@@ -1,19 +1,23 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import dbConnect from "@/lib/dbConnect";
 import User from "@/model/User";
 
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
-            id: "Credentials",
+            id: "credentials",
             name: "Credentials",
             credentials: {
                 username: { label: "Username", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials: any, req): Promise<any> {
+            async authorize(credentials: any): Promise<any> {
                 await dbConnect()
+                console.log(" credentials -> ", credentials);
+                console.log("credentials.identi -> ", credentials.identifier);
+
                 try {
                     const user = await User.findOne({
                         $or: [
@@ -21,8 +25,10 @@ export const authOptions: NextAuthOptions = {
                             { username: credentials.identifier },
                         ]
                     })
+                    console.log("user -> ", user);
+
                     if (!user) {
-                        throw new Error("No user found with this email")
+                        throw new Error("User Not found");
                     }
                     if (!user.isVerified) {
                         throw new Error('Please verified your account first before login')
@@ -35,21 +41,40 @@ export const authOptions: NextAuthOptions = {
                         throw new Error('Incorrect Password')
                     }
 
-                } catch (error) {
-                    throw new Error
+                } catch (err: any) {
+                    throw new Error(err);
+                }
+            }
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+            async profile(profile) {
+                await dbConnect();
+                // Find or create the user in your database
+                try {
+                    let user = await User.findOne({ email: profile.email });
+
+                    if (!user) {
+                        throw new Error("User not found");
+                    }
+                    if (!user.isVerified) {
+                        throw new Error('Please verify your account first before login');
+                    }
+
+                    return {
+                        id: user._id.toString(),
+                        email: user.email,
+                        username: user.username,
+                        isVerified: user.isVerified,
+                    };
+                } catch (err: any) {
+                    throw new Error(err.message)
                 }
             }
         })
     ],
     callbacks: {
-        async session({ session, token }) {
-            if (token) {
-                session.user._id = token._id
-                session.user.isVerified = token.isVerified
-                session.user.username = token.username
-            }
-            return session
-        },
         async jwt({ token, user }) {
             if (user) {
                 token._id = user._id?.toString()
@@ -58,7 +83,15 @@ export const authOptions: NextAuthOptions = {
             }
 
             return token
-        }
+        },
+        async session({ session, token }) {
+            if (token) {
+                session.user._id = token._id
+                session.user.isVerified = token.isVerified
+                session.user.username = token.username
+            }
+            return session
+        },
     },
     pages: {
         signIn: '/sign-in',

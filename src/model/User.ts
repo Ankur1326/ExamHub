@@ -14,6 +14,10 @@ interface IUser extends Document {
     email: string;
     role: UserRole;
     isVerified: boolean;
+    verifyCode: string;
+    verifyCodeExpiry: Date;
+    resetPasswordToken?:string;
+    resetPasswordExpires?: Date;
     isApproved: boolean;
     comparePassword(password: string): Promise<boolean>;
     generateAccessToken(): string;
@@ -41,6 +45,22 @@ const userSchema = new Schema<IUser>({
         type: String,
         enum: Object.values(UserRole),
         required: [true, "Role is required"],
+    },
+    verifyCode: {
+        type: String,
+        required: [true, "verify code is required"],
+    },
+    verifyCodeExpiry: {
+        type: Date,
+        required: [true, "verify code expiry is required"],
+    },
+    resetPasswordToken: {
+        type: String,
+        default: undefined,
+    },
+    resetPasswordExpires: {
+        type: Date,
+        default: undefined,
     },
     isVerified: { // this field is toggle by admins
         type: Boolean,

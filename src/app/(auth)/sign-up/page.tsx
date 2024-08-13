@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useDebounceCallback } from "usehooks-ts"
 import toast from "react-hot-toast"
+import Link from "next/link"
 
 function page() {
     const [username, setUsername] = useState('')
@@ -53,27 +54,34 @@ function page() {
 
         if (!username || !email || !password || !selectedRole) {
             toast.error("All fields required")
+            setSubmiting(false)
+            return
+        }
+        if (password !== confirmPassword) {
+            toast.error("Password not matched")
+            setSubmiting(false)
+            return
         }
 
         try {
             const response = await axios.post("/api/sign-up", { username, email, password, role: selectedRole });
 
-            // console.log(response.data);
+            // toast.success(response.data.message)
+            if (response.data.success) {
+                toast.success(response.data.message, {
+                    style: {
+                        border: '1px solid #713200',
+                        padding: '16px',
+                        color: '#713200',
+                    },
+                    iconTheme: {
+                        primary: '#713200',
+                        secondary: '#FFFAEE',
+                    },
+                });
 
-            // toast.success('Successfully toasted!')
-            // toast.success(response.data.data, {
-            //     style: {
-            //         border: '1px solid #713200',
-            //         padding: '16px',
-            //         color: '#713200',
-            //     },
-            //     iconTheme: {
-            //         primary: '#713200',
-            //         secondary: '#FFFAEE',
-            //     },
-            // });
-
-            router.replace(`/verify/${username}`);
+                router.replace(`/verify/${username}`);
+            }
 
         } catch (error) {
             console.error("error in sign up of user", error);
@@ -95,9 +103,9 @@ function page() {
             <div className="absolute inset-0 bg-black opacity-0"></div>
 
             <div className="relative z-10 bg-white p-10 px-14 rounded-lg shadow-md w-[450px] mb-3">
-                <h2 className="text-2xl text-gray-700 font-bold text-center">Sign up</h2>
-                <div className="text-center text-gray-400 text-sm mb-8">
-                    Already have an Account? <a href="#" className="text-blue-500">Sign in</a>
+                <h2 className="text-2xl text-gray-700 font-bold text-center select-none">Sign up</h2>
+                <div className="text-center text-gray-400 text-sm mb-8 select-none">
+                    Already have an Account? <Link href="/sign-in" className="text-blue-500">Sign in</Link>
                 </div>
                 <form onSubmit={onSubmit}>
                     <div className="mb-4">
@@ -185,18 +193,18 @@ function page() {
                                 onChange={(e) => setSelectedRole(e.target.value)}
                                 className="form-radio h-4 w-4 text-blue-600"
                             />
-                            <span className="text-sm text-gray-800">Student</span>
+                            <span className="text-sm text-gray-800 select-none">Student</span>
                         </label>
                         <label className="flex items-center space-x-2 cursor-pointer">
                             <input
                                 type="radio"
                                 name="role"
-                                value="teacher"
-                                checked={selectedRole === 'teacher'}
+                                value="instructor"
+                                checked={selectedRole === 'instructor'}
                                 onChange={(e) => setSelectedRole(e.target.value)}
                                 className="form-radio h-4 w-4 text-blue-600"
                             />
-                            <span className="text-sm text-gray-800">Teacher</span>
+                            <span className="text-sm text-gray-800 select-none">Instructor</span>
                         </label>
                         <label className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -207,13 +215,24 @@ function page() {
                                 onChange={(e) => setSelectedRole(e.target.value)}
                                 className="form-radio h-4 w-4 text-blue-600"
                             />
-                            <span className="text-sm text-gray-800">Admin</span>
+                            <span className="text-sm text-gray-800 select-none">Admin</span>
                         </label>
                     </div>
-
-                    <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-                        Sign Up
-                    </button>
+                    {
+                        isSubmiting ? (
+                            <div className="flex flex-row items-center justify-center gap-2 w-full bg-blue-400 text-white py-2 px-4 rounded">
+                                <Loader2 className="animate-spin" color="#fff" width={20} />
+                                <span>Please wait</span>
+                            </div>
+                        ) : (
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded cursor-pointer"
+                            >
+                                Sign Up
+                            </button>
+                        )
+                    }
                 </form>
             </div>
         </div>

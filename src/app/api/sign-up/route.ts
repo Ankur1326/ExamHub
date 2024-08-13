@@ -1,5 +1,5 @@
 import { generateOTP } from "@/helpers/generateOtp";
-import { memoryStore } from "@/helpers/memoryStore";
+import { sendEmail } from "@/helpers/sendEmail";
 import dbConnect from "@/lib/dbConnect";
 import User from "@/model/User";
 
@@ -8,12 +8,13 @@ export async function POST(request: Request) {
 
     try {
         const { username, email, password, role } = await request.json()
-        console.log(username, email, password, role);
-        
+        // console.log(username, email, password, role);
+
         const existingUserVerifiedByUsername = await User.findOne({
             username,
             isVerified: true
         })
+        const verifyCode = generateOTP()
 
         if (existingUserVerifiedByUsername) {
             return Response.json(
@@ -26,6 +27,7 @@ export async function POST(request: Request) {
         }
 
         const existingUserByEmail = await User.findOne({ email })
+
         if (existingUserByEmail) {
             if (existingUserByEmail.isVerified) {
                 return Response.json({
@@ -34,24 +36,40 @@ export async function POST(request: Request) {
                 }, { status: 400 })
             } else {
                 existingUserByEmail.password = password
+                existingUserByEmail.verifyCode = verifyCode
+                existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000)
                 await existingUserByEmail.save()
             }
         } else {
+            const expiryDate = new Date();
+            expiryDate.setHours(expiryDate.getHours() + 1);
+
             const newUser = new User({
                 username,
                 email,
                 password,
                 role,
+                verifyCode,
+                verifyCodeExpiry: expiryDate,
             })
+            console.log(newUser);
+            
             await newUser.save()
         }
 
-        // send verification email otp
-        const otp = generateOTP()
-        const expiry = Date.now() + parseInt(process.env.OTP_EXPIRY || '300000', 10);
-
-        memoryStore.push({ email, otp, expiry })
-        
+        const response = await sendEmail(email, "OTP for verifing email", { otp: verifyCode })
+        // console.log("response : ", response);
+        if (response) {
+            return Response.json(
+                {
+                    success: true,
+                    message: "Email send successfully"
+                },
+                {
+                    status: 200
+                }
+            )
+        }
 
     } catch (error) {
         console.log("Error registring user: ", error);

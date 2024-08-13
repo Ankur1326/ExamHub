@@ -18,11 +18,13 @@ const generateEmailContent = (type: string, data?: EmailData): EmailContent => {
                 
                 `
             };
-        case "OTP for forgot password":
+        case "OTP for Reset Password":
             return {
-                subject: "OTP for forgot password",
-                text: `Your OTP code is ${data?.otp} to change password.
-                `
+                subject: "Password Reset Request",
+                text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+               Please click on the following link, or paste this into your browser to complete the process:\n\n
+               ${data?.otp}\n\n
+               If you did not request this, please ignore this email and your password will remain unchanged.\n`
             };
         case 'admin verification':
             return {
@@ -58,24 +60,27 @@ export const sendEmail = async (to: string, type: string, data?: EmailData) => {
     });
 
     const mailOptions = {
-        from: `"CEDEP Institute" <${process.env.EMAIL_USER}>`,
+        from: `"Exam Hub" <${process.env.EMAIL_USER}>`,
         to,
         subject,
         text
     };
 
     try {
-        await transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log('Error sending email:', error);
-                throw new Error('Failed to send email');
-            } else {
-                console.log('Email sent successfully:', info.response);
-                // Assuming `res` and `ApiResponse` are available in this context
-                // res.status(200).json(new ApiResponse(200, null, 'OTP sent successfully'));
-            }
-        });
-        console.log('Email sent successfully');
+        const info = await transporter.sendMail(mailOptions);
+        if (info.response) {
+            return Response.json(
+                {
+                    success: true,
+                    message: "email send successfully"
+                },
+                {
+                    status: 200
+                }
+            )
+        }
+
+
     } catch (error) {
         console.error('Error sending email:', error);
     }
