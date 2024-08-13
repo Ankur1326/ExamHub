@@ -3,7 +3,12 @@ import { ArrowLeft, CheckCircle, Eye, EyeOff, Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-function ForgotPassword({ onClose }) {
+type ForgotPasswordProps = {
+    onClose: () => void;
+};
+
+
+const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }): JSX.Element => {
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -276,8 +281,7 @@ function ForgotPassword({ onClose }) {
                 step === 4 && (
                     <div className='w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg flex flex-col items-center'>
                         <h2 className="text-2xl font-bold text-center text-gray-800">Your password is changed</h2>
-                        <p className="text-center text-gray-600">Your password has been successfully updated.
-                            Your account's security is our priority<br /></p>
+                        <p className="text-center text-gray-600">Your password has been successfully updated Your account s security is our priority</p>
                         <button
                             onClick={() => onClose()}
                             className="max-w-fit px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-600 flex items-center"

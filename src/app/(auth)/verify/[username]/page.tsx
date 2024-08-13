@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
-function page() {
+export default function Page() {
     const router = useRouter();
     const params = useParams();
     const [otp, setOtp] = useState(new Array(6).fill(''));
@@ -109,5 +109,3 @@ function page() {
         </div>
     )
 }
-
-export default page;

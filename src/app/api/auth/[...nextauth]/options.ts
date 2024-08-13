@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
                             { username: credentials.identifier },
                         ]
                     })
-                    console.log("user -> ", user);
+                    // console.log("user -> ", user);
 
                     if (!user) {
                         throw new Error("User Not found");
@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID || "",
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-            async profile(profile) {
+            async profile(profile: any): Promise<any> {
                 await dbConnect();
                 // Find or create the user in your database
                 try {
@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
                     }
 
                     return {
-                        id: user._id.toString(),
+                        id: user?._id,
                         email: user.email,
                         username: user.username,
                         isVerified: user.isVerified,

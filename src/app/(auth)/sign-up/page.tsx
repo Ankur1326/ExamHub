@@ -10,7 +10,7 @@ import { useDebounceCallback } from "usehooks-ts"
 import toast from "react-hot-toast"
 import Link from "next/link"
 
-function page() {
+function Page() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -239,4 +239,4 @@ function page() {
     )
 }
 
-export default page
+export default Page

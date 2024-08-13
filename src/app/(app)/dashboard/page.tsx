@@ -2,13 +2,12 @@
 import React from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { User } from "next-auth";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 function Dashboard() {
     const { data: session } = useSession();
-    const user: User = session?.user;
+    const user = session?.user;
 
     const router = useRouter()
 

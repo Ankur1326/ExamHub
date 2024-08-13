@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
-export default function Component() {
+export default function Page() {
     const [identifier, setIdentifier] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
