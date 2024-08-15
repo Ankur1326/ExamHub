@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import User from "@/model/User";
+import { usernameValidation } from "@/schemas/signUpSchema";
 import { z } from 'zod'
-import { usernameValidation } from "../../../schemas/signUpSchema";
 
 const usernameQuerySchema = z.object({
     username: usernameValidation
@@ -12,12 +12,12 @@ export async function GET(request: Request) {
 
     try {
         const { searchParams } = new URL(request.url)
+        username: searchParams.get('username') || ""
         const queryParams = {
-            username: searchParams.get('username')
-        }
 
-        // validate with zod
+        }
         const result = usernameQuerySchema.safeParse(queryParams)
+        // validate with zod
 
         if (!result.success) {
             const usernameErrors = result.error.format().username?._errors || []
