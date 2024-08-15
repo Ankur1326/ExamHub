@@ -122,7 +122,7 @@ function Page() {
                         }
                         {!isCheckingUsername && usernameMessage && (
                             <p
-                                className={`text-sm ${usernameMessage === "username is available"
+                                className={`text-sm ${usernameMessage === "Username is available"
                                     ? "text-green-500"
                                     : "text-red-500"
                                     }`}
