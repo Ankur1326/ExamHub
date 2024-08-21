@@ -1,7 +1,7 @@
 import { generateOTP } from "@/helpers/generateOtp";
 import { sendEmail } from "@/helpers/sendEmail";
 import dbConnect from "@/lib/dbConnect";
-import User from "@/model/User";
+import UserModel from "@/model/User";
 
 export async function POST(request: Request) {
     await dbConnect()
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
             )
         }
 
-        const user = await User.findOne({
+        const user = await UserModel.findOne({
             email
         });
 

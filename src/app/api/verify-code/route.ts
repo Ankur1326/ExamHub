@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
-import User from "@/model/User";
-import { z } from 'zod'
+import UserModel from "@/model/User";
+import { z } from 'zod';
 import { usernameValidation } from "@/schemas/signUpSchema";
 
 export async function POST(request: Request) {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         const decodedUsername = decodeURIComponent(username)
         console.log('decodedUsername : ', decodedUsername);
 
-        const user = await User.findOne({ username: decodedUsername })
+        const user = await UserModel.findOne({ username: decodedUsername })
         console.log('user : ', user);
 
         if (!user) {

@@ -1,5 +1,5 @@
 import dbConnect from '@/lib/dbConnect';
-import User from '@/model/User';
+import UserModel from '@/model/User';
 
 // Verify OTP
 export async function POST(request: Request) {
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const user = await User.findOne({ email });
+        const user = await UserModel.findOne({ email });
 
         if (!user) {
             return Response.json(

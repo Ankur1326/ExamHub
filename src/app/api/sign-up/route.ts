@@ -1,7 +1,7 @@
 import { generateOTP } from "@/helpers/generateOtp";
 import { sendEmail } from "@/helpers/sendEmail";
 import dbConnect from "@/lib/dbConnect";
-import User from "@/model/User";
+import UserModel from "@/model/User";
 
 export async function POST(request: Request) {
     await dbConnect()
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
         const { username, email, password, role } = await request.json()
         // console.log(username, email, password, role);
 
-        const existingUserVerifiedByUsername = await User.findOne({
+        const existingUserVerifiedByUsername = await UserModel.findOne({
             username,
             isVerified: true
         })
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
             )
         }
 
-        const existingUserByEmail = await User.findOne({ email })
+        const existingUserByEmail = await UserModel.findOne({ email })
 
         if (existingUserByEmail) {
             if (existingUserByEmail.isVerified) {
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
             const expiryDate = new Date();
             expiryDate.setHours(expiryDate.getHours() + 1);
 
-            const newUser = new User({
+            const newUser = new UserModel({
                 username,
                 email,
                 password,
