@@ -16,9 +16,17 @@ interface IUser extends Document {
     isVerified: boolean;
     verifyCode: string;
     verifyCodeExpiry: Date;
-    resetPasswordToken?:string;
+    resetPasswordToken?: string;
     resetPasswordExpires?: Date;
     isApproved: boolean;
+    fullName?: string; // Full name of the user
+    mobileNum?: string; // Mobile number of the user
+    address?: string; // Address of the user
+    profilePicture?: string; // URL or path to the profile picture
+    dateOfBirth?: Date; // Date of birth
+    gender?: string; // Gender
+    courses?: [Schema.Types.ObjectId];
+    customFields?: Record<string, any>; // Store custom fields here
     comparePassword(password: string): Promise<boolean>;
     generateAccessToken(): string;
     generateRefreshToken(): string;
@@ -69,6 +77,40 @@ const userSchema = new Schema<IUser>({
     isApproved: { // this field is toggle by admins
         type: Boolean,
         default: false,
+    },
+    fullName: {
+        type: String,
+        default: '',
+    },
+    mobileNum: {
+        type: String,
+        default: '',
+    },
+    address: {
+        type: String,
+        default: '',
+    },
+    profilePicture: {
+        type: String,
+        default: '',
+    },
+    dateOfBirth: {
+        type: Date,
+        default: undefined,
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'other', ''],
+        default: '',
+    },
+    courses: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Course', // Assuming you have a Course model
+    }],
+    customFields: {
+        type: Map,
+        of: Schema.Types.Mixed,
+        default: {}
     },
 }, { timestamps: true });
 

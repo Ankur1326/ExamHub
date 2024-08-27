@@ -1,11 +1,16 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from '@/model/User';
 
-export async function GET(request: Response) {
+export async function GET(request: Request) {
     await dbConnect();
 
     try {
-        const { username, email } = await request.json()
+        // const { username, email } = await request.json()
+
+        const { searchParams } = new URL(request.url);
+        const username = searchParams.get('username');
+        const email = searchParams.get('email');
+
         if (!username || !email) {
             return Response.json(
                 {
@@ -37,7 +42,8 @@ export async function GET(request: Response) {
         return Response.json(
             {
                 success: true,
-                message: "User successfully fetched"
+                message: "User successfully fetched",
+                user
             },
             { status: 200 }
         )

@@ -15,8 +15,8 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials: any): Promise<any> {
                 await dbConnect()
-                console.log(" credentials -> ", credentials);
-                console.log("credentials.identi -> ", credentials.identifier);
+                // console.log(" credentials -> ", credentials);
+                // console.log("credentials.identi -> ", credentials.identifier);
 
                 try {
                     const user = await User.findOne({
@@ -77,20 +77,19 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token._id = user._id?.toString()
-                token.isVerified = user.isVerified
-                token.username = user.username
+                token._id = user._id?.toString();
+                token.isVerified = user.isVerified;
+                token.username = user.username;
             }
-
-            return token
+            return token;
         },
         async session({ session, token }) {
             if (token) {
-                session.user._id = token._id
-                session.user.isVerified = token.isVerified
-                session.user.username = token.username
+                session.user._id = token._id;
+                session.user.isVerified = token.isVerified;
+                session.user.username = token.username;
             }
-            return session
+            return session;
         },
     },
     pages: {

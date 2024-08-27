@@ -1,4 +1,4 @@
-function Dashboard() {
+export default function Dashboard() {
 
     return (
         <div className="w-full h-screen flex items-center justify-center ">
@@ -8,5 +8,3 @@ function Dashboard() {
         </div>
     );
 }
-
-export default Dashboard

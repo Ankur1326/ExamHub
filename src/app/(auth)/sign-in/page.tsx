@@ -1,12 +1,12 @@
 'use client'
-import ForgotPassword from "@/components/ForgotPassword"
+import ForgotPassword from "@/components/auth/ForgotPassword"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
+import toast from "react-hot-toast"
 import { signIn } from "next-auth/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import toast from "react-hot-toast"
 
 export default function Page() {
     const [identifier, setIdentifier] = useState("")
@@ -26,8 +26,6 @@ export default function Page() {
                 identifier: identifier,
                 password: password
             });
-
-            console.log("result -> ", result);
 
             if (result?.error) {
                 toast.error(result?.error);
