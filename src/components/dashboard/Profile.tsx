@@ -11,14 +11,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUserProfile, updateUserProfile, uploadProfilePicture } from "@/redux/slices/userSlice";
 import { BarLoader } from "react-spinners"
 import { signIn } from "next-auth/react";
+import { AppDispatch, RootState } from "@/redux/store";
 
 const ProfileClient = ({ username, email }: any) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const [loading, setLoading] = useState(false)
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    const { profile, status, profilePicture, isUploading } = useSelector((state) => state?.user)
+    const { profile, status, profilePicture, isUploading } = useSelector((state: RootState) => state?.user)
 
     useEffect(() => {
         dispatch(fetchUserProfile({ username, email }))

@@ -15,7 +15,7 @@ const ToggleSidebarButton = () => {
             <button className="text-2xl md:hidden" onClick={toggleSidebar}>
                 <AiOutlineMenu />
             </button>
-            <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+            <Sidebar isSidebarOpen={isSidebarOpen} />
             {isSidebarOpen && (
                 <div
                     className="fixed inset-0 bg-black opacity-50 z-40 md:hidden"

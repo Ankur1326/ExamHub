@@ -17,10 +17,6 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
         // Add more sections here as needed
     });
 
-    useEffect(() => {
-        setCurrentRoute(router.pathname);  // Update current route on path change
-    }, [router.pathname]);
-
     const isActive = (route: string) => currentRoute === route ? 'bg-[#00A261] text-white' : 'text-slate-300';
 
     const navigateTo = (path: string) => {

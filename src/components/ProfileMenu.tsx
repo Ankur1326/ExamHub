@@ -7,18 +7,19 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '@/redux/store';
 import { fetchUserProfile } from '@/redux/slices/userSlice';
 
 export default function ProfileMenu() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const menuRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const { data: session } = useSession();
-    const { profile, profilePicture } = useSelector((state: any) => state.user);
+    const { profile, profilePicture } = useSelector((state: RootState) => state.user);
     const router = useRouter();
 
     useEffect(() => {
-        if (session?.user) {
+        if (session?.user?.username && session?.user?.email) {
             dispatch(fetchUserProfile({ username: session.user.username, email: session.user.email }));
         }
     }, [session?.user, dispatch]); // Depend on session.user to avoid unnecessary dispatches
@@ -52,7 +53,7 @@ export default function ProfileMenu() {
     const renderProfileImage = (src: string | null) => (
         <div className="overflow-hidden w-10 h-10 rounded-full border border-gray-300">
             <Image
-                src={src}
+                src={src || ''}
                 alt="Profile image"
                 width={40}
                 height={40}

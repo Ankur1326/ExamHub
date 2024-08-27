@@ -4,7 +4,7 @@ import getUserDetails from "@/helpers/getUserDetails";
 
 const Home = async () => {
     const session = await getUserDetails()
-    console.log("session : ", session);
+    // console.log("session : ", session);
 
     if (session?.user) {
         redirect("/dashboard")
