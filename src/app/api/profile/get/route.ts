@@ -3,13 +3,13 @@ import UserModel from '@/model/User';
 
 export async function GET(request: Request) {
     await dbConnect();
-
+    
+    const { searchParams } = new URL(request.url);
+    const username = searchParams.get('username');
+    const email = searchParams.get('email');
+    
     try {
         // const { username, email } = await request.json()
-
-        const { searchParams } = new URL(request.url);
-        const username = searchParams.get('username');
-        const email = searchParams.get('email');
 
         if (!username || !email) {
             return Response.json(

@@ -124,9 +124,9 @@ const profileSlice = createSlice({
                 state.profilePicture = action.payload.user.profilePicture;
                 state.profile = action.payload;
             })
-            .addCase(fetchUserProfile.rejected, (state, action: PayloadAction<any>) => {
+            .addCase(fetchUserProfile.rejected, (state, action: PayloadAction<string | undefined>) => {
                 state.status = 'failed';
-                state.error = action.payload?.message || action.error.message || 'Failed to fetch user profile';
+                state.error = action.payload || 'Failed to fetch user profile';
             })
             .addCase(uploadProfilePicture.pending, (state) => {
                 state.isUploading = true;
@@ -136,9 +136,9 @@ const profileSlice = createSlice({
                 state.isUploading = false;
                 state.profilePicture = action.payload; // Update the profile picture in the profile
             })
-            .addCase(uploadProfilePicture.rejected, (state, action: PayloadAction<string>) => {
+            .addCase(uploadProfilePicture.rejected, (state, action: PayloadAction<string | undefined>) => {
                 state.isUploading = false;
-                state.error = action.payload;
+                state.error = action.payload || 'Failed to upload profile picture';
             })
             .addCase(updateUserProfile.pending, (state) => {
                 state.status = 'loading';
@@ -147,9 +147,9 @@ const profileSlice = createSlice({
                 state.status = 'succeeded';
                 state.profile = action.payload;
             })
-            .addCase(updateUserProfile.rejected, (state, action: PayloadAction<string>) => {
+            .addCase(updateUserProfile.rejected, (state, action: PayloadAction<string | undefined>) => {
                 state.status = 'failed';
-                state.error = action.payload;
+                state.error = action.payload || 'Failed to update user profile';
             });
     },
 });

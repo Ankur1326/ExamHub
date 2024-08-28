@@ -3,8 +3,9 @@ import UserModel from "@/model/User";
 import { usernameValidation } from "@/schemas/signUpSchema";
 import { z } from 'zod';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
+// Validate with zod
 const usernameQuerySchema = z.object({
     username: usernameValidation
 });
@@ -12,17 +13,16 @@ const usernameQuerySchema = z.object({
 export async function GET(request: Request) {
     await dbConnect();
 
+    const { searchParams } = new URL(request.url);
+
+    // Correctly assign the username to queryParams
+    const queryParams = {
+        username: searchParams.get('username')
+    };
+
     try {
-        const { searchParams } = new URL(request.url);
-
-        // Correctly assign the username to queryParams
-        const queryParams = {
-            username: searchParams.get('username')
-        };
-
-        // Validate with zod
+        
         const result = usernameQuerySchema.safeParse(queryParams);
-
         if (!result.success) {
             const usernameErrors = result.error.format().username?._errors || [];
             return new Response(
