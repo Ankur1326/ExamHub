@@ -65,13 +65,14 @@ export const uploadProfilePicture = createAsyncThunk<string, File, { rejectValue
             const data = await response.json();
             return data.secureUrl;
         } catch (error: any) {
+            console.log("Error while uploading profile image : ", error);
             return rejectWithValue(error.message);
         }
     }
 );
 
 // Thunk to update user profile
-export const updateUserProfile = createAsyncThunk<UserProfile, { formData: any; userId: string }, { rejectValue: string } >(
+export const updateUserProfile = createAsyncThunk<UserProfile, { formData: any; userId: string }, { rejectValue: string }>(
     'user/updateUserProfile',
     async ({ formData, userId }, { rejectWithValue }) => {
         try {
