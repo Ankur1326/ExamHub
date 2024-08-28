@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import { AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineLogout } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -22,7 +22,7 @@ export default function ProfileMenu() {
         if (session?.user?.username && session?.user?.email) {
             dispatch(fetchUserProfile({ username: session.user.username, email: session.user.email }));
         }
-    }, [session?.user, dispatch]); // Depend on session.user to avoid unnecessary dispatches
+    }, [session?.user, dispatch]);
 
     const toggleMenu = useCallback(() => {
         setIsOpen(prev => !prev);
@@ -51,7 +51,7 @@ export default function ProfileMenu() {
     }, [closeMenu]);
 
     const renderProfileImage = (src: string | null) => (
-        <div className="overflow-hidden w-10 h-10 rounded-full border border-gray-300">
+        <div className="overflow-hidden w-10 h-10 rounded-full border-2 border-primary-500">
             <Image
                 src={src || ''}
                 alt="Profile image"
@@ -64,29 +64,40 @@ export default function ProfileMenu() {
 
     return (
         <div className="relative">
-            <button onClick={toggleMenu} className="flex items-center">
-                {profilePicture ? renderProfileImage(profilePicture) : <FaUserCircle size={35} className="text-gray-600" />}
+            <button onClick={toggleMenu} className="text-primary-600">
+                {profilePicture ? renderProfileImage(profilePicture) : <FaUserCircle size={35} />}
+                {/* <span className="hidden md:block font-semibold">{profile?.user?.username || 'Profile'}</span> */}
             </button>
 
             {isOpen && (
-                <div ref={menuRef} className="absolute right-0 mt-2 w-64 z-10 p-3 bg-white shadow-md rounded-lg border border-gray-200">
-                    <div className="flex items-center gap-2">
-                        {profilePicture ? renderProfileImage(profilePicture) : <FaUserCircle size={35} className="text-gray-600" />}
+                <div
+                    ref={menuRef}
+                    className="absolute right-0 mt-2 w-72 z-20 p-4 bg-white shadow-lg rounded-lg border border-gray-200"
+                >
+                    <div className="flex items-center gap-4">
+                        {profilePicture ? renderProfileImage(profilePicture) : <FaUserCircle size={40} className="text-primary-600" />}
                         <div>
-                            <p className="font-semibold text-gray-900">{profile?.user?.username}</p>
+                            <p className="font-semibold text-gray-800 text-lg">{profile?.user?.username}</p>
                             <p className="text-sm text-gray-500">{profile?.user?.email}</p>
                         </div>
                     </div>
                     <div className="mt-4">
                         <Link href="/dashboard/profile">
-                            <div onClick={closeMenu} className="flex items-center space-x-2 hover:bg-gray-100 px-2 py-2 rounded-lg cursor-pointer">
-                                <AiOutlineUser className="text-gray-600" />
-                                <span>My Profile</span>
+                            <div
+                                onClick={closeMenu}
+                                className="flex items-center space-x-3 hover:bg-gray-100 text-primary-700 px-3 py-2 rounded-lg cursor-pointer transition-all"
+                            >
+                                <AiOutlineUser size={20} />
+                                <span className="font-medium">My Profile</span>
                             </div>
                         </Link>
-                        <div className="mt-4 border-t pt-4">
-                            <button onClick={handleSignOut} className="w-full text-left text-red-600 hover:bg-gray-100 px-2 py-2 rounded-lg">
-                                Log out
+                        <div className="mt-4 border-t border-gray-200 pt-4">
+                            <button
+                                onClick={handleSignOut}
+                                className="flex items-center w-full text-left space-x-3 text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition-all"
+                            >
+                                <AiOutlineLogout size={20} />
+                                <span className="font-medium">Log out</span>
                             </button>
                         </div>
                     </div>

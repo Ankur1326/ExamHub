@@ -126,15 +126,14 @@ const ProfileClient = ({ username, email }: any) => {
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-200">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-3xl font-bold text-gray-800">
                     Profile Details
-                    <span className="text-white bg-green-400 px-2 py-1 rounded-lg text-xs ml-2">
+                    <span className="text-white bg-green-500 px-2 py-1 rounded-full text-sm ml-3 shadow-sm">
                         {profile?.user?.role}
                     </span>
-
                 </h2>
                 <button
-                    className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-xs"
+                    className={`bg-blue-600 text-white py-2 px-5 rounded-lg shadow-md hover:bg-blue-700 text-sm transition-all ${isEditing ? 'bg-red-500 hover:bg-red-600' : ''}`}
                     onClick={() => setIsEditing(!isEditing)}
                 >
                     {isEditing ? 'Cancel' : 'Edit Profile'}
