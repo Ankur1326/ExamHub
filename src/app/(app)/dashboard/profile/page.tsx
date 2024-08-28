@@ -11,9 +11,7 @@ export default async function Profile() {
     }
 
     const { username, email } = session.user;
-    console.log(session);
-    
-
+    // console.log(session);
     try {
         // const profile = await fetchUserProfile({ username, email });
         return <ProfileClient username={username} email={email} />;
