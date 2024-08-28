@@ -69,7 +69,7 @@ export default function ProfileMenu() {
             </button>
 
             {isOpen && (
-                <div ref={menuRef} className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border p-3 z-10">
+                <div ref={menuRef} className="absolute right-0 mt-2 w-64 z-10 p-3 bg-white shadow-md rounded-lg border border-gray-200">
                     <div className="flex items-center gap-2">
                         {profilePicture ? renderProfileImage(profilePicture) : <FaUserCircle size={35} className="text-gray-600" />}
                         <div>

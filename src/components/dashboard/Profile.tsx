@@ -124,14 +124,14 @@ const ProfileClient = ({ username, email }: any) => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white shadow rounded-lg border border-gray-100">
+        <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-200">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">
                     Profile Details
                     <span className="text-white bg-green-400 px-2 py-1 rounded-lg text-xs ml-2">
                         {profile?.user?.role}
                     </span>
-                    
+
                 </h2>
                 <button
                     className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 text-xs"
@@ -291,73 +291,68 @@ const ProfileClient = ({ username, email }: any) => {
                     </div> */}
                 </form>
             ) : (
-                <div className="flex items-center gap-6">
-                    <div className="w-48 h-40 rounded-lg relative overflow-hidden">
-                        <div className="flex items-center gap-6">
-                            <div
-                                className="w-48 h-40 rounded-lg relative overflow-hidden"
-                                onMouseEnter={handleMouseEnter}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <div className="relative w-full h-full">
-                                    {
-                                        profilePicture ?
-                                            <Image
-                                                src={profilePicture}
-                                                alt="Profile image"
-                                                layout="fill"
-                                                objectFit="cover"
-                                                className="border"
-                                            />
-                                            :
-                                            <div className="p-1 shadow-md">
-                                                <FaUserAlt className="text-gray-300 w-full h-full" />
-                                            </div>
-                                    }
-                                    {isHovered && (
-                                        <button
-                                            className="absolute top-2 right-2 bg-gray-500 hover:bg-gray-600 text-white p-1 rounded-full"
-                                            onClick={() => {
-                                                // Trigger file input click here
-                                                document.getElementById('fileInput')?.click();
-                                            }}
-                                        >
-                                            <MdOutlineEdit />
-                                        </button>
-                                    )}
-                                    {
-                                        isUploading &&
-                                        <div className="flex justify-center items-center h-[3px]">
-                                            <BarLoader color="#2563EB" width={200} />
-                                        </div>
-                                    }
-                                </div>
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={handleFileUpload}
+                <div className="flex flex-col md:flex-row items-center gap-8">
+                    <div className="relative w-full md:w-48 h-48 rounded-lg overflow-hidden border-4 border-primary-500">
+                        <div
+                            className="relative w-full h-full group"
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                        >
+                            {profilePicture ? (
+                                <Image
+                                    src={profilePicture}
+                                    alt="Profile image"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="transition-transform duration-300 group-hover:scale-105"
                                 />
-                            </div>
+                            ) : (
+                                <div className="flex justify-center items-center w-full h-full bg-gray-100 shadow-inner">
+                                    <FaUserAlt className="text-gray-300 w-20 h-20" />
+                                </div>
+                            )}
+
+                            {isHovered && (
+                                <button
+                                    className="absolute top-2 right-2 bg-primary-600 hover:bg-gray-700 text-white p-2 rounded-full shadow-lg transition-all duration-200 ease-in-out"
+                                    onClick={() => document.getElementById('fileInput')?.click()}
+                                >
+                                    <MdOutlineEdit />
+                                </button>
+                            )}
+
+                            {isUploading && (
+                                <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-80">
+                                    <BarLoader color="#2563EB" width={120} />
+                                </div>
+                            )}
                         </div>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleFileUpload}
+                        />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+
+                    <div className="w-full md:w-auto grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
                         <ProfileItem label="Username" value={profile?.user?.username} />
                         <ProfileItem label="Email" value={profile?.user?.email} isVerified={profile?.user?.isVerified} />
-                        <ProfileItem label="Full Name" value={profile?.user?.fullName ? profile?.user?.fullName : "N/A"} />
+                        <ProfileItem label="Full Name" value={profile?.user?.fullName || "N/A"} />
                         <ProfileItem label="Approved?" value={profile?.user?.isApproved ? "Yes" : "No"} />
-                        <ProfileItem label="Mobile" value={profile?.user?.mobileNum ? profile?.user?.mobileNum : "N/A"} />
-                        <ProfileItem label="Address" value={profile?.user?.address ? profile?.user?.address : "N/A"} />
-                        <ProfileItem label="Date of birth" value={profile?.user?.dateOfBirth ? formateDate(profile?.user?.dateOfBirth) : "N/A"} />
-                        <ProfileItem label="Gender" value={profile?.user?.gender ? profile?.user?.gender : "N/A"} />
+                        <ProfileItem label="Mobile" value={profile?.user?.mobileNum || "N/A"} />
+                        <ProfileItem label="Address" value={profile?.user?.address || "N/A"} />
+                        <ProfileItem label="Date of Birth" value={profile?.user?.dateOfBirth ? formateDate(profile?.user?.dateOfBirth) : "N/A"} />
+                        <ProfileItem label="Gender" value={profile?.user?.gender || "N/A"} />
+
                         {profile?.user?.additionalFields?.length > 0 && (
-                            <div className="md:col-span-2">
-                                <h3 className="text-gray-500 font-bold mb-2">Additional Information</h3>
-                                <ul className="list-disc list-inside">
+                            <div className="md:col-span-2 mt-4">
+                                <h3 className="text-primary-600 font-bold mb-3">Additional Information</h3>
+                                <ul className="list-disc list-inside text-gray-600 pl-4">
                                     {profile?.user.additionalFields.map((field: any, index: number) => (
-                                        <li key={index}>
-                                            {field.label}: {field.value}
+                                        <li key={index} className="text-sm">
+                                            {field.label}: <span className="font-medium">{field.value}</span>
                                         </li>
                                     ))}
                                 </ul>

@@ -21,7 +21,7 @@ export default function RootLayout({ children }: any) {
       {/* Content Area */}
       <Provider store={store}>
         <div className="flex-1 ml-0 md:ml-64">
-          <header className="flex justify-between p-4 h-16 bg-white shadow fixed top-0 left-0 right-0 z-10">
+          <header className="flex justify-between p-4 h-16 bg-white fixed top-0 left-0 right-0 z-10 shadow-sm rounded-lg border border-gray-200">
             <button
               className="text-2xl md:hidden"
               onClick={toggleSidebar}

@@ -6,9 +6,9 @@ export async function POST(request: Request) {
 
     try {
         const { formData, userId } = await request.json()
-        console.log(formData, userId);
+        // console.log(formData, userId);
 
-        console.log("formData.additionalFields : " , formData.additionalFields);
+        // console.log("formData.additionalFields : " , formData.additionalFields);
 
         if (!userId) {
             return Response.json(

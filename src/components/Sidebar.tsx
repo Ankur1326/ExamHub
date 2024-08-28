@@ -43,7 +43,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             <div onClick={() => toggleSection('dashboard')} className="flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer text-slate-300 hover:text-white hover:bg-[#00A261]">
                                 <div className="flex items-center space-x-2">
                                     <AiOutlineUser />
-                                    <span onClick={() => navigateTo('/dashboard6')}>Dashboard</span>
+                                    <span onClick={() => navigateTo('/dashboard')}>Dashboard</span>
                                 </div>
                                 {expandedSections.dashboard ? <AiOutlineDown /> : <AiOutlineRight />}
                             </div>
