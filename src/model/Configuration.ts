@@ -4,6 +4,7 @@ interface IQuestionType extends Document {
     typeName: string;
     description?: string;
     code?: string;
+    _id?: string;
     isActive: boolean;
 }
 

@@ -70,11 +70,11 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.questionBanks && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/question-banks/math')} className={`flex items-center space-x-2 hover:text-white px-4 py-2 rounded-lg cursor-pointer ${isActive('/question-banks/math')}`}>
+                                    <div onClick={() => navigateTo('/dashboard/question-banks/question-types')} className={`flex items-center space-x-2 hover:text-white px-4 py-2 rounded-lg cursor-pointer ${isActive('/question-banks/math')}`}>
                                         <AiOutlineUser />
-                                        <span>Math</span>
+                                        <span>Question Types</span>
                                     </div>
-                                    <div onClick={() => navigateTo('/question-banks/science')} className={`flex items-center space-x-2 hover:text-white px-4 py-2 rounded-lg cursor-pointer ${isActive('/question-banks/science')}`}>
+                                    <div onClick={() => navigateTo('/dashboard/question-banks/science')} className={`flex items-center space-x-2 hover:text-white px-4 py-2 rounded-lg cursor-pointer ${isActive('/question-banks/science')}`}>
                                         <AiOutlineSetting />
                                         <span>Science</span>
                                     </div>
