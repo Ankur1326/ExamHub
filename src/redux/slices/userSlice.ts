@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
+import { setLoading } from "./loadingSlice";
 
 // Types for the state
 interface UserProfile {
@@ -46,7 +47,8 @@ export const fetchUserProfile = createAsyncThunk<UserProfile, { username: string
 // Upload profile picture thunk
 export const uploadProfilePicture = createAsyncThunk<string, File, { rejectValue: string }>(
     'profile/uploadProfilePicture',
-    async (file, { rejectWithValue }) => {
+    async (file, { dispatch, rejectWithValue }) => {
+        dispatch(setLoading(true));
         const formData = new FormData();
         formData.append('file', file);
 
@@ -67,6 +69,8 @@ export const uploadProfilePicture = createAsyncThunk<string, File, { rejectValue
         } catch (error: any) {
             console.log("Error while uploading profile image : ", error);
             return rejectWithValue(error.message);
+        } finally {
+            dispatch(setLoading(false));
         }
     }
 );
@@ -74,7 +78,8 @@ export const uploadProfilePicture = createAsyncThunk<string, File, { rejectValue
 // Thunk to update user profile
 export const updateUserProfile = createAsyncThunk<UserProfile, { formData: any; userId: string }, { rejectValue: string }>(
     'user/updateUserProfile',
-    async ({ formData, userId }, { rejectWithValue }) => {
+    async ({ formData, userId }, { dispatch, rejectWithValue }) => {
+        dispatch(setLoading(true))
         try {
             const response = await fetch(`/api/profile/update`, {
                 method: 'POST',
@@ -97,6 +102,8 @@ export const updateUserProfile = createAsyncThunk<UserProfile, { formData: any; 
         } catch (error: any) {
             toast.error("Failed to update profile");
             return rejectWithValue(error.message);
+        } finally {
+            dispatch(setLoading(false))
         }
     }
 );
