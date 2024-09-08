@@ -9,6 +9,15 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        green_button: '#1BC5BD', // Example primary color
+        green_hover_button: '#18b7af', // Example primary color
+        blue_button: '#3699FF', // Example secondary color
+        blue_hover_button: '#3291f0', // Example secondary color
+        accent: '#38c172', // Example accent color
+        background: '#f8f9fa', // Example background color
+        // Add more colors as needed
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
