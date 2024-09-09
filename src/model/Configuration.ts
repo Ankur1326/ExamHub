@@ -14,6 +14,11 @@ interface IQuestionCategory extends Document {
     isActive: boolean;
 }
 
+interface IQuestionTags extends Document {
+    tagName: string;
+    isActive: boolean;
+}
+
 const QuestionTypeSchema = new Schema<IQuestionType>({
     typeName: {
         type: String,
@@ -50,11 +55,27 @@ const QuestionCategorySchema = new Schema<IQuestionCategory>({
     },
 });
 
+const questionTagSchema = new Schema<IQuestionTags>({
+    tagName: {
+        type: String,
+        required: [true, "Tag Name is required"],
+        unique: true,
+        index: true,
+    },
+    isActive: {
+        type: Boolean,
+        required: [true, "isActive is required"],
+        default: true,
+    }
+})
+
+
 // Main Configuration Document Interface
 interface IConfiguration extends Document {
     documentType: string;
     questionTypes?: IQuestionType[];
     questionCategories?: IQuestionCategory[];
+    questionTags?: IQuestionTags[];
     // appSettings?: IAppSettings; // Include when AppSettings schema is defined
 }
 
@@ -66,6 +87,10 @@ const configurationSchema = new Schema<IConfiguration>({
     },
     questionTypes: {
         type: [QuestionTypeSchema],
+        default: undefined,
+    },
+    questionTags: {
+        type: [questionTagSchema],
         default: undefined,
     },
     questionCategories: {

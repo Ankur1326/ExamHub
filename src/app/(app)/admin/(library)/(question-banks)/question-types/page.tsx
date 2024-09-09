@@ -1,6 +1,8 @@
 'use client'
+import DropdownMenu from '@/components/DropDownMenu';
+import DropDownMenu from '@/components/DropDownMenu';
 import EditSidebar from '@/components/EditSidebar';
-import { fetchQuestionTypes, toggleQuestionTypeStatus } from '@/redux/slices/question-bank/questionTypeSlice';
+import { fetchQuestionTypes, toggleQuestionTypeStatus } from '@/redux/slices/library/question-bank/questionTypeSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import React, { useEffect, useRef, useState } from 'react';
 import { FiMoreVertical } from 'react-icons/fi';
@@ -9,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const QuestionTypesPage = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const [dropdownOpen, setDropdownOpen] = useState(null);
+    const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
     const { questionTypes, status, error } = useSelector((state: RootState) => state.questionTypes);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -57,6 +59,13 @@ const QuestionTypesPage = () => {
         };
     }, [dropdownOpen]);
 
+    const menuItems = (type: any) => [
+        // { id: type._id, label: 'Edit', onClick: () => handleEdit(type) },
+        // { id: type._id, label: 'Delete', onClick: () => handleDelete(type._id) },
+        { id: type._id, label: type.isActive ? 'Deactivate' : 'Activate', onClick: () => handleToggleStatus(type._id) },
+    ];
+
+
     if (status === 'failed') return <div>Error: {error}</div>;
 
     return (
@@ -90,32 +99,15 @@ const QuestionTypesPage = () => {
                                             <td className="px-4 py-2 border-b text-sm text-gray-700 relative">
                                                 <button
                                                     className="text-gray-600 hover:text-gray-800 focus:outline-none"
-                                                    onClick={() => handleDropdownToggle(index)}
+                                                    onClick={() => setDropdownOpen(dropdownOpen === index ? null : index)}
                                                 >
                                                     <FiMoreVertical />
                                                 </button>
-                                                {dropdownOpen === index && (
-                                                    <div ref={ref} className="absolute right-0 mt-2 w-28 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                                                        <button
-                                                            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                                                            onClick={() => handleToggleStatus(type._id)}
-                                                        >
-                                                            {type.isActive ? 'Inactive' : 'Active'}
-                                                        </button>
-                                                        {/* <button
-                                                            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                                                            onClick={() => handleEdit(type)}
-                                                        >
-                                                            Edit
-                                                        </button>
-                                                        <button
-                                                            className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                                                            onClick={() => handleDelete(type)}
-                                                        >
-                                                            Delete
-                                                        </button> */}
-                                                    </div>
-                                                )}
+                                                <DropdownMenu
+                                                    items={menuItems(type)}
+                                                    isOpen={dropdownOpen === index}
+                                                    onClose={() => setDropdownOpen(null)}
+                                                />
                                             </td>
                                         </tr>
                                     ))

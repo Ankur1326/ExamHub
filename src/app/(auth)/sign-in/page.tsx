@@ -34,8 +34,22 @@ export default function Page() {
             }
 
             if (result?.ok) {
-                router.replace("/dashboard/");
+                const response = await fetch('/api/auth/session');
+                const session = await response.json();
+                const userRole = session?.user?.role;
+
+                // Redirect based on user role
+                if (userRole === 'admin') {
+                    router.replace("/admin/dashboard");
+                } else if (userRole === 'teacher') {
+                    router.replace("/teacher/dashboard");
+                } else if (userRole === 'student') {
+                    router.replace("/student/dashboard");
+                } else {
+                    router.replace("/403");  // Unauthorized access page
+                }
             }
+
         } catch (error) {
             console.error("Error during sign-in:", error);
             toast.error("An unexpected error occurred. Please try again later.");
@@ -59,7 +73,20 @@ export default function Page() {
                 router.push(`/sign-in?error=${encodeURIComponent(result.error)}`);
                 toast.error(result?.error);
             } else if (result?.ok) {
-                router.replace("/dashboard/");
+                const response = await fetch('/api/auth/session');
+                const session = await response.json();
+                const userRole = session?.user?.role;
+
+                // Redirect based on user role
+                if (userRole === 'admin') {
+                    router.replace("/admin/dashboard");
+                } else if (userRole === 'teacher') {
+                    router.replace("/teacher/dashboard");
+                } else if (userRole === 'student') {
+                    router.replace("/student/dashboard");
+                } else {
+                    router.replace("/403");  // Unauthorized access page
+                }
             }
         } catch (error) {
             console.error("Error during Google sign-in:", error);

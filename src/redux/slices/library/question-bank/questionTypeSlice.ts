@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { setLoading } from "../loadingSlice";
+import { setLoading } from "../../loadingSlice";
 
 // Types for the state
 interface QuestionType {
@@ -26,7 +26,7 @@ export const fetchQuestionTypes = createAsyncThunk<QuestionType[], void, { rejec
     'questionTypes/fetchQuestionTypes',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch('/api/admin/question-bank/question-types/get');
+            const response = await fetch('/api/admin/question-types/get');
             if (!response.ok) {
                 return rejectWithValue('Failed to fetch question types');
             }
@@ -46,7 +46,7 @@ export const toggleQuestionTypeStatus = createAsyncThunk<QuestionType, { id: str
     async ({ id }, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true))
         try {
-            const response = await axios.post(`/api/admin/question-bank/question-types/toggle-status`, { id });
+            const response = await axios.post(`/api/admin/question-types/toggle-status`, { id });
 
             return response.data.updatedQuestionTypes;
         } catch (error: any) {

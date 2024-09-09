@@ -1,13 +1,11 @@
 "use client";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/admin/Sidebar";
 import { store } from "@/redux/store";
 import { useState } from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
 import { Provider } from "react-redux";
 import 'react-loading-skeleton/dist/skeleton.css'
-import { Loader2 } from "lucide-react";
-
 
 export default function RootLayout({ children }: any) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);

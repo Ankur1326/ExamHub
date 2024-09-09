@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import Sidebar from "../Sidebar";
+import Sidebar from "../admin/Sidebar";
 
 const ToggleSidebarButton = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);

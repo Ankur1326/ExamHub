@@ -52,15 +52,15 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.dashboard && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/dashboard')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer ${isActive('/admin/dashboard')}`}>
+                                    <div onClick={() => navigateTo('/admin/dashboard')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/dashboard')}`}>
                                         <AiOutlineHome className="text-lg" />
                                         <span>Home</span>
                                     </div>
-                                    <div onClick={() => navigateTo('/user/profile')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer ${isActive('/user/profile')}`}>
+                                    <div onClick={() => navigateTo('/user/profile')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/user/profile')}`}>
                                         <AiOutlineUser className="text-lg" />
                                         <span>My Profile</span>
                                     </div>
-                                    <div onClick={() => navigateTo('/dashboard/settings')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer ${isActive('/dashboard/settings')}`}>
+                                    <div onClick={() => navigateTo('/dashboard/settings')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/dashboard/settings')}`}>
                                         <AiOutlineSetting className="text-lg" />
                                         <span>My Account</span>
                                     </div>
@@ -77,7 +77,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.questionBanks && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer ${isActive('/admin/question-types')}`}>
+                                    <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/question-types')}`}>
                                         {/* <AiOutlineFileText className="text-lg" /> */}
                                         <span>Question Types</span>
                                     </div>
@@ -95,7 +95,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.manageCategories && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/tags')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer ${isActive('/admin/tags')}`}>
+                                    <div onClick={() => navigateTo('/admin/tags')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/tags')}`}>
                                         {/* <AiOutlineTags className="text-lg" /> */}
                                         <span>Tags</span>
                                     </div>
