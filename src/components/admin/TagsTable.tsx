@@ -7,6 +7,7 @@ import { createTag, deleteTag, editTag, fetchTags } from "@/redux/slices/configu
 import { Plus } from "lucide-react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Skeleton from 'react-loading-skeleton';
+import Pagination from "../Pagination";
 
 export default function TagsTable() {
     const dispatch = useDispatch<AppDispatch>();
@@ -68,28 +69,16 @@ export default function TagsTable() {
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
                 <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
                     <h2 className="text-3xl font-bold text-gray-600">Manage Tags</h2>
-                    <div className="flex space-x-4">
-                        <div className="relative w-full sm:w-64">
-                            <input
-                                type="text"
-                                placeholder="Search tags..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                            />
-                        </div>
-                        <div className="relative">
-                            <select
-                                value={tagsPerPage}
-                                onChange={(e) => setTagsPerPage(Number(e.target.value))}
-                                className="text-sm px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                            >
-                                {[5, 10, 15].map(size => (
-                                    <option key={size} value={size}>{size} per page</option>
-                                ))}
-                            </select>
-                        </div>
+                    <div className="relative w-full sm:w-64">
+                        <input
+                            type="text"
+                            placeholder="Search tags..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        />
                     </div>
+
                 </div>
                 <button
                     onClick={() => { setSelectedTag(null); setShowModal(true); }}
@@ -145,34 +134,15 @@ export default function TagsTable() {
                 </tbody>
             </table>
 
-            {/* Pagination Controls */}
-            <div className="flex flex-col sm:flex-row items-center justify-between mt-6 text-sm">
-                <div className="mb-4 sm:mb-0">
-                    <span className="text-gray-700">
-                        Showing {tags.length} of {totalTags} tags
-                    </span>
-                </div>
-                <div className="flex items-center space-x-3">
-                    <button
-                        onClick={handlePreviousPage}
-                        disabled={currentPage === 1}
-                        className={`w-10 h-10 flex items-center justify-center rounded-full text-white ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue_button hover:bg-blue_hover_button"} transition`}
-                    >
-                        <FaAngleLeft className="text-lg" />
-                    </button>
-                    <span className="text-gray-700 text-sm">
-                        {currentPage} of {Math.ceil(totalPages)}
-                    </span>
-                    <button
-                        onClick={handleNextPage}
-                        disabled={currentPage === totalPages}
-                        className={`w-10 h-10 flex items-center justify-center rounded-full text-white ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue_button hover:bg-blue_hover_button"} transition`}
-                    >
-                        <FaAngleRight className="text-lg" />
-                    </button>
-                </div>
-            </div>
-
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                itemsPerPage={tags.length}
+                totalItems={totalTags}
+                setItemsPerPage={setTagsPerPage}
+                handlePreviousPage={handlePreviousPage}
+                handleNextPage={handleNextPage}
+            />
 
             {/* Modal for creating/editing tag */}
             {showModal && (
