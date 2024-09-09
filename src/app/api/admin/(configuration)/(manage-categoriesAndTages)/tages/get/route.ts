@@ -4,12 +4,12 @@ import ConfigurationModel from "@/model/Configuration";
 export async function GET(request: Request) {
     await dbConnect();
 
+    const url = new URL(request.url);
+    const isActive = url.searchParams.get("isActive");
+    const page = parseInt(url.searchParams.get("page") || "1", 10);  // Default to page 1 if not provided
+    const tagsPerPage = parseInt(url.searchParams.get("tagsPerPage") || "5", 10); // Default to 5 items per page
+    
     try {
-        const url = new URL(request.url);
-        const isActive = url.searchParams.get("isActive");
-        const page = parseInt(url.searchParams.get("page") || "1", 10);  // Default to page 1 if not provided
-        const tagsPerPage = parseInt(url.searchParams.get("tagsPerPage") || "5", 10); // Default to 5 items per page
-
         // Calculate the number of items to skip
         const skip = (page - 1) * tagsPerPage;
 
