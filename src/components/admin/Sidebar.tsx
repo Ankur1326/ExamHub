@@ -1,8 +1,8 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { AiOutlineUser, AiOutlineSetting, AiOutlineRight, AiOutlineDown, AiOutlineHome, AiOutlineDashboard, AiOutlineFileText, AiOutlineTags } from 'react-icons/ai';
-import { BiMoon } from 'react-icons/bi';
+import { AiOutlineUser, AiOutlineSetting, AiOutlineRight, AiOutlineDown, AiOutlineHome, AiOutlineDashboard, AiOutlineTags } from 'react-icons/ai';
 import { FaQuestionCircle } from 'react-icons/fa';
 
 interface SidebarProps {

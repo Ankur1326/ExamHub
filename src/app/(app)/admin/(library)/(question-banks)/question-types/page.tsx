@@ -1,6 +1,5 @@
 'use client'
 import DropdownMenu from '@/components/DropDownMenu';
-import DropDownMenu from '@/components/DropDownMenu';
 import EditSidebar from '@/components/EditSidebar';
 import { fetchQuestionTypes, toggleQuestionTypeStatus } from '@/redux/slices/library/question-bank/questionTypeSlice';
 import { AppDispatch, RootState } from '@/redux/store';

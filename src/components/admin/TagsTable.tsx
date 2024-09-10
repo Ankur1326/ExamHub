@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { createTag, deleteTag, editTag, fetchTags } from "@/redux/slices/configuration/manage-categories/tagSlice";
 import { Plus } from "lucide-react";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Skeleton from 'react-loading-skeleton';
 import Pagination from "../Pagination";
 
@@ -20,6 +19,9 @@ export default function TagsTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [tagsPerPage, setTagsPerPage] = useState(5); // Customize the number of items per page
     const [searchQuery, setSearchQuery] = useState<string>("");
+
+    console.log(tags, totalPages, totalTags, status, error);
+    
 
     useEffect(() => {
         dispatch(fetchTags({ currentPage, tagsPerPage }));
@@ -66,6 +68,7 @@ export default function TagsTable() {
 
     return (
         <div className="container mx-auto p-4">
+
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
                 <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">

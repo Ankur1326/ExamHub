@@ -1,17 +1,16 @@
 import dbConnect from "@/lib/dbConnect";
 import ConfigurationModel from "@/model/Configuration";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(request: NextRequest) {
+export async function PATCH(request: Request) {
     await dbConnect();
 
     try {
         const { tagId, tagName, isActive } = await request.json();
-        console.log(tagId, tagName, isActive);
+        // console.log(tagId, tagName, isActive);
         
 
         if (!tagId || (!tagName && isActive === undefined)) {
-            return NextResponse.json(
+            return Response.json(
                 {
                     success: false,
                     message: "tagId, and at least one of name or isActive are required."
@@ -37,7 +36,7 @@ export async function PATCH(request: NextRequest) {
         );
 
         if (!configuration) {
-            return NextResponse.json(
+            return Response.json(
                 {
                     success: false,
                     message: "Tag not found or configuration not found."
@@ -52,7 +51,7 @@ export async function PATCH(request: NextRequest) {
 
         // console.log("updatedTag : ", updatedTag);
 
-        return NextResponse.json(
+        return Response.json(
             {
                 success: true,
                 message: "Tag updated successfully",
@@ -65,7 +64,7 @@ export async function PATCH(request: NextRequest) {
 
     } catch (error) {
         console.log("Error while updating the tag: ", error);
-        return NextResponse.json(
+        return Response.json(
             {
                 success: false,
                 message: "Internal server error while updating the tag",

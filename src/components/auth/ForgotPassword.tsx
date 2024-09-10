@@ -7,7 +7,6 @@ type ForgotPasswordProps = {
     onClose: () => void;
 };
 
-
 const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onClose }): JSX.Element => {
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');

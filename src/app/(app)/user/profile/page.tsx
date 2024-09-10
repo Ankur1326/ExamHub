@@ -1,6 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
-// import { fetchUserProfile } from "@/services/profileService";
 import ProfileClient from "@/components/dashboard/Profile";
 
 export default async function Profile() {
@@ -11,9 +10,7 @@ export default async function Profile() {
     }
 
     const { username, email } = session.user;
-    // console.log(session);
     try {
-        // const profile = await fetchUserProfile({ username, email });
         return <ProfileClient username={username} email={email} />;
     } catch (error: any) {
         console.log(error);

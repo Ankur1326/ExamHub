@@ -1,8 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import ConfigurationModel from "@/model/Configuration";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: Request) {
     await dbConnect();
 
     try {
@@ -11,7 +10,7 @@ export async function DELETE(request: NextRequest) {
         const tagId = data._id
 
         if (!tagId) {
-            return NextResponse.json(
+            return Response.json(
                 {
                     success: false,
                     message: "tagId is required."
@@ -33,7 +32,7 @@ export async function DELETE(request: NextRequest) {
 
 
         if (!configuration) {
-            return NextResponse.json(
+            return Response.json(
                 {
                     success: false,
                     message: "Tag not found or configuration not found."
@@ -44,7 +43,7 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        return NextResponse.json(
+        return Response.json(
             {
                 success: true,
                 message: "Tag deleted successfully",
@@ -57,7 +56,7 @@ export async function DELETE(request: NextRequest) {
 
     } catch (error) {
         console.error("Error while deleting the tag: ", error);
-        return NextResponse.json(
+        return Response.json(
             {
                 success: false,
                 message: "Internal server error while deleting the tag",

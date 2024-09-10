@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import ConfigurationModel from "@/model/Configuration";
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth/react";
 
 export async function POST(request: Request) {
     await dbConnect();
