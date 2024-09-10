@@ -103,7 +103,7 @@ export default function TagsTable() {
                 <tbody>
                     {status === 'succeeded' ? (
                         tags.map((tag: any) => (
-                            <tr key={tag.id} className="border-t hover:bg-gray-50">
+                            <tr key={tag.id} className="border-t hover:bg-gray-50" style={{ height: '45px' }}>
                                 <td className="py-3 px-4 text-sm">{tag?.tagName}</td>
                                 <td className="py-3 px-4 text-sm">
                                     <span className={`px-2 py-1 rounded-full text-xs ${tag.isActive ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>
@@ -127,7 +127,7 @@ export default function TagsTable() {
                         ))
                     ) : (
                         Array.from({ length: tagsPerPage }).map((_, index) => (
-                            <tr key={index}>
+                            <tr key={index} style={{ height: '45px' }}>
                                 <td className="px-4 py-2 border-b"><Skeleton width={24} height={20} /></td>
                                 <td className="px-4 py-2 border-b"><Skeleton width={150} height={20} /></td>
                                 <td className="px-4 py-2 border-b"><Skeleton width={40} height={20} /></td>

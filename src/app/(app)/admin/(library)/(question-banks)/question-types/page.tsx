@@ -86,7 +86,7 @@ const QuestionTypesPage = () => {
                             <tbody>
                                 {status === 'succeeded' ? (
                                     questionTypes.map((type: any, index: number) => (
-                                        <tr key={index} className={`cursor-default ${(index + 1) % 2 === 0 ? 'bg-gray-100' : ""} }`} >
+                                        <tr key={index} className={`cursor-default ${(index + 1) % 2 === 0 ? 'bg-gray-100' : ""} h-12`} >
                                             <td className="px-4 py-2 border-b text-sm text-gray-700">{index + 1}</td>
                                             <td className="px-4 py-2 border-b text-sm text-gray-700">{type.typeName}</td>
                                             <td className="px-4 py-2 border-b text-sm text-gray-700">{type.description}</td>
@@ -112,7 +112,7 @@ const QuestionTypesPage = () => {
                                     ))
                                 ) : (
                                     Array.from({ length: 5 }).map((_, index) => (
-                                        <tr key={index}>
+                                        <tr key={index} className="h-12">
                                             <td className="px-4 py-2 border-b"><Skeleton width={24} /></td>
                                             <td className="px-4 py-2 border-b"><Skeleton width={150} /></td>
                                             <td className="px-4 py-2 border-b"><Skeleton width={250} /></td>
