@@ -20,11 +20,10 @@ export default function TagsTable() {
     const [tagsPerPage, setTagsPerPage] = useState(5); // Customize the number of items per page
     const [searchQuery, setSearchQuery] = useState<string>("");
 
-    console.log(tags, totalPages, totalTags, status, error);
-    
-
     useEffect(() => {
-        dispatch(fetchTags({ currentPage, tagsPerPage }));
+        if (typeof window !== 'undefined') {
+            dispatch(fetchTags({ currentPage, tagsPerPage }));
+        }
     }, [dispatch, currentPage, tagsPerPage, searchQuery]);
 
     const handleNextPage = () => {

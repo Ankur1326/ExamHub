@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineUser, AiOutlineSetting, AiOutlineRight, AiOutlineDown, AiOutlineHome, AiOutlineDashboard, AiOutlineTags } from 'react-icons/ai';
 import { FaQuestionCircle } from 'react-icons/fa';
 
@@ -11,12 +11,18 @@ interface SidebarProps {
 
 export default function Sidebar({ isSidebarOpen }: SidebarProps) {
     const router = useRouter();
-    const [currentRoute, setCurrentRoute] = useState<string>(window.location.pathname);
+    const [currentRoute, setCurrentRoute] = useState<string>('');
     const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
         dashboard: false,
         questionBanks: false,
         manageCategories: false,
     });
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setCurrentRoute(window.location.pathname);
+        }
+    }, []);
 
     const isActive = (route: string) => currentRoute === route ? 'bg-[#00A261] text-white' : 'text-slate-300';
 
