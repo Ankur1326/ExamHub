@@ -21,6 +21,9 @@ const Pagination: React.FC<PaginationProps> = ({
   handlePreviousPage,
   handleNextPage,
 }) => {
+
+  console.log("Items Per Page Selected:", itemsPerPage);
+
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between mt-6 text-sm">
       {/* Items Per Page Selector */}

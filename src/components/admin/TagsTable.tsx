@@ -140,7 +140,7 @@ export default function TagsTable() {
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                itemsPerPage={tags.length}
+                itemsPerPage={tagsPerPage}
                 totalItems={totalTags}
                 setItemsPerPage={setTagsPerPage}
                 handlePreviousPage={handlePreviousPage}
