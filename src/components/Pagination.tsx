@@ -49,7 +49,7 @@ const Pagination: React.FC<PaginationProps> = ({
     <button
       onClick={handlePreviousPage}
       disabled={currentPage === 1}
-      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#716ACA] hover:bg-[#645eb3]'
         }`}
       aria-label="Previous Page"
     >
@@ -63,7 +63,7 @@ const Pagination: React.FC<PaginationProps> = ({
     <button
       onClick={handleNextPage}
       disabled={currentPage === totalPages}
-      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#716ACA] hover:bg-[#645eb3]'
         }`}
       aria-label="Next Page"
     >

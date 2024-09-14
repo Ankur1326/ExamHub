@@ -5,12 +5,13 @@ import DropdownMenu from "../DropDownMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { createTag, deleteTag, fetchTags, updateTag } from "@/redux/slices/configuration/manage-categories/tagsSlice";
-import { Plus } from "lucide-react";
+import { Filter, Plus } from "lucide-react";
 import Skeleton from 'react-loading-skeleton';
 import Pagination from "../Pagination";
 import { EditOrCreateNewModalWrapper } from "../EditOrCreateNewModalWrapper";
 import SearchBar from "../SearchBar";
 import StatusFilter from "../StatusFilter";
+import SectionHeader from "../SectionHeader";
 
 export default function TagsTable() {
     const dispatch = useDispatch<AppDispatch>();
@@ -158,16 +159,7 @@ export default function TagsTable() {
     return (
         <div className="container mx-auto p-4">
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-gray-600">Manage Tags</h2>
-                <button
-                    onClick={handleCreateNewTag}
-                    className="bg-green_button text-white text-sm flex items-center px-4 py-2 rounded-lg shadow-md hover:bg-green_hover_button transition duration-200 ease-in-out"
-                >
-                    <Plus width={20} className="mr-2" /> Create New
-                </button>
-            </div>
-
+            <SectionHeader title="Manage Tags" onClick={handleCreateNewTag} />
             {/* Tags Table */}
             <table className="min-w-full bg-white shadow-md rounded-lg border border-gray-200">
                 <thead className="bg-white">
@@ -193,9 +185,10 @@ export default function TagsTable() {
                         <th className="text-left py-2 text-sm font-medium text-gray-600">
                             <button
                                 onClick={handleSearch}  // Trigger the search when clicked
-                                className="bg-blue_button text-white px-4 py-1 rounded-md hover:bg-blue_hover_button"
+                                className="flex items-center gap-2 bg-white text-black px-2 py-[6px] text-xs hover:bg-blue_hover_button transition duration-200 ease-in-out hover:text-white"
                             >
-                                Search
+                                <Filter color="gray" size={13} />
+                                <span>Apply</span>
                             </button>
                         </th>
                     </tr>

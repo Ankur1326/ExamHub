@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUser, FaUserAlt, FaUserAltSlash, FaUserCircle, FaUserCog } from 'react-icons/fa';
 import { AiOutlineUser, AiOutlineLogout } from 'react-icons/ai';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
@@ -9,13 +9,14 @@ import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import { fetchUserProfile } from '@/redux/slices/userSlice';
+import Skeleton from 'react-loading-skeleton';
 
 export default function ProfileMenu() {
     const dispatch = useDispatch<AppDispatch>();
     const menuRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const { data: session } = useSession();
-    const { profile, profilePicture } = useSelector((state: RootState) => state.user);
+    const { profile, profilePicture, status } = useSelector((state: RootState) => state.user);
     const router = useRouter();
 
     useEffect(() => {
@@ -50,13 +51,13 @@ export default function ProfileMenu() {
         };
     }, [closeMenu]);
 
-    const renderProfileImage = (src: string | null) => (
-        <div className="overflow-hidden w-10 h-10 rounded-full border-2 border-primary-500">
+    const RenderProfileImage = ({ src, width, height }: any) => (
+        <div className="overflow-hidden rounded-sm">
             <Image
                 src={src || ''}
                 alt="Profile image"
-                width={40}
-                height={40}
+                width={width}
+                height={height}
                 className="object-cover"
             />
         </div>
@@ -65,8 +66,17 @@ export default function ProfileMenu() {
     return (
         <div className="relative">
             <button onClick={toggleMenu} className="text-primary-600">
-                {profilePicture ? renderProfileImage(profilePicture) : <FaUserCircle size={35} />}
-                {/* <span className="hidden md:block font-semibold">{profile?.user?.username || 'Profile'}</span> */}
+                {
+                    status === "succeeded" ?
+                        (
+                            profilePicture ? <RenderProfileImage src={profilePicture} height={40} width={40} /> : <FaUserCircle size={35} />
+                        )
+                        :
+                        (
+                            <Skeleton width={40} height={40} />
+                        )
+
+                }
             </button>
 
             {isOpen && (
@@ -75,7 +85,16 @@ export default function ProfileMenu() {
                     className="absolute right-0 mt-2 w-72 z-20 p-4 bg-white shadow-lg rounded-lg border border-gray-200"
                 >
                     <div className="flex items-center gap-4">
-                        {profilePicture ? renderProfileImage(profilePicture) : <FaUserCircle size={40} className="text-primary-600" />}
+                        {
+                            status === "succeeded" ?
+                                (
+                                    profilePicture ? <RenderProfileImage src={profilePicture} height={45} width={45} /> : <FaUserCircle size={45} />
+                                )
+                                :
+                                (
+                                    <Skeleton width={45} height={45} />
+                                )
+                        }
                         <div>
                             <p className="font-semibold text-gray-800 text-lg">{profile?.user?.username}</p>
                             <p className="text-sm text-gray-500">{profile?.user?.email}</p>
