@@ -33,9 +33,6 @@ export default function TagsTable() {
 
     const tags = pagesCache[currentPage] || []; // Get tags for the current page from cache
 
-    console.log(tags, currentPage, totalPages);
-    
-
     useEffect(() => {
         const fetchData = async () => {
             if (!pagesCache[currentPage]) {
@@ -130,7 +127,7 @@ export default function TagsTable() {
 
     const onEdit = (item: any) => {
         setSelectedTag(item); // Set the tag data for editing
-        setName(item.tagName); // Set the existing tag name in state
+        setName(item.name); // Set the existing tag name in state
         setIsActive(item.isActive);
         setModalVisible(true)// Show the modal
         setDropdownOpen(null);

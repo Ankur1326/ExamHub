@@ -117,7 +117,7 @@ export const updateTag = createAsyncThunk(
     async (tag: Tag, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {
-            const response = await axios.patch(`/api/admin/tages/update`, tag);
+            const response = await axios.put(`/api/admin/tages/update`, tag);
             if (response.status === 200) {
                 return response.data.data;
             }
