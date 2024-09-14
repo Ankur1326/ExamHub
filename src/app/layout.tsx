@@ -18,6 +18,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* <head> */}
+        {/* <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.MathJax = {
+                tex: {
+                  inlineMath: [['$', '$'], ['\\(', '\\)']],
+                  displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                  processEscapes: true
+                },
+                svg: {
+                  fontCache: 'global'
+                }
+              };
+              MathJax.startup.defaultReady();
+            `
+          }}
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML" async></script> */}
+        {/* <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        
+        <script src="https://cdn.jsdelivr.net/gh/isaul32/ckeditor5@c3463fe834049bf5d805d1d22402108a9c0576bd/packages/ckeditor5-build-classic/build/ckeditor.js"></script> */}
+      {/* </head> */}
       <AuthProvider>
         <body className={inter.className}>
           {children}

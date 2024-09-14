@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-editor .ck-editor__editable {
+  min-height: 400px !important; /* Adjust the height */
+  max-height: 600px !important; /* Set a maximum height if needed */
+  overflow: auto;
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

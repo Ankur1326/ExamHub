@@ -24,7 +24,7 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ filterQuery, setFilterQuery
             // defaultValue={null}
             // onChange={onChange}
             onChange={handleChange}
-            className="border border-gray-300 rounded-md px-4 py-1"
+            className="border border-gray-300 text-xs rounded-md px-3 py-1"
         >
             <option value="">Both</option>
             <option value="true">Active</option>

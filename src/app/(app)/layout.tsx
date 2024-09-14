@@ -22,7 +22,7 @@ export default function RootLayout({ children }: any) {
       {/* Content Area */}
       <Provider store={store}>
         <div className="flex-1 ml-0 md:ml-64">
-          <header className="flex justify-between h-16 items-center bg-white fixed top-0 left-0 right-0 z-10 shadow-sm border border-gray-200">
+          <header className="flex justify-between h-16 bg-white items-center fixed top-0 left-0 right-0 z-10 shadow-md">
             <button
               className="text-2xl md:hidden"
               onClick={toggleSidebar}
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: any) {
               <Navbar />
             </div>
           </header>
-          <main className="mt-16 px-2 py-3 bg-[#F4F6F9] h-full">{children}</main>
+          <main className="mt-16 px-2 py-3 bg-[#F2F3F8] h-full">{children}</main>
         </div>
       </Provider>
 
