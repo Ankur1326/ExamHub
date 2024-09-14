@@ -1,6 +1,6 @@
 'use client'
 
-import { Filter } from "lucide-react";
+import { Filter, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { EditOrCreateNewModalWrapper } from "@/components/EditOrCreateNewModalWrapper";
 import { useDispatch } from "react-redux";
