@@ -2,14 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './slices/userSlice';
 import questionTypesReducer from './slices/library/question-bank/questionTypeSlice';
 import loadingReducer from "./slices/loadingSlice"
-import tagReducer from "./slices/configuration/manage-categories/tagSlice"
+import tagsReducer from "./slices/configuration/manage-categories/tagsSlice"
+import categoriesReducer from "./slices/configuration/manage-categories/categoriesSlice"
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         questionTypes: questionTypesReducer,
         loading: loadingReducer,
-        tag: tagReducer
+        tag: tagsReducer,
+        categories: categoriesReducer,
     },
 });
 
