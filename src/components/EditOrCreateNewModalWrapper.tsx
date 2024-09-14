@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useRef, ReactNode } from 'react';
 
 interface ModalWrapperProps {
@@ -29,7 +30,7 @@ export function EditOrCreateNewModalWrapper({ onClose, onSave, title, isVisible,
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [onClose]);
 
     return (
         <div className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>

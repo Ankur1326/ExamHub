@@ -50,7 +50,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                     <div className="mt-4">
                         <nav className="space-y-2">
                             {/* Dashboard Section */}
-                            <div onClick={() => toggleSection('dashboard')} className={`flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer ${isActive('/admin/dashboard')} hover:text-white hover:bg-[#00A261]`}>
+                            <div onClick={() => toggleSection('dashboard')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/dashboard')} hover:text-white hover:bg-[#00A261]`}>
                                 <div className="flex items-center space-x-2">
                                     <AiOutlineDashboard className="text-lg" />
                                     <span>Dashboard</span>
@@ -59,23 +59,23 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.dashboard && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/dashboard')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/dashboard')}`}>
-                                        <AiOutlineHome className="text-lg" />
+                                    <div onClick={() => navigateTo('/admin/dashboard')} className={`flex items-center space-x-2 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/dashboard')}`}>
+                                        <AiOutlineHome />
                                         <span>Home</span>
                                     </div>
-                                    <div onClick={() => navigateTo('/user/profile')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/user/profile')}`}>
-                                        <AiOutlineUser className="text-lg" />
+                                    <div onClick={() => navigateTo('/user/profile')} className={`flex items-center space-x-2 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/user/profile')}`}>
+                                        <AiOutlineUser />
                                         <span>My Profile</span>
                                     </div>
-                                    <div onClick={() => navigateTo('/dashboard/settings')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/dashboard/settings')}`}>
-                                        <AiOutlineSetting className="text-lg" />
+                                    <div onClick={() => navigateTo('/dashboard/settings')} className={`flex items-center space-x-2 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/dashboard/settings')}`}>
+                                        <AiOutlineSetting />
                                         <span>My Account</span>
                                     </div>
                                 </div>
                             )}
 
                             {/* Question Banks Section */}
-                            <div onClick={() => toggleSection('questionBanks')} className={`flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer ${isActive('/admin/question-banks')} hover:text-white hover:bg-[#00A261]`}>
+                            <div onClick={() => toggleSection('questionBanks')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/question-banks')} hover:text-white hover:bg-[#00A261]`}>
                                 <div className="flex items-center space-x-2">
                                     <FaQuestionCircle className="text-lg" />
                                     <span>Question Banks</span>
@@ -84,7 +84,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.questionBanks && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-1 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/question-types')}`}>
+                                    <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/question-types')}`}>
                                         {/* <AiOutlineFileText className="text-lg" /> */}
                                         <Dot />
                                         <span>Question Types</span>
@@ -94,7 +94,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             )}
 
                             {/* Manage Categories Section */}
-                            <div onClick={() => toggleSection('manageCategories')} className={`flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer ${isActive('/admin/manage-categories')} hover:text-white hover:bg-[#00A261]`}>
+                            <div onClick={() => toggleSection('manageCategories')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/manage-categories')} hover:text-white hover:bg-[#00A261]`}>
                                 <div className="flex items-center space-x-2">
                                     <AiOutlineTags className="text-lg" />
                                     <span>Manage Categories</span>
@@ -103,7 +103,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.manageCategories && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/tags')} className={`flex items-center space-x-1 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/tags')}`}>
+                                    <div onClick={() => navigateTo('/admin/tags')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/tags')}`}>
                                         {/* <AiOutlineTags className="text-lg" /> */}
                                         <Dot />
                                         <span>Tags</span>

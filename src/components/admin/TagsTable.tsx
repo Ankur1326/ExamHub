@@ -161,12 +161,12 @@ export default function TagsTable() {
             {/* Header Section */}
             <SectionHeader title="Manage Tags" onClick={handleCreateNewTag} />
             {/* Tags Table */}
-            <table className="min-w-full bg-white shadow-md rounded-lg border border-gray-200">
+            <table className="min-w-full bg-white shadow-md rounded-sm">
                 <thead className="bg-white">
-                    <tr>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Tag Name</th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Status</th>
-                        <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Actions</th>
+                    <tr className="">
+                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Tag Name</th>
+                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Status</th>
+                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Actions</th>
                     </tr>
                 </thead>
                 <thead className="bg-gray-100">
@@ -185,10 +185,10 @@ export default function TagsTable() {
                         <th className="text-left py-2 text-sm font-medium text-gray-600">
                             <button
                                 onClick={handleSearch}  // Trigger the search when clicked
-                                className="flex items-center gap-2 bg-white text-black px-2 py-[6px] text-xs hover:bg-blue_hover_button transition duration-200 ease-in-out hover:text-white"
+                                className="flex items-center gap-2 bg-[#EFF6FF] rounded-md border border-blue-200 text-blue-500 px-2 py-[6px] text-xs hover:bg-blue_hover_button transition duration-200 ease-in-out hover:text-white"
                             >
-                                <Filter color="gray" size={13} />
-                                <span>Apply</span>
+                                <Filter size={13} />
+                                <span>Filters</span>
                             </button>
                         </th>
                     </tr>
@@ -197,10 +197,10 @@ export default function TagsTable() {
                     {!loadingPage ? (
                         tags.length > 0 ? (
                             tags.map((tag: any) => (
-                                <tr key={tag.id} className="border-t hover:bg-gray-50" style={{ height: '45px' }}>
-                                    <td className="py-3 px-4 text-sm">{tag?.name}</td>
-                                    <td className="py-3 px-4 text-sm">
-                                        <span className={`px-2 py-1 rounded-full text-xs ${tag.isActive ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>
+                                <tr key={tag.id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
+                                    <td className="py-3 px-4 text-sm border-r border-gray-100">{tag?.name}</td>
+                                    <td className="py-3 px-4 text-sm border-r border-gray-100">
+                                        <span className={`px-2 py-1 rounded-sm text-xs font-medium ${tag.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
                                             {tag.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
