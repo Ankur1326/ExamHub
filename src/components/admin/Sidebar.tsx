@@ -1,5 +1,6 @@
 'use client';
 
+import { Dot } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AiOutlineUser, AiOutlineSetting, AiOutlineRight, AiOutlineDown, AiOutlineHome, AiOutlineDashboard, AiOutlineTags } from 'react-icons/ai';
@@ -83,8 +84,9 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.questionBanks && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/question-types')}`}>
+                                    <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-1 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/question-types')}`}>
                                         {/* <AiOutlineFileText className="text-lg" /> */}
+                                        <Dot />
                                         <span>Question Types</span>
                                     </div>
                                     {/* Add more sub-links here */}
@@ -101,8 +103,9 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             </div>
                             {expandedSections.manageCategories && (
                                 <div className="pl-8 space-y-2">
-                                    <div onClick={() => navigateTo('/admin/tags')} className={`flex items-center space-x-2 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/tags')}`}>
+                                    <div onClick={() => navigateTo('/admin/tags')} className={`flex items-center space-x-1 px-4 py-2 rounded-lg cursor-pointer hover:text-white ${isActive('/admin/tags')}`}>
                                         {/* <AiOutlineTags className="text-lg" /> */}
+                                        <Dot />
                                         <span>Tags</span>
                                     </div>
                                 </div>

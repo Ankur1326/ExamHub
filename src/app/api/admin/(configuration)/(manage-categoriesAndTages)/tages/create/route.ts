@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import ConfigurationModel from "@/model/Configuration";
+import Tag from "@/model/tags";
 // import { getSession } from "next-auth/react";
 
 export async function POST(request: Request) {
@@ -25,15 +25,14 @@ export async function POST(request: Request) {
     // }
 
     try {
-        const { tagName, isActive } = await request.json();
-        // console.log(tagName, isActive);
+        const { name, isActive } = await request.json();
+        console.log(name, isActive);
 
-        // Fixing validation to check for undefined for isActive
-        if (!tagName || isActive === undefined) {
+        if (!name) {
             return Response.json(
                 {
                     success: false,
-                    message: "Tag name and isActive are required."
+                    message: "Tag name is required."
                 },
                 {
                     status: 400
@@ -41,58 +40,34 @@ export async function POST(request: Request) {
             );
         }
 
-        // Find the document and check if the tag already exists
-        const existingConfig = await ConfigurationModel.findOne({
-            documentType: 'questionTags',
-            'questionTags.tagName': tagName
+        // Check if the category already exists by name
+        const existingTag = await Tag.findOne({ name });
+        console.log("existingTag : ", existingTag);
+
+
+        if (existingTag) {
+            return Response.json(
+                {
+                    success: true,
+                    message: "Tag with this name already exists",
+                },
+                { status: 400 }
+            )
+        }
+
+        const newTag = new Tag({
+            name,
+            isActive,
         });
 
-        if (existingConfig) {
-            return Response.json(
-                {
-                    success: false,
-                    message: "Tag already exists."
-                },
-                {
-                    status: 409 // Conflict
-                }
-            );
-        }
-
-        const configuration = await ConfigurationModel.findOneAndUpdate(
-            { documentType: 'questionTags' },
-            {
-                $push: {
-                    questionTags: {
-                        $each: [{ tagName, isActive }],
-                        $position: 0 // Add the new tag at the first position
-                    }
-                }
-            },
-            { new: true, upsert: true }
-        );
-
-        const createdTag = configuration?.questionTags?.find(
-            item => item.tagName === tagName && item.isActive === isActive
-        );
-
-        if (!configuration) {
-            return Response.json(
-                {
-                    success: false,
-                    message: "configuration not found",
-                },
-                {
-                    status: 404
-                }
-            );
-        }
+        // Save the new tag to the database
+        await newTag.save();
 
         return Response.json(
             {
                 success: true,
-                message: "Question tag created successfully",
-                data: createdTag,
+                message: "Tag successfully created",
+                data: newTag,
             },
             {
                 status: 200
@@ -100,11 +75,11 @@ export async function POST(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while creating new question tag : ", error);
+        console.log("Error while creating new tag : ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while creating new question tag",
+                message: "Internal server error while creating new tag",
                 error
             },
             {
@@ -113,4 +88,3 @@ export async function POST(request: Request) {
         );
     }
 }
-``

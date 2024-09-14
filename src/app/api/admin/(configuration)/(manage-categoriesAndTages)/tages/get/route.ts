@@ -1,80 +1,92 @@
 import dbConnect from "@/lib/dbConnect";
-import ConfigurationModel from "@/model/Configuration";
+import Tag from "@/model/tags";
+// import { getSession } from "next-auth/react";
 
 export async function GET(request: Request) {
     await dbConnect();
 
-    const url = new URL(request.url);
+    // const session = await getSession({ request })
+
+    // if (!session) {
+    //     return Response.json(
+    //         {
+    //             success: false,
+    //             message: "Unauthorized. Please log in."
+    //         },
+    //         {
+    //             status: 401
+    //         }
+    //     );
+    // }
+
+    // Check if the user has admin role
+    // if (session.user?.role !== "admin") {
+    //     return res.status(403).json({ error: "Forbidden. You do not have permission to perform this action." });
+    // }
+
+    const url = new URL(request.url)
     const isActive = url.searchParams.get("isActive");
-    const page = parseInt(url.searchParams.get("page") || "1", 10);  // Default to page 1 if not provided
-    const tagsPerPage = parseInt(url.searchParams.get("tagsPerPage") || "5", 10); // Default to 5 items per page
-    
+    const currentPage = parseInt(url.searchParams.get("currentPage") || "1", 10);  // Default to page 1 if not provided
+    const name = url.searchParams.get("name") || "";
+    const itemsPerPage = parseInt(url.searchParams.get("itemsPerPage") || "5", 10); // Default to 5 items per page
+
     try {
-        // Calculate the number of items to skip
-        const skip = (page - 1) * tagsPerPage;
+        console.log(name, isActive, currentPage, itemsPerPage);
 
-         // Fetch the total number of tags for pagination purposes
-         const totalTagsCount = await ConfigurationModel.aggregate([
-            { $match: { documentType: 'questionTags' } },
-            { $project: { totalTags: { $size: "$questionTags" } } }
-        ]);
+        let filter: any = {};
 
-        const totalTags = totalTagsCount?.[0]?.totalTags || 0;
+        // If `isActive` is provided, add it to the filter
+        if (isActive !== null) {
+            const isActiveBoolean = isActive === 'true';
+            filter = { isActive: isActiveBoolean };
+        }
 
-        // Fetch the configuration document with optional filter on questionTags
-        const configuration = await ConfigurationModel.findOne(
-            { documentType: 'questionTags' },
-            { questionTags: { $slice: [skip, tagsPerPage] } }
-        );
-        
-        // Fetch the configuration document with optional filter on questionTags
-        const questionTags = configuration?.questionTags || [];
+        // Filter by `name` if provided (case-insensitive, partial match)
+        if (name) {
+            filter.name = { $regex: name, $options: "i" };
+        }
 
-        if (isActive === 'true') {
-            const activeQuestionTags = questionTags?.filter(questionTag => questionTag.isActive === true)
+        const skip = (currentPage - 1) * itemsPerPage;
+        const limit = itemsPerPage;
 
+        // Fetch categories based on filter and pagination
+        const tags = await Tag.find(filter).skip(skip).limit(limit).exec();
+        const totalTags = await Tag.countDocuments(filter).exec();
+
+        if (!tags) {
             return Response.json(
                 {
-                    success: true,
-                    message: "Active Question types fetched successfully",
-                    data: activeQuestionTags,
-                    pagination: {
-                        totalTags,
-                        currentPage: page,
-                        tagsPerPage,
-                        totalPage: Math.ceil(totalTags / tagsPerPage)
-                    }
+                    success: false,
+                    message: "tags not found"
                 },
                 {
-                    status: 200
-                }
-            );
-        } else {
-            // console.log("questionTypes : ", questionTypes);
-            return Response.json(
-                {
-                    success: true,
-                    message: "All Question types fetched successfully",
-                    data: questionTags,
-                    pagination: {
-                        totalTags,
-                        currentPage: page,
-                        tagsPerPage,
-                        totalPage: Math.ceil(totalTags / tagsPerPage)
-                    }
-                },
-                {
-                    status: 200
+                    status: 404
                 }
             );
         }
 
+        return Response.json(
+            {
+                success: true,
+                message: "Tags fetched successfully",
+                data: {
+                    tags,
+                    totalTags,
+                    currentPage,
+                    totalPages: Math.ceil(totalTags / itemsPerPage)
+                }
+            },
+            {
+                status: 200
+            }
+        );
+
     } catch (error) {
-        console.log("Error while fetching question tags: ", error);
+        console.log("Error while fetching tags: ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while fetching question tags",
+                message: "Internal server error while fetching tags",
                 error
             },
             {
@@ -82,5 +94,4 @@ export async function GET(request: Request) {
             }
         );
     }
-
 }

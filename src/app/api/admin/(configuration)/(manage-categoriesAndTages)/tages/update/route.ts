@@ -1,45 +1,73 @@
 import dbConnect from "@/lib/dbConnect";
-import ConfigurationModel from "@/model/Configuration";
+import Category from "@/model/categories";
+import Tag from "@/model/tags";
+// import { getSession } from "next-auth/react";
 
-export async function PATCH(request: Request) {
+export async function PUT(request: Request) {
     await dbConnect();
 
-    try {
-        const { tagId, tagName, isActive } = await request.json();
-        // console.log(tagId, tagName, isActive);
-        
+    // const session = await getSession({ request })
 
-        if (!tagId || (!tagName && isActive === undefined)) {
+    // if (!session) {
+    //     return Response.json(
+    //         {
+    //             success: false,
+    //             message: "Unauthorized. Please log in."
+    //         },
+    //         {
+    //             status: 401
+    //         }
+    //     );
+    // }
+
+    // Check if the user has admin role
+    // if (session.user?.role !== "admin") {
+    //     return res.status(403).json({ error: "Forbidden. You do not have permission to perform this action." });
+    // }
+
+    try {
+        const { _id, name, isActive } = await request.json();
+        // console.log(_id, newName, description, content, isActive);
+        const tagId = _id;
+
+        if (!tagId) {
             return Response.json(
                 {
                     success: false,
-                    message: "tagId, and at least one of name or isActive are required."
+                    message: "tagId is required",
                 },
                 {
-                    status: 400
+                    status: 400,
                 }
             );
         }
 
-        const configuration = await ConfigurationModel.findOneAndUpdate(
-            {
-                documentType: 'questionTags',
-                "questionTags._id": tagId
-            },
-            {
-                $set: {
-                    "questionTags.$.tagName": tagName,
-                    "questionTags.$.isActive": isActive
-                }
-            },
-            { new: true }
-        );
-
-        if (!configuration) {
+        // Check if the new name is already taken
+        const existingTag: any = await Tag.findOne({ name });
+        if (existingTag && existingTag._id.toString() !== tagId) {
             return Response.json(
                 {
                     success: false,
-                    message: "Tag not found or configuration not found."
+                    message: "Tag with this name already exists",
+                },
+                {
+                    status: 400,
+                }
+            );
+        }
+
+        // Find the tag by ID and update it
+        const updatedTag = await Tag.findByIdAndUpdate(
+            tagId,
+            { name, isActive },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedTag) {
+            return Response.json(
+                {
+                    success: false,
+                    message: "Tag not found",
                 },
                 {
                     status: 404
@@ -47,15 +75,11 @@ export async function PATCH(request: Request) {
             );
         }
 
-        const updatedTag = configuration?.questionTags?.filter((item:any) => item?._id == tagId) || []
-
-        // console.log("updatedTag : ", updatedTag);
-
         return Response.json(
             {
                 success: true,
-                message: "Tag updated successfully",
-                data: updatedTag[0]
+                message: "tag updated successfully",
+                data: updatedTag
             },
             {
                 status: 200
@@ -63,19 +87,16 @@ export async function PATCH(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while updating the tag: ", error);
+        console.log("Error while deleting tag : ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while updating the tag",
+                message: "Internal server error while tag",
                 error
             },
             {
                 status: 500
             }
         );
-
     }
-
-
 }

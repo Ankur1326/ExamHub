@@ -7,9 +7,9 @@ interface PaginationProps {
   totalPages: number;
   itemsPerPage: number;
   totalItems: number;
-  setItemsPerPage: (value: number) => void;
   handlePreviousPage: () => void;
   handleNextPage: () => void;
+  handleItemPerPageChange: (e : any) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -17,12 +17,10 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   itemsPerPage,
   totalItems,
-  setItemsPerPage,
   handlePreviousPage,
   handleNextPage,
+  handleItemPerPageChange,
 }) => {
-
-  console.log("Items Per Page Selected:", itemsPerPage);
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between mt-6 text-sm">
@@ -33,48 +31,46 @@ const Pagination: React.FC<PaginationProps> = ({
           <select
             id="itemsPerPage"
             value={itemsPerPage}
-            onChange={(e) => setItemsPerPage(Number(e.target.value))}
-            className="text-sm px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            onChange={(e) => handleItemPerPageChange(e)}
+          className="text-sm px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           >
-            {[5, 10, 15].map(size => (
-              <option key={size} value={size}>{size}</option>
-            ))}
-          </select>
-        </div>
-        <span className="text-gray-600">
-          Showing {Math.min(itemsPerPage, totalItems)} of {totalItems} items
-        </span>
+          {[5, 10, 15].map(size => (
+            <option key={size} value={size}>{size}</option>
+          ))}
+        </select>
       </div>
-
-      {/* Pagination Controls */}
-      <div className="flex items-center space-x-3">
-        <button
-          onClick={handlePreviousPage}
-          disabled={currentPage === 1}
-          className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${
-            currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
-          }`}
-          aria-label="Previous Page"
-        >
-          <FaAngleLeft className="text-lg" />
-        </button>
-
-        <span className="text-gray-700 text-sm">
-          Page {currentPage} of {totalPages}
-        </span>
-
-        <button
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-          className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${
-            currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
-          }`}
-          aria-label="Next Page"
-        >
-          <FaAngleRight className="text-lg" />
-        </button>
-      </div>
+      <span className="text-gray-600">
+        Showing {Math.min(itemsPerPage, totalItems)} of {totalItems} items
+      </span>
     </div>
+
+      {/* Pagination Controls */ }
+  <div className="flex items-center space-x-3">
+    <button
+      onClick={handlePreviousPage}
+      disabled={currentPage === 1}
+      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+        }`}
+      aria-label="Previous Page"
+    >
+      <FaAngleLeft className="text-lg" />
+    </button>
+
+    <span className="text-gray-700 text-sm">
+      Page {currentPage} of {totalPages}
+    </span>
+
+    <button
+      onClick={handleNextPage}
+      disabled={currentPage === totalPages}
+      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+        }`}
+      aria-label="Next Page"
+    >
+      <FaAngleRight className="text-lg" />
+    </button>
+  </div>
+    </div >
   );
 };
 
