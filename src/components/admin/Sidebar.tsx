@@ -43,9 +43,9 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
         >
             <div className="flex flex-col h-full justify-between">
                 <div>
-                    <a href="/" className="text-xl text-[#00A261] font-bold mb-4 flex items-center space-x-2">
+                    <a href="/" className="text-2xl text-[#00A261] font-bold mb-4 flex items-center space-x-2">
                         {/* <img src="/logo.png" alt="Logo" className="w-8 h-8" /> */}
-                        <span>Logo</span>
+                        <span className=''>Logo</span>
                     </a>
                     <div className="mt-4">
                         <nav className="space-y-2">
@@ -75,6 +75,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             )}
 
                             {/* Question Banks Section */}
+                            <Section name="Library" />
                             <div onClick={() => toggleSection('questionBanks')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/question-banks')} hover:text-white hover:bg-[#00A261]`}>
                                 <div className="flex items-center space-x-2">
                                     <FaQuestionCircle className="text-lg" />
@@ -94,6 +95,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             )}
 
                             {/* Manage Categories Section */}
+                            <Section name="Configuration" />
                             <div onClick={() => toggleSection('manageCategories')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/manage-categories')} hover:text-white hover:bg-[#00A261]`}>
                                 <div className="flex items-center space-x-2">
                                     <AiOutlineTags className="text-lg" />
@@ -125,4 +127,25 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
             </div>
         </div>
     );
+}
+
+const Section = ({ name, color = "#00A261" }: { name: string; color?: string }) => {
+    return (
+        <div className="flex items-center justify-start py-3 mt-6">
+            {/* <span
+                className="w-[70%] h-[0.5px] rounded-l-full bg-gradient-to-r from-gray-200 via-transparent"
+                style={{ backgroundColor: color }}
+            ></span> */}
+            <h3
+                className="font-bold text-xs tracking-wider uppercase px-3 py-1  text-[#00A261] rounded-md shadow-sm"
+                // style={{ border: `0.2px solid ${color}` }}
+            >
+                {name}
+            </h3>
+            <span
+                    className="w-[100%] h-[2px] rounded-r-full bg-gradient-to-l via-transparent bg-[#3e3e3e]"
+                // style={{ backgroundColor: '#00A261' }}
+            ></span>
+        </div>
+    )
 }
