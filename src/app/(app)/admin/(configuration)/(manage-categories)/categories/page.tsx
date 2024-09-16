@@ -16,6 +16,9 @@ import StatusFilter from "@/components/StatusFilter";
 import SearchBar from "@/components/SearchBar";
 import SectionHeader from "@/components/SectionHeader";
 import dynamic from "next/dynamic";
+import TableLabelHeader from "@/components/TableLabelHeader";
+import SearchFilters from "@/components/SearchFilters";
+import { formatDate } from "@/utility/dateFormate";
 
 const CKEditor = dynamic(() => import("@/components/CustomCKEditor").then((module) => module.default), { ssr: false })
 
@@ -112,23 +115,23 @@ export default function Page() {
         let response: any;
         if (selectedCategory) {
             // Update existing category
-                response = await dispatch(updateCategory({ ...selectedCategory, ...categoryData }));
-            } else {
-                // Create new category
-                response = await dispatch(createCategory(categoryData));
-            }
+            response = await dispatch(updateCategory({ ...selectedCategory, ...categoryData }));
+        } else {
+            // Create new category
+            response = await dispatch(createCategory(categoryData));
+        }
 
-            // Wait for the response to resolve
-            if (response && response.payload && typeof response.payload !== 'string') {
-                // Update the state to show the new/update tag immediately
-                const updatedCategories: any = selectedCategory ? categories.map(cat => cat._id === selectedCategory._id ? { ...cat, ...categoryData } : cat) : [...categories, response.payload]
+        // Wait for the response to resolve
+        if (response && response.payload && typeof response.payload !== 'string') {
+            // Update the state to show the new/update tag immediately
+            const updatedCategories: any = selectedCategory ? categories.map(cat => cat._id === selectedCategory._id ? { ...cat, ...categoryData } : cat) : [...categories, response.payload]
 
-                setPagesCache(prevCache => ({
-                    ...prevCache,
-                    [currentPage]: updatedCategories
-                }))
-                setModalVisible(false)
-            }
+            setPagesCache(prevCache => ({
+                ...prevCache,
+                [currentPage]: updatedCategories
+            }))
+            setModalVisible(false)
+        }
     }
 
     // Handle editing an existing category
@@ -168,7 +171,21 @@ export default function Page() {
         { id: item._id, label: 'Delete', onClick: () => handleDelete(item._id) },
     ];
 
-    if (status === 'failed') return <div>Error: {error}</div>;
+    const filterFields = [
+        <SearchBar
+            key="name"
+            filterQuery={filterQuery}
+            setFilterQuery={setFilterQuery}
+            placeHolder="Skill name..."
+            fieldName="name" // Pass the key corresponding to the filter
+        />,
+        <StatusFilter
+            key="status"
+            filterQuery={filterQuery}
+            setFilterQuery={setFilterQuery}
+        />,
+        <></>
+    ];
 
     return (
         <div className="container mx-auto p-4">
@@ -176,37 +193,8 @@ export default function Page() {
             <SectionHeader title="Manage Categories" onClick={handleCreateNewCategory} />
             {/* Tags Table */}
             <table className="min-w-full bg-white shadow-md rounded-sm">
-                <thead className="bg-white">
-                    <tr>
-                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Tag Name</th>
-                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Status</th>
-                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Actions</th>
-                    </tr>
-                </thead>
-                <thead className="bg-gray-100">
-                    <tr>
-                        <th className="text-left px-2 py-2 text-sm font-medium text-gray-600">
-                            <SearchBar
-                                filterQuery={filterQuery}
-                                setFilterQuery={setFilterQuery}
-                                placeHolder="Search name..."
-                            />
-                        </th>
-                        <th className="text-left py-2 text-sm font-medium text-gray-600">
-                            <StatusFilter filterQuery={filterQuery}
-                                setFilterQuery={setFilterQuery} />
-                        </th>
-                        <th className="text-left py-2 text-sm font-medium text-gray-600">
-                            <button
-                                onClick={handleSearch}  // Trigger the search when clicked
-                                className="flex items-center gap-2 bg-[#EFF6FF] rounded-md border border-blue-200 text-blue-500 px-2 py-[6px] text-xs hover:bg-blue_hover_button transition duration-200 ease-in-out hover:text-white"
-                            >
-                                <Filter size={13} />
-                                <span>Filters</span>
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
+                <TableLabelHeader headings={["Skill Name", "Status", "Created at", "Actions"]} />
+                <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
                 <tbody>
                     {
                         !loadingPage ? (
@@ -218,6 +206,9 @@ export default function Page() {
                                             <span className={`py-1 px-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
                                                 {item.isActive ? "Active" : "Inactive"}
                                             </span>
+                                        </td>
+                                        <td className="py-3 px-4 border-r border-gray-200 text-gray-400 text-xs">
+                                            {formatDate(item?.createdAt)}
                                         </td>
                                         <td className="py-3 px-4 text-sm relative w-fit">
                                             <button
@@ -244,8 +235,9 @@ export default function Page() {
                         ) : (
                             Array.from({ length: itemsPerPage }).map((_, index) => (
                                 <tr key={index} style={{ height: '45px' }}>
-                                    <td className="px-4 py-2 border-b"><Skeleton width={150} height={20} /></td>
-                                    <td className="px-4 py-2 border-b"><Skeleton width={50} height={20} /></td>
+                                    <td className="px-4 py-2 border-b border-r border-gray-100"><Skeleton width={150} height={20} /></td>
+                                    <td className="px-4 py-2 border-b border-r border-gray-100"><Skeleton width={50} height={20} /></td>
+                                    <td className="px-4 py-2 border-b border-r border-gray-100"><Skeleton width={50} height={20} /></td>
                                     <td className="px-4 py-2 border-b"><Skeleton width={30} height={20} /></td>
                                 </tr>
                             ))

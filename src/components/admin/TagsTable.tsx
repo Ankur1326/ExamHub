@@ -16,6 +16,7 @@ import FormInput from "../FormInput";
 import FormSelect from "../FormSelect";
 import TableLabelHeader from "../TableLabelHeader";
 import SearchFilters from "../SearchFilters";
+import { formatDate } from "@/utility/dateFormate";
 
 export default function TagsTable() {
     const dispatch = useDispatch<AppDispatch>();
@@ -162,16 +163,18 @@ export default function TagsTable() {
 
     const filterFields = [
         <SearchBar
-            key="search"
+            key="name"
             filterQuery={filterQuery}
             setFilterQuery={setFilterQuery}
-            placeHolder="Search name..."
+            placeHolder="Skill name..."
+            fieldName="name" // Pass the key corresponding to the filter
         />,
         <StatusFilter
             key="status"
             filterQuery={filterQuery}
             setFilterQuery={setFilterQuery}
         />,
+        <></>
     ];
 
     return (
@@ -180,7 +183,7 @@ export default function TagsTable() {
             <SectionHeader title="Manage Tags" onClick={handleCreateNewTag} />
             {/* Tags Table */}
             <table className="min-w-full bg-white shadow-md rounded-sm">
-                <TableLabelHeader headings={["Section Name", "Status", "Actions"]} />
+                <TableLabelHeader headings={["Section Name", "Status", "Created at", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
                 <tbody>
@@ -194,6 +197,7 @@ export default function TagsTable() {
                                             {tag.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
+                                    <td className="py-3 px-4 border-r border-gray-100 text-gray-400 text-xs">{formatDate(tag?.createdAt)}</td>
                                     <td className="py-3 px-4 text-sm relative w-fit">
                                         <button
                                             className="text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -220,6 +224,7 @@ export default function TagsTable() {
                         Array.from({ length: itemsPerPage }).map((_, index) => (
                             <tr key={index} style={{ height: '45px' }}>
                                 <td className="px-4 py-2 border-b"><Skeleton width={150} height={20} /></td>
+                                <td className="px-4 py-2 border-b"><Skeleton width={50} height={20} /></td>
                                 <td className="px-4 py-2 border-b"><Skeleton width={50} height={20} /></td>
                                 <td className="px-4 py-2 border-b"><Skeleton width={30} height={20} /></td>
                             </tr>

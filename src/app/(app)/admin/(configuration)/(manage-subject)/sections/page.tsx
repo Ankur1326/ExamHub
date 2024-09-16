@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { Filter, Plus } from "lucide-react";
 import Skeleton from 'react-loading-skeleton';
 import { createSection, deleteSection, fetchSections, updateSection } from "@/redux/slices/configuration/manage-subjects/sectionsSlice";
 import SectionHeader from "@/components/SectionHeader";
@@ -17,10 +16,11 @@ import FormSelect from "@/components/FormSelect";
 import FormTextarea from "@/components/FormTextarea";
 import TableLabelHeader from "@/components/TableLabelHeader";
 import SearchFilters from "@/components/SearchFilters";
+import { formatDate } from "@/utility/dateFormate";
 
 export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
-    const { totalPages, totalSections, status, error } = useSelector((state: RootState) => state.sections);
+    const { totalPages = 1, totalSections, status, error } = useSelector((state: RootState) => state.sections);
     const [name, setName] = useState<string>(""); // Set initial section name if provided
     const [isActive, setIsActive] = useState<boolean>(true); // Set initial status
     const [shortDescription, setShortDescription] = useState<string>(""); // Set initial status
@@ -104,7 +104,7 @@ export default function Page() {
         setModalVisible(true)
     }
 
-    const handleSave = async (e:any) => {
+    const handleSave = async (e: any) => {
         e.preventDefault()
         const sectionData: any = { name, shortDescription, isActive }
         let response;
@@ -160,20 +160,20 @@ export default function Page() {
         { id: item._id, label: 'Delete', onClick: () => handleDelete(item._id) },
     ];
 
-    if (status === 'failed') return <div>Error: {error}</div>;
-
     const filterFields = [
         <SearchBar
-            key="search"
+            key="name"
             filterQuery={filterQuery}
             setFilterQuery={setFilterQuery}
-            placeHolder="Search name..."
+            placeHolder="Section name..."
+            fieldName="name" // Pass the key corresponding to the filter
         />,
         <StatusFilter
-            key="status"
-            filterQuery={filterQuery}
-            setFilterQuery={setFilterQuery}
+        key="status"
+        filterQuery={filterQuery}
+        setFilterQuery={setFilterQuery}
         />,
+        <></>,
     ];
 
     return (
@@ -182,7 +182,7 @@ export default function Page() {
             <SectionHeader title="Manage Sections" onClick={handleCreateNewSection} />
             {/* Sections Table */}
             <table className="min-w-full bg-white shadow-md rounded-sm">
-                <TableLabelHeader headings={["Section Name", "Status", "Actions"]} />
+                <TableLabelHeader headings={["Section Name",  "Status","Created at", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
                 <tbody>
@@ -196,6 +196,7 @@ export default function Page() {
                                             {item.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
+                                    <td className="py-3 px-4 border-r text-gray-400 text-xs">{formatDate(item?.createdAt)}</td>
                                     <td className="py-3 px-4 text-sm relative w-fit">
                                         <button
                                             className="text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -221,9 +222,10 @@ export default function Page() {
                     ) : (
                         Array.from({ length: itemsPerPage }).map((_, index) => (
                             <tr key={index} style={{ height: '45px' }}>
-                                <td className="px-4 py-2 border-b"><Skeleton width={150} height={20} /></td>
-                                <td className="px-4 py-2 border-b"><Skeleton width={50} height={20} /></td>
-                                <td className="px-4 py-2 border-b"><Skeleton width={30} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={150} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={60} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={80} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={30} height={20} /></td>
                             </tr>
                         ))
                     )}

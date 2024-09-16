@@ -29,9 +29,10 @@ export async function GET(request: Request) {
     const currentPage = parseInt(url.searchParams.get("currentPage") || "1", 10);  // Default to page 1 if not provided
     const name = url.searchParams.get("name") || "";
     const itemsPerPage = parseInt(url.searchParams.get("itemsPerPage") || "5", 10); // Default to 5 items per page
+    const fetchAll = url.searchParams.get("fetchAll") === 'true'; // Check if fetchAll is true
 
     try {
-        console.log(name, isActive, currentPage, itemsPerPage);
+        // console.log(name, isActive, currentPage, itemsPerPage);
 
         let filter: any = {};
 
@@ -46,12 +47,19 @@ export async function GET(request: Request) {
             filter.name = { $regex: name, $options: "i" };
         }
 
-        const skip = (currentPage - 1) * itemsPerPage;
-        const limit = itemsPerPage;
+        let sections;
+        let totalSections;
 
-        // Fetch categories based on filter and pagination
-        const sections = await Section.find(filter).skip(skip).limit(limit).exec();
-        const totalSections = await Section.countDocuments(filter).exec();
+        if (fetchAll) {
+            sections = await Section.find(filter).exec();
+            totalSections = sections.length;
+        } else {
+            // Apply pagination when fetchAll is false or not provided
+            const skip = (currentPage - 1) * itemsPerPage;
+            const limit = itemsPerPage;
+            sections = await Section.find(filter).skip(skip).limit(limit).exec();
+            totalSections = await Section.countDocuments(filter).exec();
+        }
 
         if (!sections) {
             return Response.json(

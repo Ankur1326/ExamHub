@@ -15,8 +15,8 @@ interface Section {
 interface SectionsState {
     sections: Section[];
     totalSections: number;
-    currentPage: number;
-    totalPages: number;
+    currentPage?: number;
+    totalPages?: number;
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
@@ -46,11 +46,11 @@ const handleError = (error: any, rejectWithValue: any) => {
 // Fetch sections with pagination
 export const fetchSections = createAsyncThunk(
     'questionSections/fetchSections',
-    async ({ isActive, name, currentPage, itemsPerPage }: { isActive?: boolean | null; name?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
+    async ({ fetchAll, isActive, name, currentPage, itemsPerPage }: { fetchAll?: boolean | null, isActive?: boolean | null; name?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/sections/get`, {
-                params: { isActive, name, currentPage, itemsPerPage }
+                params: { fetchAll, isActive, name, currentPage, itemsPerPage }
             });
             return response.data.data;
         } catch (error: any) {
