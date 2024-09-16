@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import Tag from "@/model/tags";
+import Tag from "@/model/Tags";
 // import { getSession } from "next-auth/react";
 
 export async function DELETE(request: Request) {

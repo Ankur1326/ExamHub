@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import Category from "@/model/categories";
+import Category from "@/model/Categories";
 // import { getSession } from "next-auth/react";
 
 export async function DELETE(request: Request) {

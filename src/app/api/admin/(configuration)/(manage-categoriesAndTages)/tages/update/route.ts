@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import Category from "@/model/categories";
-import Tag from "@/model/tags";
+import Tag from "@/model/Tags";
 // import { getSession } from "next-auth/react";
 
 export async function PUT(request: Request) {

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import DropdownMenu from "../DropDownMenu";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,10 @@ import { EditOrCreateNewModalWrapper } from "../EditOrCreateNewModalWrapper";
 import SearchBar from "../SearchBar";
 import StatusFilter from "../StatusFilter";
 import SectionHeader from "../SectionHeader";
+import FormInput from "../FormInput";
+import FormSelect from "../FormSelect";
+import TableLabelHeader from "../TableLabelHeader";
+import SearchFilters from "../SearchFilters";
 
 export default function TagsTable() {
     const dispatch = useDispatch<AppDispatch>();
@@ -73,20 +77,20 @@ export default function TagsTable() {
         fetchData();
     }, [dispatch, searchQuery, currentPage, itemsPerPage, pagesCache, totalPages]);
 
-    const handleNextPage = () => {
+    const handleNextPage = useCallback(() => {
         if (currentPage < totalPages) setCurrentPage(prevPage => prevPage + 1);
-    };
+    }, [currentPage, totalPages]);
 
-    const handlePreviousPage = () => {
+    const handlePreviousPage = useCallback(() => {
         if (currentPage > 1) setCurrentPage(prevPage => prevPage - 1);
-    };
+    }, [currentPage]);
 
-    const handleSearch = () => {
+    const handleSearch = useCallback(() => {
         setSearchQuery(filterQuery);
-        setItemsPerPage(totalTags)
-        setPagesCache({});  // Clear cache when a new search is applied
+        setItemsPerPage(totalTags);
+        setPagesCache({});
         setCurrentPage(1);
-    }
+    }, [filterQuery, totalTags]);
 
     const handleItemsPerPageChange = (e: any) => {
         setPagesCache({})
@@ -103,7 +107,6 @@ export default function TagsTable() {
     const handleSave = async () => {
         const tagData: any = { name, isActive }
         let response;
-        setModalVisible(false);  // Close the modal after saving
         if (selectedTag) {
             // If editing a tag, dispatch the edit action
             response = await dispatch(updateTag({ ...selectedTag, ...tagData }));
@@ -123,6 +126,7 @@ export default function TagsTable() {
                 ...prevCache,
                 [currentPage]: updatedTags
             }));
+            setModalVisible(false);  // Close the modal after saving
         }
     };
 
@@ -156,43 +160,29 @@ export default function TagsTable() {
 
     if (status === 'failed') return <div>Error: {error}</div>;
 
+    const filterFields = [
+        <SearchBar
+            key="search"
+            filterQuery={filterQuery}
+            setFilterQuery={setFilterQuery}
+            placeHolder="Search name..."
+        />,
+        <StatusFilter
+            key="status"
+            filterQuery={filterQuery}
+            setFilterQuery={setFilterQuery}
+        />,
+    ];
+
     return (
         <div className="container mx-auto p-4">
             {/* Header Section */}
             <SectionHeader title="Manage Tags" onClick={handleCreateNewTag} />
             {/* Tags Table */}
             <table className="min-w-full bg-white shadow-md rounded-sm">
-                <thead className="bg-white">
-                    <tr className="">
-                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Tag Name</th>
-                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Status</th>
-                        <th className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100">Actions</th>
-                    </tr>
-                </thead>
-                <thead className="bg-gray-100">
-                    <tr>
-                        <th className="text-left px-2 py-2 text-sm font-medium text-gray-600">
-                            <SearchBar
-                                filterQuery={filterQuery}
-                                setFilterQuery={setFilterQuery}
-                                placeHolder="Search name..."
-                            />
-                        </th>
-                        <th className="text-left py-2 text-sm font-medium text-gray-600">
-                            <StatusFilter filterQuery={filterQuery}
-                                setFilterQuery={setFilterQuery} />
-                        </th>
-                        <th className="text-left py-2 text-sm font-medium text-gray-600">
-                            <button
-                                onClick={handleSearch}  // Trigger the search when clicked
-                                className="flex items-center gap-2 bg-[#EFF6FF] rounded-md border border-blue-200 text-blue-500 px-2 py-[6px] text-xs hover:bg-blue_hover_button transition duration-200 ease-in-out hover:text-white"
-                            >
-                                <Filter size={13} />
-                                <span>Filters</span>
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
+                <TableLabelHeader headings={["Section Name", "Status", "Actions"]} />
+                {/* Search Filters */}
+                <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
                 <tbody>
                     {!loadingPage ? (
                         tags.length > 0 ? (
@@ -223,7 +213,7 @@ export default function TagsTable() {
                             :
                             (
                                 <tr>
-                                    <td colSpan={2} className="text-center py-4 text-gray-500">No categories found</td>
+                                    <td colSpan={2} className="text-center py-4 text-gray-500">No tags found</td>
                                 </tr>
                             )
                     ) : (
@@ -255,25 +245,20 @@ export default function TagsTable() {
                 onSave={handleSave}
             >
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Tag Name</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full px-3 py-2 border rounded shadow-sm text-sm"
-                    />
+                    <FormInput label="Tag Name" value={name} onChange={(e) => setName(e.target.value)} required={true} placeholder="Tag Name" />
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <select
+                    <FormSelect
+                        label="Status"
                         value={isActive ? "active" : "inactive"}
                         onChange={(e) => setIsActive(e.target.value === "active")}
-                        className="w-full px-3 py-2 border rounded shadow-sm text-sm"
-                    >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
+                        options={[
+                            { label: "Active", value: "active" },
+                            { label: "Inactive", value: "inactive" }
+                        ]}
+                        className="my-custom-select-class"
+                    />
                 </div>
             </EditOrCreateNewModalWrapper>
         </div>

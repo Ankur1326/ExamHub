@@ -3,7 +3,7 @@ import { useEffect, useRef, ReactNode } from 'react';
 
 interface ModalWrapperProps {
     onClose: () => void;
-    onSave: () => void;
+    onSave: (e: React.FormEvent<HTMLFormElement>) => void;
     title: string;
     isVisible: boolean;
     children: ReactNode;
@@ -33,7 +33,7 @@ export function EditOrCreateNewModalWrapper({ onClose, onSave, title, isVisible,
     }, [onClose]);
 
     return (
-        <div className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <form onSubmit={onSave} className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <div ref={modalRef} className={`bg-white rounded-lg shadow-lg max-w-4xl transition-all duration-200 ease-in-out w-full ${sizeClass[size]} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
                 <div className="flex justify-between items-center p-5 border-b">
                     <h3 className="text-xl font-semibold">{title}</h3>
@@ -47,14 +47,14 @@ export function EditOrCreateNewModalWrapper({ onClose, onSave, title, isVisible,
 
                 {/* Modal Footer */}
                 <div className="flex justify-end p-5 border-t">
-                    <button
+                    <div
                         onClick={onClose}
-                        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 cursor-pointer"
                     >
                         Cancel
-                    </button>
+                    </div>
                     <button
-                        onClick={onSave}
+                        type="submit"
                         className="ml-2 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
                     >
                         Save
@@ -62,6 +62,6 @@ export function EditOrCreateNewModalWrapper({ onClose, onSave, title, isVisible,
                 </div>
 
             </div>
-        </div>
+        </form>
     );
 }

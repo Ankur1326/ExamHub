@@ -176,7 +176,7 @@ const tagsSlice = createSlice({
                 state.error = action.payload || 'Failed to toggle tag status';
             })
             .addCase(createTag.fulfilled, (state, action: PayloadAction<Tag>) => {
-                state.tags.unshift(action.payload);
+                state.tags.push(action.payload);
 
             })
             .addCase(createTag.rejected, (state, action: PayloadAction<string | undefined>) => {

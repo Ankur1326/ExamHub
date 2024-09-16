@@ -110,10 +110,8 @@ export default function Page() {
     const handleSave = async () => {
         const categoryData = { name, description, content, isActive };
         let response: any;
-        setModalVisible(false)
-        try {
-            if (selectedCategory) {
-                // Update existing category
+        if (selectedCategory) {
+            // Update existing category
                 response = await dispatch(updateCategory({ ...selectedCategory, ...categoryData }));
             } else {
                 // Create new category
@@ -129,9 +127,8 @@ export default function Page() {
                     ...prevCache,
                     [currentPage]: updatedCategories
                 }))
+                setModalVisible(false)
             }
-        } catch (error: any) {
-        }
     }
 
     // Handle editing an existing category

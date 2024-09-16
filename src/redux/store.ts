@@ -4,6 +4,7 @@ import questionTypesReducer from './slices/library/question-bank/questionTypeSli
 import loadingReducer from "./slices/loadingSlice"
 import tagsReducer from "./slices/configuration/manage-categories/tagsSlice"
 import categoriesReducer from "./slices/configuration/manage-categories/categoriesSlice"
+import sectionsReducer from "./slices/configuration/manage-subjects/sectionsSlice"
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
         questionTypes: questionTypesReducer,
         loading: loadingReducer,
         tag: tagsReducer,
+        sections: sectionsReducer,
         categories: categoriesReducer,
     },
 });
