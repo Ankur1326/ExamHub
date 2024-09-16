@@ -113,6 +113,34 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                                 </div>
                             )}
 
+                            {/* Manage Subject Section */}
+                            <div onClick={() => toggleSection('manageSubjects')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/manage-categories')} hover:text-white hover:bg-[#00A261]`}>
+                                <div className="flex items-center space-x-2">
+                                    <AiOutlineTags className="text-lg" />
+                                    <span>Manage Subjects</span>
+                                </div>
+                                {expandedSections.manageSubjects ? <AiOutlineDown className="text-lg" /> : <AiOutlineRight className="text-lg" />}
+                            </div>
+                            {expandedSections.manageSubjects && (
+                                <div className="pl-8 space-y-2">
+                                    <div onClick={() => navigateTo('/admin/sections')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/sections')}`}>
+                                        {/* <AiOutlineTags className="text-lg" /> */}
+                                        <Dot />
+                                        <span>Sections</span>
+                                    </div>
+                                    <div onClick={() => navigateTo('/admin/skills')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/skills')}`}>
+                                        {/* <AiOutlineTags className="text-lg" /> */}
+                                        <Dot />
+                                        <span>Skills</span>
+                                    </div>
+                                    <div onClick={() => navigateTo('/admin/topics')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/topics')}`}>
+                                        {/* <AiOutlineTags className="text-lg" /> */}
+                                        <Dot />
+                                        <span>Topics</span>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Dark Mode Toggle */}
                             {/* <div
                                 onClick={() => navigateTo('/dark-mode')}
