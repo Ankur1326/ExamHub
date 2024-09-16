@@ -39,6 +39,6 @@ const SkillSchema: Schema<ITopic> = new mongoose.Schema(
     }
 )
 
-const Skill = (mongoose.models.Skill as mongoose.Model<ISkill>) || mongoose.model<ISkill>("Section", SkillSchema);
+const Skill = (mongoose.models.Skill as mongoose.Model<ITopic>) || mongoose.model<ITopic>("Section", SkillSchema);
 
 export default Skill;
