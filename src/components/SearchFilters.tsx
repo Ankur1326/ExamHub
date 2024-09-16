@@ -12,7 +12,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ filterFields, onSearch })
                 {filterFields.map((filterField, index) => (
                     <th
                         key={index}
-                        className="text-left px-2 py-2 text-xs font-medium text-gray-600"
+                        className="text-left px-2 py-2 text-xs font-medium text-gray-600 border-r border-white"
                     >
                         {filterField}
                     </th>
