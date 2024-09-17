@@ -113,6 +113,10 @@ export default function Page() {
     const handleSave = async (e: any) => {
         e.preventDefault()
         const skillsData: any = { name, sectionName, shortDescription, isActive }
+        if (!name && !sectionName) {
+            return;
+        }
+        setModalVisible(false);
         let response;
         if (selectedSkill) {
             // If editing a skill, dispatch the edit action
@@ -125,25 +129,21 @@ export default function Page() {
         // Wait for the response to resolve
         if (response && response.payload && typeof response.payload !== 'string') {
             // Update the state to show the new/updated item immediately
+            const newSkill = response.payload
             const updatedSkills = selectedSkill
-                ? skills.map(skill => skill._id === selectedSkill._id ? { ...skill, ...skillsData } : skill)
+                ? skills.map(skill => skill._id === selectedSkill._id ? { ...skill, ...newSkill } : skill)
                 : [...skills, response.payload]; // Add the new item to the list
-
-            console.log("response.payload : ", response.payload);
-
 
             setPagesCache(prevCache => ({
                 ...prevCache,
                 [currentPage]: updatedSkills
             }));
-            console.log("pagesCache : ", pagesCache);
-
-            setModalVisible(false);  // Close the modal after saving
         }
     };
 
     const onEdit = (item: any) => {
-        setSelectedSkill(item); // Set the item data for editing
+        setSelectedSkill(item);
+        // Set the item data for editing
         setName(item.name); // Set the existing item name in state
         setSectionName(item.sectionDetails.name); // Set the existing item name in state
         setShortDescription(item.shortDescription);
@@ -207,7 +207,7 @@ export default function Page() {
             <SectionHeader title="Manage Skills" onClick={handleCreateNewItem} />
             {/* Skill Table */}
             <table className="min-w-full bg-white shadow-md rounded-sm">
-                <TableLabelHeader headings={["Skill Name", "Section", "Status", "Actions"]} />
+                <TableLabelHeader headings={["Skill Name", "Sections", "Status", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
 

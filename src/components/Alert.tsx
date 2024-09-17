@@ -18,7 +18,7 @@ const Alert = ({ type, message, onClose }: AlertProps) => {
 
     return (
         <div
-            className={`top-4 right-4 p-4 mb-4 rounded-lg shadow-md flex items-center space-x-3 relative border-l-4 ${type === "success" ? "bg-green-50 border-green-500" : "bg-red-50 border-red-500"
+            className={`p-4 mb-8 rounded-lg shadow-md flex items-center space-x-3 relative border-l-4 ${type === "success" ? "bg-green-50 border-green-500" : "bg-red-50 border-red-500"
                 }`}
             style={{ zIndex: 1000 }} // Ensure it's above all other elements
         >
@@ -34,3 +34,5 @@ const Alert = ({ type, message, onClose }: AlertProps) => {
         </div>
     );
 };
+
+export default Alert

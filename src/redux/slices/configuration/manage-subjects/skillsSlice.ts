@@ -47,13 +47,13 @@ const handleError = (error: any, rejectWithValue: any) => {
 // Fetch skills with pagination
 export const fetchSkills = createAsyncThunk(
     'questionSkills/fetchSkills',
-    async ({ isActive, name, sectionName, currentPage, itemsPerPage }: { isActive?: boolean | null; name?: string; sectionName?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
+    async ({ fetchAll, isActive, name, sectionName, currentPage, itemsPerPage }: { fetchAll?: boolean, isActive?: boolean | null; name?: string; sectionName?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
         console.log(name, sectionName);
-        
+
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/skills/get`, {
-                params: { isActive, name, sectionName, currentPage, itemsPerPage }
+                params: { fetchAll, isActive, name, sectionName, currentPage, itemsPerPage }
             });
             return response.data.data;
         } catch (error: any) {
@@ -72,7 +72,7 @@ export const createSkill = createAsyncThunk(
         try {
             const response = await axios.post(`/api/admin/skills/create`, { name, shortDescription, sectionName, isActive });
             toast.success(response.data.message || "Skill successfully created");
-            
+
             console.log("response.data : ", response.data);
             return response.data.data;
         } catch (error: any) {
@@ -86,11 +86,12 @@ export const createSkill = createAsyncThunk(
 // Edit an existing skill thunk
 export const updateSkill = createAsyncThunk(
     'Skills/editSkill',
-    async ({ _id, name, shortDescription, sectionName, isActive }: { _id:string, name:string; shortDescription:string; sectionName:string; isActive:boolean }, { dispatch, rejectWithValue }) => {
+    async ({ _id, name, shortDescription, sectionName, isActive }: { _id: string, name: string; shortDescription: string; sectionName: string; isActive: boolean }, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {
             const response = await axios.put(`/api/admin/skills/update`, { _id, name, shortDescription, sectionName, isActive });
             if (response.status === 200) {
+                toast.success("Successfully updated")
                 return response.data.data;
             }
         } catch (error: any) {

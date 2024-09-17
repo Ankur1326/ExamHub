@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import Skill from "@/model/Skill";
-import Section from "@/model/Section";
+import Topic from "@/model/Topic";
 // import { getSession } from "next-auth/react";
 
 
@@ -29,13 +29,12 @@ export async function GET(request: Request) {
     const url = new URL(request.url)
     const isActive = url.searchParams.get("isActive");
     const name = url.searchParams.get("name") || "";
-    const sectionName = url.searchParams.get("sectionName") || "";
+    const skillName = url.searchParams.get("skillName") || "";
     const currentPage = parseInt(url.searchParams.get("currentPage") || "1", 10);  // Default to page 1 if not provided
     const itemsPerPage = parseInt(url.searchParams.get("itemsPerPage") || "5", 10); // Default to 5 items per page
-    const fetchAll = url.searchParams.get("fetchAll") === 'true'; // Check if fetchAll is true
 
     try {
-        // console.log(name, isActive, sectionName, currentPage, itemsPerPage);
+        // console.log(name, isActive, skillName, currentPage, itemsPerPage);
 
         let filter: any = {};
 
@@ -49,76 +48,68 @@ export async function GET(request: Request) {
             filter.name = { $regex: name, $options: "i" };
         }
 
-        let skills;
-        let totalSkills;
-        if (fetchAll) {
-            skills = await Skill.find(filter).exec();
-            totalSkills = sectionName.length;
-        } else {
-            if (sectionName) {
-                const section = await Section.findOne({ name: { $regex: sectionName, $options: "i" } });
+        if (skillName) {
+            const skill = await Skill.findOne({ name: { $regex: skillName, $options: "i" } });
 
-                if (!section) {
-                    return Response.json(
-                        {
-                            success: false,
-                            message: `No section found with the name "${sectionName}"`,
-                        },
-                        {
-                            status: 404,
-                        }
-                    );
-                }
-
-                // console.log("section : ", section);
-
-                // Add sectionId to the filter
-                filter.sectionId = section._id;
-            }
-
-            const skip = (currentPage - 1) * itemsPerPage;
-            const limit = itemsPerPage;
-
-            skills = await Skill.aggregate([
-                {
-                    $match: filter,
-                },
-                {
-                    $skip: skip,
-                },
-                {
-                    $limit: limit,
-                },
-            ]);
-
-            console.log("skills : ", skills);
-
-
-            totalSkills = await Skill.countDocuments(filter);
-
-            if (!skills.length) {
+            if (!skill) {
                 return Response.json(
                     {
                         success: false,
-                        message: "No skills found",
+                        message: `No skill found with the name "${skillName}"`,
                     },
                     {
                         status: 404,
                     }
                 );
             }
+
+            // console.log("skill : ", skill);
+
+            // Add skillId to the filter
+            filter.skillId = skill._id;
         }
 
+        const skip = (currentPage - 1) * itemsPerPage;
+        const limit = itemsPerPage;
 
+        const topics = await Topic.aggregate([
+            {
+                $match: filter,
+            },
+            {
+                $skip: skip,
+            },
+            {
+                $limit: limit,
+            },
+        ]);
+
+        // console.log("topics : ", topics);
+
+
+        const totalTopics = await Topic.countDocuments(filter);
+
+        if (!topics.length) {
+            return Response.json(
+                {
+                    success: false,
+                    message: "No topics found",
+                },
+                {
+                    status: 404,
+                }
+            );
+        }
+        
         return Response.json(
             {
                 success: true,
                 message: "Skills fetched successfully",
                 data: {
-                    skills,
+                    topics,
                     currentPage,
-                    totalPages: Math.ceil(totalSkills / itemsPerPage),
-                    totalSkills,
+                    totalPages: Math.ceil(totalTopics / itemsPerPage),
+                    totalTopics,
                 },
             },
             {
@@ -127,11 +118,11 @@ export async function GET(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while fetching sections: ", error);
+        console.log("Error while fetching topics: ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while fetching sections",
+                message: "Internal server error while fetching topics",
                 error
             },
             {

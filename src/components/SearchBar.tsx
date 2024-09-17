@@ -2,6 +2,7 @@ interface SearchBarProps {
     filterQuery: {
         name: string;
         sectionName: string;
+        skillName: string;
         isActive: boolean | null;
     };
     placeHolder: string;

@@ -4,12 +4,16 @@ export interface ITopic extends Document {
     name: string;
     shortDescription: string;
     isActive: boolean;
-    sectionId: Types.ObjectId;
+    skillId: Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
+    skillDetails: {
+        name: string;
+        createdAt: Date;
+    };
 }
 
-const SkillSchema: Schema<ITopic> = new mongoose.Schema(
+const TopicSchema: Schema<ITopic> = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -29,9 +33,19 @@ const SkillSchema: Schema<ITopic> = new mongoose.Schema(
             required: [true, "isActive status is required"],
             default: true
         },
-        sectionId: {
+        skillId: {
             type: Schema.Types.ObjectId,
-            ref: "Section"
+            ref: "skill"
+        },
+        skillDetails: {
+            name: {
+                type: String,
+                required: true
+            },
+            createdAt: {
+                type: Date,
+                required: true
+            }
         }
     },
     {
@@ -39,6 +53,6 @@ const SkillSchema: Schema<ITopic> = new mongoose.Schema(
     }
 )
 
-const Skill = (mongoose.models.Skill as mongoose.Model<ITopic>) || mongoose.model<ITopic>("Section", SkillSchema);
+const Topic = (mongoose.models.Topic as mongoose.Model<ITopic>) || mongoose.model<ITopic>("Topic", TopicSchema);
 
-export default Skill;
+export default Topic;

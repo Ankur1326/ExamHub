@@ -6,6 +6,7 @@ import tagsReducer from "./slices/configuration/manage-categories/tagsSlice"
 import categoriesReducer from "./slices/configuration/manage-categories/categoriesSlice"
 import sectionsReducer from "./slices/configuration/manage-subjects/sectionsSlice"
 import skillsReducer from "./slices/configuration/manage-subjects/skillsSlice"
+import topicsReducer from "./slices/configuration/manage-subjects/topicSlice"
 
 export const store = configureStore({
     reducer: {
@@ -14,7 +15,8 @@ export const store = configureStore({
         loading: loadingReducer,
         tag: tagsReducer,
         sections: sectionsReducer,
-        skills:skillsReducer,
+        skills: skillsReducer,
+        topics: topicsReducer,
         categories: categoriesReducer,
     },
 });

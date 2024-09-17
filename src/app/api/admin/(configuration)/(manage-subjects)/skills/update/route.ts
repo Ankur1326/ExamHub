@@ -27,7 +27,7 @@ export async function PUT(request: Request) {
 
     try {
         const { _id, name, sectionName, shortDescription, isActive } = await request.json();
-        console.log(_id, name, sectionName, shortDescription, isActive);
+        // console.log(_id, name, sectionName, shortDescription, isActive);
         const skillId = _id;
 
         if (!skillId) {
@@ -35,6 +35,31 @@ export async function PUT(request: Request) {
                 {
                     success: false,
                     message: "skillId is required",
+                },
+                {
+                    status: 400,
+                }
+            );
+        }
+
+        const prevoiusSkill = await Skill.findById({ _id: skillId })
+        if (!prevoiusSkill) {
+            return Response.json(
+                {
+                    success: false,
+                    message: "Skill is not found",
+                },
+                {
+                    status: 400,
+                }
+            );
+        }
+        const prevoiusSection = await Section.findOne({ name: sectionName })
+        if (!prevoiusSection) {
+            return Response.json(
+                {
+                    success: false,
+                    message: "Section is not found",
                 },
                 {
                     status: 400,
@@ -59,10 +84,21 @@ export async function PUT(request: Request) {
         // Find the tag by ID and update it
         const updatedSkill = await Skill.findByIdAndUpdate(
             skillId,
-            { name, isActive },
+            {
+                name,
+                sectionDetails: {
+                    name: sectionName,
+                    createdAt: prevoiusSkill.createdAt
+                },
+                isActive,
+                sectionId: prevoiusSection._id
+            },
             { new: true, runValidators: true }
         );
 
+        // console.log("updatedSkill : ", updatedSkill);
+        
+        
         if (!updatedSkill) {
             return Response.json(
                 {
@@ -87,7 +123,7 @@ export async function PUT(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while deleting skill : ", error);
+        console.log("Error while updating skill : ", error);
         return Response.json(
             {
                 success: false,

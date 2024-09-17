@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
-import Section from "@/model/Section";
 import Skill from "@/model/Skill";
+import Topic from "@/model/Topic";
 // import { getSession } from "next-auth/react";
 
 export async function POST(request: Request) {
@@ -26,25 +26,24 @@ export async function POST(request: Request) {
     // }
 
     try {
-        const { name, sectionName, shortDescription, isActive } = await request.json();
-        console.log(name, sectionName, shortDescription, isActive);
+        const { name, skillName, shortDescription, isActive } = await request.json();
 
         if (!name) {
             return Response.json(
                 {
                     success: false,
-                    message: "Skill name is required."
+                    message: "Topic name is required."
                 },
                 {
                     status: 400
                 }
             );
         }
-        if (!sectionName) {
+        if (!skillName) {
             return Response.json(
                 {
                     success: false,
-                    message: "Please select a Section"
+                    message: "Please select a Skill"
                 },
                 {
                     status: 400
@@ -53,53 +52,53 @@ export async function POST(request: Request) {
         }
 
         // Check if the category already exists by name
-        const existingSkill = await Skill.findOne({ name });
-        // console.log("existingSkill : ", existingSkill);
+        const existingTopic = await Topic.findOne({ name });
+        // console.log("existingTopic : ", existingTopic);
 
-        if (existingSkill) {
+        if (existingTopic) {
             return Response.json(
                 {
                     success: true,
-                    message: "Skill with this name already exists",
+                    message: "Topic with this name already exists",
                 },
                 { status: 400 }
             )
         }
 
-        const section: any = await Section.findOne({ name: sectionName }) || ""
+        const skill: any = await Skill.findOne({ name: skillName }) || ""
 
-        if (!section) {
+        if (!skill) {
             return Response.json(
                 {
                     success: false,
-                    message: "Crosponding Section is not found",
+                    message: "Crosponding Skill is not found",
                 },
                 { status: 400 }
             )
         }
 
-        // Create a new skill with section details
-        const newSkill = new Skill({
+        // Create a new topic with section details
+        const newTopic = new Topic({
             name,
             shortDescription,
             isActive,
-            sectionId: section._id.toString(),
-            sectionDetails: {
-                name: section.name,
-                createdAt: section.createdAt
+            skillId: skill._id.toString(),
+            skillDetails: {
+                name: skill.name,
+                createdAt: skill.createdAt
             }
         });
 
-        console.log("newSkill : ", newSkill);
+        // console.log("newTopic : ", newTopic);
 
-        // Save the new skill to the database
-        await newSkill.save();
+        // Save the new Topic to the database
+        await newTopic.save();
 
         return Response.json(
             {
                 success: true,
-                message: "Skill successfully created",
-                data: newSkill,
+                message: "Topic successfully created",
+                data: newTopic,
             },
             {
                 status: 200
@@ -107,11 +106,11 @@ export async function POST(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while creating new Skill : ", error);
+        console.log("Error while creating new Topic : ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while creating new Skill",
+                message: "Internal server error while creating new Topic",
                 error
             },
             {

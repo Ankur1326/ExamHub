@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
+import Alert from "@/components/Alert";
 
 // Types for the state
 interface Section {
@@ -69,6 +70,7 @@ export const createSection = createAsyncThunk(
         try {
             const response = await axios.post(`/api/admin/sections/create`, { name, shortDescription, isActive });
             toast.success(response.data.message || "Section successfully created");
+
             return response.data.data;
         } catch (error: any) {
             return handleError(error, rejectWithValue);

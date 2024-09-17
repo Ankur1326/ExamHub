@@ -1,4 +1,5 @@
 'use client'
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface SearchDropdownProps {
@@ -22,6 +23,7 @@ const SearchDropdown = ({
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [showDropdown, setShowDropdown] = useState(true);
     const [initialFetchDone, setInitialFetchDone] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
         if (sectionName) {
@@ -43,17 +45,20 @@ const SearchDropdown = ({
         const delayDebounceFn = setTimeout(() => {
             if (searchQuery === "") {
                 if (initialFetchDone) {
+                    setLoading(true)
                     fetchResults("", true).then((data) => {
                         setSearchResults(data); // Fetch all active items when query is empty
                     });
+                    setLoading(true)
                 }
             } else if (searchQuery && showDropdown) {
+                setLoading(true)
                 fetchResults(searchQuery, true).then((data) => {
                     setSearchResults(data); // Fetch results based on search query
                 });
+                setLoading(false)
             }
         }, 300);
-
         return () => clearTimeout(delayDebounceFn);
     }, [searchQuery, showDropdown, fetchResults, initialFetchDone]);
 
@@ -63,21 +68,29 @@ const SearchDropdown = ({
                 {label}
                 {required && <span className="text-red-500 ml-1">*</span>}  {/* Required indicator */}
             </label>
-            <input
-                type="text"
-                value={searchQuery}
-                required={required}
-                onFocus={(e) => {
-                    fetchResults("", true).then((data) =>
-                        setSearchResults(data));
-                }}
-                onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setShowDropdown(true); // Show dropdown when typing
-                }}
-                placeholder={placeholder}
-                className="border p-2 rounded-md w-full"
-            />
+            <div className='relative flex items-center'>
+                <input
+                    type="text"
+                    value={searchQuery}
+                    required={required}
+                    onFocus={(e) => {
+                        fetchResults("", true).then((data) =>
+                            setSearchResults(data));
+                    }}
+                    onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setShowDropdown(true); // Show dropdown when typing
+                    }}
+                    placeholder={placeholder}
+                    className="border p-2 rounded-md w-full"
+                />
+                {
+                    isLoading &&
+                    <span className='absolute right-2'>
+                        <Loader2 className='animate-spin text-gray-600' />
+                    </span>
+                }
+            </div>
             {/* Dropdown for search results */}
             {showDropdown && searchResults.length > 0 && (
                 <div className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 max-h-48 overflow-auto w-full">
