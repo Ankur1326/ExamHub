@@ -89,6 +89,14 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                     <div
                         className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedSections.questionBanks ? 'max-h-[500px]' : 'max-h-0'}`}>
                         <div className="pl-8 space-y-2">
+                            <div onClick={() => navigateTo('/admin/questions')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/questions')}`}>
+                                <Dot />
+                                <span>Questions</span>
+                            </div>
+                            <div onClick={() => navigateTo('/admin/add-questions')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/add-questions')}`}>
+                                <Dot />
+                                <span>Add Question</span>
+                            </div>
                             <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/question-types')}`}>
                                 <Dot />
                                 <span>Question Types</span>

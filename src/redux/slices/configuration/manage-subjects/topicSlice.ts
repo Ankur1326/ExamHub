@@ -47,12 +47,12 @@ const handleError = (error: any, rejectWithValue: any) => {
 // Fetch topics with pagination
 export const fetchTopics = createAsyncThunk(
     'Topics/fetchTopics',
-    async ({ isActive, name, skillName, currentPage, itemsPerPage }: { isActive?: boolean | null; name?: string; skillName?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
+    async ({ fetchAll, isActive, name, skillName, currentPage, itemsPerPage }: { fetchAll?: boolean; isActive?: boolean | null; name?: string; skillName?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
         
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/topics/get`, {
-                params: { isActive, name, skillName, currentPage, itemsPerPage }
+                params: { fetchAll, isActive, name, skillName, currentPage, itemsPerPage }
             });
             return response.data.data;
         } catch (error: any) {

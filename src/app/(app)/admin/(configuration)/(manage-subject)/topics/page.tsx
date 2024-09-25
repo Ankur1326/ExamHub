@@ -303,7 +303,7 @@ export default function Page() {
 
                 <SearchDropdown
                     label="Skill Name"
-                    placeholder="Search for a section..."
+                    placeholder="Search for a skill..."
                     required={true}
                     fetchResults={fetchAllActiveItems}
                     sectionName={skillName}

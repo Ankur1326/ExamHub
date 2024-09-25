@@ -29,9 +29,10 @@ export async function GET(request: Request) {
     const currentPage = parseInt(url.searchParams.get("currentPage") || "1", 10);  // Default to page 1 if not provided
     const name = url.searchParams.get("name") || "";
     const itemsPerPage = parseInt(url.searchParams.get("itemsPerPage") || "5", 10); // Default to 5 items per page
+    const fetchAll = url.searchParams.get("fetchAll") === 'true'; // Check if fetchAll is true
 
     try {
-        console.log(name, isActive, currentPage, itemsPerPage);
+        // console.log(name, isActive, currentPage, itemsPerPage);
 
         let filter: any = {};
 
@@ -46,12 +47,19 @@ export async function GET(request: Request) {
             filter.name = { $regex: name, $options: "i" };
         }
 
-        const skip = (currentPage - 1) * itemsPerPage;
-        const limit = itemsPerPage;
+        let tags;
+        let totalTags;
+        if (fetchAll) {
+            tags = await Tag.find(filter).exec();
+            totalTags = tags.length
+        } else {
+            const skip = (currentPage - 1) * itemsPerPage;
+            const limit = itemsPerPage;
 
-        // Fetch categories based on filter and pagination
-        const tags = await Tag.find(filter).skip(skip).limit(limit).exec();
-        const totalTags = await Tag.countDocuments(filter).exec();
+            // Fetch categories based on filter and pagination
+            tags = await Tag.find(filter).skip(skip).limit(limit).exec();
+            totalTags = await Tag.countDocuments(filter).exec();
+        }
 
         if (!tags) {
             return Response.json(

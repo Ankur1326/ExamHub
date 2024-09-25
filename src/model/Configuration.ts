@@ -1,30 +1,21 @@
 import mongoose, { Schema } from 'mongoose';
 
 interface IQuestionType extends Document {
-    typeName: string;
-    description?: string;
+    name: string;
+    shortDescription?: string;
     code?: string;
     _id?: string;
     isActive: boolean;
-}
-
-interface IQuestionCategory extends Document {
-    categoryName: string;
-    description?: string;
-    isActive: boolean;
-}
-
-interface IQuestionTags extends Document {
-    tagName: string;
-    isActive: boolean;
+    defaultTimeToSolve: Number;
+    defaultMarks: Number;
 }
 
 const QuestionTypeSchema = new Schema<IQuestionType>({
-    typeName: {
+    name: {
         type: String,
         required: true
     },
-    description: {
+    shortDescription: {
         type: String,
         default: '',
     },
@@ -37,46 +28,20 @@ const QuestionTypeSchema = new Schema<IQuestionType>({
         type: Boolean,
         default: true,
     },
-})
-
-// Define the schema for question categories
-const QuestionCategorySchema = new Schema<IQuestionCategory>({
-    categoryName: {
-        type: String,
-        required: true,
+    defaultTimeToSolve: {
+        type: Number,
+        default: 60
     },
-    description: {
-        type: String,
-        default: '',
-    },
-    isActive: {
-        type: Boolean,
-        default: true,
-    },
-});
-
-const questionTagSchema = new Schema<IQuestionTags>({
-    tagName: {
-        type: String,
-        required: [true, "Tag Name is required"],
-        unique: true,
-        index: true,
-    },
-    isActive: {
-        type: Boolean,
-        required: [true, "isActive is required"],
-        default: true,
+    defaultMarks: {
+        type: Number,
+        default: 1
     }
 })
-
 
 // Main Configuration Document Interface
 interface IConfiguration extends Document {
     documentType: string;
     questionTypes?: IQuestionType[];
-    questionCategories?: IQuestionCategory[];
-    questionTags?: IQuestionTags[];
-    // appSettings?: IAppSettings; // Include when AppSettings schema is defined
 }
 
 const configurationSchema = new Schema<IConfiguration>({
@@ -87,14 +52,6 @@ const configurationSchema = new Schema<IConfiguration>({
     },
     questionTypes: {
         type: [QuestionTypeSchema],
-        default: undefined,
-    },
-    questionTags: {
-        type: [questionTagSchema],
-        default: undefined,
-    },
-    questionCategories: {
-        type: [QuestionCategorySchema],
         default: undefined,
     },
     // appSettings: AppSettingsSchema,

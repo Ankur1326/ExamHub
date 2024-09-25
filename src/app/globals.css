@@ -57,3 +57,24 @@ body {
 .scrollbar-custom::-webkit-scrollbar-thumb:hover {
   background-color: #008c4b; /* Darker shade on hover */
 }
+
+/* create questions */
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+}
+
+.tab-content {
+  margin-top: 0px;
+}

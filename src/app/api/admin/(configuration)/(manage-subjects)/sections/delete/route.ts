@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import Section from "@/model/Section";
+import Skill from "@/model/Skill";
 // import { getSession } from "next-auth/react";
 
 export async function DELETE(request: Request) {
@@ -40,10 +41,22 @@ export async function DELETE(request: Request) {
                 }
             );
         }
+        const associateSkills = await Skill.findOne({ sectionId })
+        if (associateSkills) {
+            return Response.json(
+                {
+                    success: false,
+                    message: "Unable to Delete Section . Remove all associate skills first",
+                },
+                {
+                    status: 400,
+                }
+            );
+        }
 
         const result = await Section.deleteOne({ _id: sectionId });
         console.log("result : ", result);
-        
+
 
         if (result.deletedCount === 0) {
             return Response.json(

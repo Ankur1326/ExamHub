@@ -3,7 +3,6 @@ import Skill from "@/model/Skill";
 import Section from "@/model/Section";
 // import { getSession } from "next-auth/react";
 
-
 export async function GET(request: Request) {
     await dbConnect();
 
@@ -53,7 +52,7 @@ export async function GET(request: Request) {
         let totalSkills;
         if (fetchAll) {
             skills = await Skill.find(filter).exec();
-            totalSkills = sectionName.length;
+            totalSkills = skills.length;
         } else {
             if (sectionName) {
                 const section = await Section.findOne({ name: { $regex: sectionName, $options: "i" } });
@@ -90,9 +89,6 @@ export async function GET(request: Request) {
                     $limit: limit,
                 },
             ]);
-
-            console.log("skills : ", skills);
-
 
             totalSkills = await Skill.countDocuments(filter);
 

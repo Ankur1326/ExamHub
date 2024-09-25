@@ -3,7 +3,6 @@ import Skill from "@/model/Skill";
 import Topic from "@/model/Topic";
 // import { getSession } from "next-auth/react";
 
-
 export async function GET(request: Request) {
     await dbConnect();
 
@@ -32,6 +31,7 @@ export async function GET(request: Request) {
     const skillName = url.searchParams.get("skillName") || "";
     const currentPage = parseInt(url.searchParams.get("currentPage") || "1", 10);  // Default to page 1 if not provided
     const itemsPerPage = parseInt(url.searchParams.get("itemsPerPage") || "5", 10); // Default to 5 items per page
+    const fetchAll = url.searchParams.get("fetchAll") === 'true'; // Check if fetchAll is true
 
     try {
         // console.log(name, isActive, skillName, currentPage, itemsPerPage);
@@ -48,31 +48,36 @@ export async function GET(request: Request) {
             filter.name = { $regex: name, $options: "i" };
         }
 
-        if (skillName) {
-            const skill = await Skill.findOne({ name: { $regex: skillName, $options: "i" } });
+        let topics;
+        let totalTopics;
+        if (fetchAll) {
+            topics = await Topic.find(filter).exec();
+            totalTopics = topics.length;
+        } else {
+            if (skillName) {
+                const skill = await Skill.findOne({ name: { $regex: skillName, $options: "i" } });
 
-            if (!skill) {
-                return Response.json(
-                    {
-                        success: false,
-                        message: `No skill found with the name "${skillName}"`,
-                    },
-                    {
-                        status: 404,
-                    }
-                );
+                if (!skill) {
+                    return Response.json(
+                        {
+                            success: false,
+                            message: `No skill found with the name "${skillName}"`,
+                        },
+                        {
+                            status: 404,
+                        }
+                    );
+                }
+                // Add skillId to the filter
+                filter.skillId = skill._id;
             }
 
-            // console.log("skill : ", skill);
-
-            // Add skillId to the filter
-            filter.skillId = skill._id;
         }
 
         const skip = (currentPage - 1) * itemsPerPage;
         const limit = itemsPerPage;
 
-        const topics = await Topic.aggregate([
+        topics = await Topic.aggregate([
             {
                 $match: filter,
             },
@@ -84,10 +89,7 @@ export async function GET(request: Request) {
             },
         ]);
 
-        // console.log("topics : ", topics);
-
-
-        const totalTopics = await Topic.countDocuments(filter);
+        totalTopics = await Topic.countDocuments(filter);
 
         if (!topics.length) {
             return Response.json(
@@ -100,7 +102,7 @@ export async function GET(request: Request) {
                 }
             );
         }
-        
+
         return Response.json(
             {
                 success: true,

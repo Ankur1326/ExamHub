@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
+import handleError from "../../handleError";
 
 // Types for the state
 interface Tag {
@@ -33,37 +34,16 @@ const initialState: TagsState = {
 
 // Fetch tags with pagination
 export const fetchTags = createAsyncThunk(
-    'questionTags/fetchQuestionTags',
-    async ({ isActive, name, currentPage, itemsPerPage }: { isActive?: boolean | null; name?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
+    'Tags/fetchTags',
+    async ({ fetchAll, isActive, name, currentPage, itemsPerPage }: { fetchAll?: boolean; isActive?: boolean | null; name?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/tages/get`, {
-                params: { isActive, name, currentPage, itemsPerPage }
+                params: { fetchAll, isActive, name, currentPage, itemsPerPage }
             });
-            return {
-                tags: response.data.data.tags,
-                totalTags: response.data.data.totalTags,
-                currentPage: response.data.data.currentPage,
-                totalPages: response.data.data.totalPages,
-            };
+            return response.data.data;
         } catch (error: any) {
-
-            if (error.response) {
-                // Server responded with a status other than 2xx
-                console.log(`Error: ${error.response.status} - ${error.response.data}`);
-                console.log("error.response.data : ", error.response.data);
-
-            } else if (error.request) {
-                // Request was made but no response was received
-                console.log('Network error: No response from server');
-            } else {
-                // Something else happened in setting up the request
-                console.log(`Error: ${error.message}`);
-            }
-
-            console.error("error : ", error);
-            console.error("error.message : ", error.message);
-            return rejectWithValue(error.message);
+            return handleError(error, rejectWithValue)
         } finally {
             dispatch(setLoading(false));
         }
@@ -72,7 +52,7 @@ export const fetchTags = createAsyncThunk(
 
 // Create a new tag thunk
 export const createTag = createAsyncThunk<Tag, { name: string, isActive: boolean }, { rejectValue: string }>(
-    'questionTags/createTag',
+    'Tags/createTag',
     async ({ name, isActive }, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {
@@ -83,11 +63,7 @@ export const createTag = createAsyncThunk<Tag, { name: string, isActive: boolean
             }
         } catch (error: any) {
             console.error(error);
-            if (error.response && error.response.status === 409) {
-                toast.error("Tag is already exist")
-                return rejectWithValue("Tag already exists.");
-            }
-            return rejectWithValue(error.message || "Failed to create tag");
+            return handleError(error, rejectWithValue)
         } finally {
             dispatch(setLoading(false));
         }
@@ -96,15 +72,14 @@ export const createTag = createAsyncThunk<Tag, { name: string, isActive: boolean
 
 // Toggle question type status thunk
 export const toggleTagStatus = createAsyncThunk<Tag, { id: string }, { rejectValue: string }>(
-    'questionTags/toggleQuestionTagStatus',
+    'Tags/toggleQuestionTagStatus',
     async ({ id }, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`/api/admin/configuration/manage-categoriesAndTages/tages/toggle-status`, { id });
             return response.data.data;
         } catch (error: any) {
-            console.error(error);
-            return rejectWithValue(error.message);
+            return handleError(error, rejectWithValue)
         } finally {
             dispatch(setLoading(false));
         }
@@ -113,7 +88,7 @@ export const toggleTagStatus = createAsyncThunk<Tag, { id: string }, { rejectVal
 
 // Edit an existing tag thunk
 export const updateTag = createAsyncThunk(
-    'questionTags/editTag',
+    'Tags/editTag',
     async (tag: Tag, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {
@@ -122,8 +97,7 @@ export const updateTag = createAsyncThunk(
                 return response.data.data;
             }
         } catch (error: any) {
-            console.error(error.response.data.message || "Failed to update tag");
-            return rejectWithValue(error.message || 'Failed to update tag');
+            return handleError(error, rejectWithValue)
         } finally {
             dispatch(setLoading(false));
         }
@@ -132,7 +106,7 @@ export const updateTag = createAsyncThunk(
 
 // Delete a tag thunk
 export const deleteTag = createAsyncThunk(
-    'questionTags/deleteTag',
+    'Tags/deleteTag',
     async (_id: string, { dispatch, rejectWithValue }) => {
         dispatch(setLoading(true));
         try {

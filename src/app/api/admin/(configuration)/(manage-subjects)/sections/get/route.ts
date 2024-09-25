@@ -57,6 +57,7 @@ export async function GET(request: Request) {
             // Apply pagination when fetchAll is false or not provided
             const skip = (currentPage - 1) * itemsPerPage;
             const limit = itemsPerPage;
+            
             sections = await Section.find(filter).skip(skip).limit(limit).exec();
             totalSections = await Section.countDocuments(filter).exec();
         }

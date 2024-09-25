@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
-import Alert from "@/components/Alert";
 
 // Types for the state
 interface Section {

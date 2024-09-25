@@ -48,7 +48,7 @@ const handleError = (error: any, rejectWithValue: any) => {
 export const fetchSkills = createAsyncThunk(
     'questionSkills/fetchSkills',
     async ({ fetchAll, isActive, name, sectionName, currentPage, itemsPerPage }: { fetchAll?: boolean, isActive?: boolean | null; name?: string; sectionName?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
-        console.log(name, sectionName);
+        // console.log(name, sectionName);
 
         dispatch(setLoading(true));
         try {
