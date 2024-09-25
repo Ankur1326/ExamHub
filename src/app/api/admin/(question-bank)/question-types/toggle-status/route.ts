@@ -6,10 +6,10 @@ export async function POST(request: Request) {
     await dbConnect();
 
     try {
-        const { id } = await request.json()
-        console.log(id);
+        const { _id } = await request.json()
+        console.log(_id);
 
-        if (!id) {
+        if (!_id) {
             return Response.json(
                 {
                     success: false,
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
         // Toggle the isActive status of the specific questionType
         const updatedQuestionTypes = configuration.questionTypes?.map((questionType) => {
-            if (questionType?._id?.toString() === id) {
+            if (questionType?._id?.toString() === _id) {
                 return {
                     ...questionType,
                     isActive: !questionType.isActive,

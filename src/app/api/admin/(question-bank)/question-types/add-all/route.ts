@@ -28,7 +28,7 @@ export async function POST(request: Request) {
         {
             code: "MSA",
             name: "Multiple Choice Single Answer",
-            shortDesc: "This question type is easy to set up and is the most frequent MCQ question in online exams. Users are allowed to pick just one answer from a list of given options.",
+            shortDescription: "This question type is easy to set up and is the most frequent MCQ question in online exams. Users are allowed to pick just one answer from a list of given options.",
             isActive: true,
             defaultTimeToSolve: 60,
             defaultMarks: 1
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         {
             code: "MMA",
             name: "Multiple Choice Multiple Answers",
-            shortDesc: "Multiple Choice Multiple Answers type question allows users to select one or several answers from a list of given options.",
+            shortDescription: "Multiple Choice Multiple Answers type question allows users to select one or several answers from a list of given options.",
             isActive: true,
             defaultTimeToSolve: 60,
             defaultMarks: 1
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
         {
             code: "TOF",
             name: "True or False",
-            shortDesc: "A true or false question consists of a statement that requires a true or false response. We can also format the options such as: Yes/No, Correct/Incorrect, and Agree/Disagree.",
+            shortDescription: "A true or false question consists of a statement that requires a true or false response. We can also format the options such as: Yes/No, Correct/Incorrect, and Agree/Disagree.",
             isActive: true,
             defaultTimeToSolve: 60,
             defaultMarks: 1
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         {
             code: "SAQ",
             name: "Short Answer",
-            shortDesc: "Short answer questions allow users to provide text or numeric answers. These responses will be validated against the provided possible answers.",
+            shortDescription: "Short answer questions allow users to provide text or numeric answers. These responses will be validated against the provided possible answers.",
             isActive: true,
             defaultTimeToSolve: 60,
             defaultMarks: 1
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
         {
             code: "MTF",
             name: "Match the Following",
-            shortDesc: "A matching question is two adjacent lists of related words, phrases, pictures, or symbols. Each item in one list is paired with at least one item in the other list.",
+            shortDescription: "A matching question is two adjacent lists of related words, phrases, pictures, or symbols. Each item in one list is paired with at least one item in the other list.",
             isActive: true,
             defaultTimeToSolve: 60,
             defaultMarks: 1
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
         {
             code: "ORD",
             name: "Ordering/Sequence",
-            shortDesc: "An ordering/sequence question consists of a scrambled list of related words, phrases, pictures, or symbols. The User needs to arrange them in a logical order/sequence.",
+            shortDescription: "An ordering/sequence question consists of a scrambled list of related words, phrases, pictures, or symbols. The User needs to arrange them in a logical order/sequence.",
             isActive: true,
             defaultTimeToSolve: 60,
             defaultMarks: 1
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         {
             code: "FIB",
             name: "Fill in the Blanks",
-            shortDesc: "A Fill in the Blank question consists of a phrase, sentence, or paragraph with a blank space where a student provides the missing word or words.",
+            shortDescription: "A Fill in the Blank question consists of a phrase, sentence, or paragraph with a blank space where a student provides the missing word or words.",
             isActive: true,
             defaultTimeToSolve: 60,
             defaultMarks: 1
@@ -106,10 +106,13 @@ export async function POST(request: Request) {
             );
         }
 
+        const createdQuestionTypes: any = configuration.questionTypes
+
         return Response.json(
             {
                 success: true,
                 message: "Question types added successfully",
+                data: createdQuestionTypes
             },
             {
                 status: 200

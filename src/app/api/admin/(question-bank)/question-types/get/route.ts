@@ -6,7 +6,7 @@ export async function GET(request: Request) {
     await dbConnect();
 
     const url = new URL(request.url);
-    const activeParam = url.searchParams.get("active");
+    const activeParam = url.searchParams.get("isActive");
 
     try {
         // Fetch the configuration document for 'questionTypes'
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
             return Response.json(
                 {
                     success: false,
-                    message: "No question types found"
+                    message: "Configration is not found"
                 },
                 {
                     status: 404
@@ -27,6 +27,18 @@ export async function GET(request: Request) {
         }
 
         const questionTypes = configuration.questionTypes
+
+        if (!questionTypes) {
+            return Response.json(
+                {
+                    success: false,
+                    message: "Question types is not found"
+                },
+                {
+                    status: 404
+                }
+            );
+        }
 
         if (activeParam === 'true') {
             const activeQuestionTypes = questionTypes?.filter(questionType => questionType.isActive === true)
