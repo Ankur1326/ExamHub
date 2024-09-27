@@ -1,9 +1,7 @@
 'use client'
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Math from '@isaul32/ckeditor5-math/src/math';
-import AutoformatMath from '@isaul32/ckeditor5-math/src/autoformatmath';
 
 interface CustomCKEditorProps {
     content: string;
@@ -16,15 +14,14 @@ const CKEditor = dynamic<any>(() =>
 );
 
 const CustomCKEditor: React.FC<CustomCKEditorProps> = ({ content, setContent }) => {
-    const editorRef = useRef(null);
+    // const editorRef = useRef(null);
 
-    useEffect(() => {
+    useEffect(() => { 
         // Load MathJax
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML';
         script.async = true;
         document.body.appendChild(script);
-
         script.onload = () => {
             if (typeof MathJax !== 'undefined') {
                 // Configure MathJax
@@ -38,28 +35,28 @@ const CustomCKEditor: React.FC<CustomCKEditorProps> = ({ content, setContent }) 
         };
     }, []);
 
-    const editorConfiguration = {
-        plugins: [Math, AutoformatMath],
-        toolbar: [
-            'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
-            'blockQuote', 'insertTable', 'undo', 'redo', '|', 'math'
-        ],
-        math: {
-            engine: 'mathjax', // Use MathJax engine
-            outputType: 'script', // MathJax output type
-            forceOutputType: false, // Allow both script and span types
-            enablePreview: true,
-        },
-    };
+    // const editorConfiguration = {
+    //     plugins: [Math, AutoformatMath],
+    //     toolbar: [
+    //         'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
+    //         'blockQuote', 'insertTable', 'undo', 'redo', '|', 'math'
+    //     ],
+    //     math: {
+    //         engine: 'mathjax', // Use MathJax engine
+    //         outputType: 'script', // MathJax output type
+    //         forceOutputType: false, // Allow both script and span types
+    //         enablePreview: true,
+    //     },
+    // };
 
     return (
         <CKEditor
             editor={ClassicEditor}
             data={content}
-            config={editorConfiguration}
-            onReady={(editor: any) => {
-                editorRef.current = editor;
-            }}
+            // config={editorConfiguration}
+            // onReady={(editor: any) => {
+            //     editorRef.current = editor;
+            // }}
             onChange={(event: any, editor: any) => setContent(editor.getData())}
         />
     );
