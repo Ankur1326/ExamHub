@@ -3,7 +3,7 @@
 import { Dot } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { AiOutlineUser, AiOutlineSetting, AiOutlineRight, AiOutlineDown, AiOutlineHome, AiOutlineDashboard, AiOutlineTags } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineSetting, AiOutlineHome, AiOutlineDashboard, AiOutlineTags } from 'react-icons/ai';
 import { FaAngleDown, FaQuestionCircle } from 'react-icons/fa';
 
 interface SidebarProps {
@@ -76,7 +76,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                     </div>
 
                     {/* Question Banks Section */}
-                    <Section name='Library'/>
+                    <Section name='Library' />
                     <div onClick={() => toggleSection('questionBanks')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/question-banks')} hover:text-white hover:bg-[#00A261] transition-colors text-sm duration-300 ease-in-out`}>
                         <div className="flex items-center space-x-2">
                             <FaQuestionCircle className="text-lg" />
@@ -97,6 +97,10 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                                 <Dot />
                                 <span>Add Question</span>
                             </div>
+                            <div onClick={() => navigateTo('/admin/compreshensions')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/compreshensions')}`}>
+                                <Dot />
+                                <span>Compreshensions</span>
+                            </div>
                             <div onClick={() => navigateTo('/admin/question-types')} className={`flex items-center space-x-1 px-4 py-2 rounded-md cursor-pointer hover:text-white text-sm ${isActive('/admin/question-types')}`}>
                                 <Dot />
                                 <span>Question Types</span>
@@ -105,7 +109,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                     </div>
 
                     {/* Manage Categories Section */}
-                    <Section name='Configuration'/>
+                    <Section name='Configuration' />
                     <div onClick={() => toggleSection('manageCategories')} className={`flex items-center justify-between px-4 py-2 rounded-md cursor-pointer ${isActive('/admin/manage-categories')} hover:text-white hover:bg-[#00A261] transition-colors duration-300 ease-in-out text-sm`}>
                         <div className="flex items-center space-x-2">
                             <AiOutlineTags className="text-lg" />

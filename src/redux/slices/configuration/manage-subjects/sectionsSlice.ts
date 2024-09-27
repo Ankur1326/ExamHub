@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
+import handleError from "../../handleError";
 
 // Types for the state
 interface Section {
@@ -28,19 +29,6 @@ const initialState: SectionsState = {
     currentPage: 1,
     status: 'idle',
     error: null,
-};
-
-// Error Handler
-const handleError = (error: any, rejectWithValue: any) => {
-    if (error.response) {
-        toast.error(error.response.data.message || "Falied")
-        console.log(`Error: ${error.response.status} - ${error.response.data}`);
-        return rejectWithValue(error.response.data.message || "Request failed");
-    } else if (error.request) {
-        toast.error("Failed")
-        return rejectWithValue("Network error: No response from server");
-    }
-    return rejectWithValue(error.message || "Request failed");
 };
 
 // Fetch sections with pagination

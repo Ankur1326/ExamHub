@@ -1,6 +1,6 @@
 'use client'
 import { Loader2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SearchDropdownProps {
     label: string;
@@ -8,6 +8,7 @@ interface SearchDropdownProps {
     fetchResults: (searchQuery: string, fetchAll: boolean) => Promise<any>;
     onSelect: (selectedTags: any[]) => void;
     required: boolean;
+    selectedTags: any[];
 }
 
 const MultiTagSearchDropdown = ({
@@ -15,7 +16,8 @@ const MultiTagSearchDropdown = ({
     placeholder,
     fetchResults,
     onSelect,
-    required
+    required,
+    selectedTags: propSelectedTags // Initialize from prop
 }: SearchDropdownProps) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -23,12 +25,17 @@ const MultiTagSearchDropdown = ({
     const [showDropdown, setShowDropdown] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [initialClick, setInitialClick] = useState(false)
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
-    console.log("selectedTags : ", selectedTags);
+    useEffect(() => {
+        setSelectedTags(propSelectedTags || []); // Update state when prop changes
+    }, [propSelectedTags]);
+    
+    // console.log("selectedTags : ", selectedTags);
     // Handle selecting a tag from the dropdown
     const handleSelect = (tag: any) => {
         if (!selectedTags.some((t) => t._id === tag._id)) { // Prevent duplicate tags
-            const updatedTags = [...selectedTags, tag];
+            const updatedTags = [...selectedTags, { _id: tag._id, name: tag.name }];
             setSelectedTags(updatedTags);
             onSelect(updatedTags); // Call onSelect with updated selected tags
         }
@@ -69,8 +76,23 @@ const MultiTagSearchDropdown = ({
         return () => clearTimeout(delayDebounceFn);
     }, [searchQuery, fetchResults, initialClick]);
 
+        // Close dropdown when clicking outside
+        useEffect(() => {
+            const handleClickOutside = (event: MouseEvent) => {
+                if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                    setShowDropdown(false);  // Close dropdown if clicking outside
+                }
+            };
+    
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside); // Cleanup the event listener
+            };
+        }, []);
+    
+
     return (
-        <div className="mb-4 relative">
+        <div className="mb-4 relative" ref={dropdownRef}>
             <label className="block text-sm font-medium text-gray-700 mb-1">
                 {label}
                 {required && <span className="text-red-500 ml-1">*</span>}  {/* Required indicator */}
