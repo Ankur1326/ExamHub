@@ -26,13 +26,15 @@ const CustomCKEditor: React.FC<CustomCKEditorProps> = ({ content, setContent }) 
         document.body.appendChild(script);
 
         script.onload = () => {
-            // Configure MathJax
-            MathJax.Hub.Config({
-                tex2jax: {
-                    inlineMath: [['$', '$'], ['\\(', '\\)']],
-                    displayMath: [['$$', '$$'], ['\\[', '\\]']]
-                }
-            });
+            if (typeof MathJax !== 'undefined') {
+                // Configure MathJax
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [['$', '$'], ['\\(', '\\)']],
+                        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                    }
+                });
+            }
         };
     }, []);
 
@@ -46,7 +48,7 @@ const CustomCKEditor: React.FC<CustomCKEditorProps> = ({ content, setContent }) 
             engine: 'mathjax', // Use MathJax engine
             outputType: 'script', // MathJax output type
             forceOutputType: false, // Allow both script and span types
-            enablePreview: true, 
+            enablePreview: true,
         },
     };
 
@@ -55,7 +57,7 @@ const CustomCKEditor: React.FC<CustomCKEditorProps> = ({ content, setContent }) 
             editor={ClassicEditor}
             data={content}
             config={editorConfiguration}
-            onReady={(editor:any) => {
+            onReady={(editor: any) => {
                 editorRef.current = editor;
             }}
             onChange={(event: any, editor: any) => setContent(editor.getData())}
