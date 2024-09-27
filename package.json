@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "live-server": "^1.2.2",
     "lucide-react": "^0.424.0",
+    "mathjax": "^3.2.2",
     "mongoose": "^8.5.2",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
@@ -37,6 +38,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@isaul32/ckeditor5-math": "^43.1.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
