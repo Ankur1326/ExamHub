@@ -16,7 +16,8 @@ import TableLabelHeader from "@/components/TableLabelHeader";
 import SearchFilters from "@/components/SearchFilters";
 import { formatDate } from "@/utility/dateFormate";
 import { createCompreshension, deleteCompreshension, fetchCompreshensions, updateCompreshension } from "@/redux/slices/library/question-bank/CompreshensionSlice";
-import CustomCKEditor from "@/components/CustomCKEditor";
+import dynamic from "next/dynamic";
+const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor"), { ssr: false });
 
 export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
@@ -175,6 +176,7 @@ export default function Page() {
             placeHolder="title..."
             fieldName="title" // Pass the key corresponding to the filter
         />,
+        <></>,
         <StatusFilter
             key="status"
             filterQuery={filterQuery}
@@ -199,7 +201,12 @@ export default function Page() {
                             compreshensions.map((item: any) => (
                                 <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">{item?.title}</td>
-                                    <td className="py-3 px-4 text-sm border-r border-gray-100">{item?.body}</td>
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                        {/* Render HTML content from the question field */}
+                                        <div
+                                            dangerouslySetInnerHTML={{ __html: item?.body }}
+                                        />
+                                    </td>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
                                             {item.isActive ? "Active" : "Inactive"}
