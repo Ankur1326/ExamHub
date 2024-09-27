@@ -103,7 +103,6 @@ export const deleteCompreshension = createAsyncThunk(
     }
 );
 
-
 const compreshensionsSlice = createSlice({
     name: 'compreshensions',
     initialState,

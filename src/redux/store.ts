@@ -7,7 +7,7 @@ import categoriesReducer from "./slices/configuration/manage-categories/categori
 import sectionsReducer from "./slices/configuration/manage-subjects/sectionsSlice"
 import skillsReducer from "./slices/configuration/manage-subjects/skillsSlice"
 import topicsReducer from "./slices/configuration/manage-subjects/topicSlice"
-import CompreshensionsReducer from "./slices/library/question-bank/CompreshensionSlice"
+import CompreshensionsReducer from "./slices/library/question-bank/compreshensionsSlice"
 import questionsReducer from "./slices/library/question-bank/questionSlice"
 
 export const store = configureStore({

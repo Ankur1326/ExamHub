@@ -15,7 +15,7 @@ import FormSelect from "@/components/FormSelect";
 import TableLabelHeader from "@/components/TableLabelHeader";
 import SearchFilters from "@/components/SearchFilters";
 import { formatDate } from "@/utility/dateFormate";
-import { createCompreshension, deleteCompreshension, fetchCompreshensions, updateCompreshension } from "@/redux/slices/library/question-bank/CompreshensionSlice";
+import { createCompreshension, deleteCompreshension, fetchCompreshensions, updateCompreshension } from "@/redux/slices/library/question-bank/compreshensionsSlice";
 import dynamic from "next/dynamic";
 const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor"), { ssr: false });
 
