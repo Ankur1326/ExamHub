@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     try {
         const { name, shortDescription, isActive } = await request.json();
-        console.log(name, shortDescription, isActive);
+        // console.log(name, shortDescription, isActive);
 
         if (!name) {
             return Response.json(

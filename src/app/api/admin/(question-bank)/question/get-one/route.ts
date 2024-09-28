@@ -56,7 +56,7 @@ export async function GET(request: Request) {
             {
                 $project: {
                     _id: 1,
-                    questionType:1,
+                    questionType: 1,
                     question: 1, // Add any other fields you want to return from the Question model
                     options: 1,
                     correctOptions: 1,
@@ -67,10 +67,23 @@ export async function GET(request: Request) {
                     defaultMarks: 1,
                     defaultTimeToSolve: 1,
                     isActive: 1,
+                    solution: 1,
                     enableSolutionVideo: 1,
+                    solutionVideoType: 1,
+                    solutionVideoLink: 1,
+                    hint: 1,
                     skillName: { $arrayElemAt: ["$skillDetails.name", 0] },
                     topicName: { $arrayElemAt: ["$topicDetails.name", 0] },
-                    tagNames: "$tagDetails.name" // Assuming tagDetails is an array
+                    tagDetails: {
+                        $map: {
+                            input: "$tagDetails",
+                            as: "tag",
+                            in: {
+                                _id: "$$tag._id",
+                                name: "$$tag.name"
+                            }
+                        }
+                    } // Assuming tagDetails is an array
                 }
             }
         ]);

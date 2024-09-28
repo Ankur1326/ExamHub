@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     const fetchAll = url.searchParams.get("fetchAll") === 'true'; // Check if fetchAll is true
 
     try {
-        // console.log(title, isActive, currentPage, itemsPerPage);
+        console.log(title, isActive, currentPage, itemsPerPage);
 
         let filter: any = {};
 
@@ -42,9 +42,9 @@ export async function GET(request: Request) {
             filter = { isActive: isActiveBoolean };
         }
 
-        // Filter by `name` if provided (case-insensitive, partial match)
+        // Filter by `title` if provided (case-insensitive, partial match)
         if (title) {
-            filter.name = { $regex: title, $options: "i" };
+            filter.title = { $regex: title, $options: "i" };
         }
 
         let compreshensions;
@@ -61,6 +61,8 @@ export async function GET(request: Request) {
             compreshensions = await Compreshension.find(filter).skip(skip).limit(limit).exec();
             totalCompreshensions = await Compreshension.countDocuments(filter).exec();
         }
+        console.log("compreshensions : ", compreshensions);
+        
 
         if (!compreshensions) {
             return Response.json(

@@ -17,14 +17,13 @@ import FormTextarea from "@/components/FormTextarea";
 import TableLabelHeader from "@/components/TableLabelHeader";
 import SearchFilters from "@/components/SearchFilters";
 import { formatDate } from "@/utility/dateFormate";
-import Alert from "@/components/Alert";
 
 export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
-    const { totalPages = 1, totalSections, status, error } = useSelector((state: RootState) => state.sections);
-    const [name, setName] = useState<string>(""); // Set initial section name if provided
-    const [isActive, setIsActive] = useState<boolean>(true); // Set initial status
-    const [shortDescription, setShortDescription] = useState<string>(""); // Set initial status
+    const { totalPages = 1, totalSections } = useSelector((state: RootState) => state.sections);
+    const [name, setName] = useState<string>("");
+    const [isActive, setIsActive] = useState<boolean>(true);
+    const [shortDescription, setShortDescription] = useState<string>("");
     const [isModalVisible, setModalVisible] = useState(false);
     const [selectedSection, setSelectedSection] = useState<any | null>(null);
     const [loadingPage, setLoadingPage] = useState(true);
@@ -221,7 +220,7 @@ export default function Page() {
                             :
                             (
                                 <tr>
-                                    <td colSpan={2} className="text-center py-4 text-gray-500">No sections found</td>
+                                    <td colSpan={2} className="text-center py-4 text-gray-500"> Sections Not found</td>
                                 </tr>
                             )
                     ) : (
