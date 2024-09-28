@@ -2,29 +2,29 @@ import React from 'react';
 import { FiEye } from 'react-icons/fi';
 
 interface VideoLinkOrIdInputProps {
-    solutionVideoType: 'mp4' | 'youtube' | 'vimeo';
-    solutionVideoLink: string;
-    enableSolutionVideo: boolean;
+    videoType: 'mp4' | 'youtube' | 'vimeo';
+    videoLink: string;
+    enableVideo: boolean;
     setSolutionVideoLink: (link: string) => void;
     handlePreview: () => void;
 }
 
 const VideoLinkOrIdInput: React.FC<VideoLinkOrIdInputProps> = ({
-    solutionVideoType,
-    solutionVideoLink,
-    enableSolutionVideo,
+    videoType,
+    videoLink,
+    enableVideo,
     setSolutionVideoLink,
     handlePreview
 }) => {
-    const label = solutionVideoType === 'mp4' 
+    const label = videoType === 'mp4'
         ? 'MP4 Video URL' 
-        : solutionVideoType === 'youtube' 
+        : videoType === 'youtube' 
         ? 'YouTube Video ID' 
         : 'Vimeo Video ID';
 
-    const placeholder = solutionVideoType === 'mp4'
+    const placeholder = videoType === 'mp4'
         ? 'Enter MP4 video link'
-        : solutionVideoType === 'youtube'
+        : videoType === 'youtube'
         ? 'Enter YouTube video ID'
         : 'Enter Vimeo video ID';
 
@@ -35,9 +35,9 @@ const VideoLinkOrIdInput: React.FC<VideoLinkOrIdInputProps> = ({
                 <input
                     type="text"
                     className="w-full px-4 py-2 rounded-l-md text-sm"
-                    required={enableSolutionVideo}
+                    required={enableVideo}
                     placeholder={placeholder}
-                    value={solutionVideoLink}
+                    value={videoLink}
                     onChange={(e) => setSolutionVideoLink(e.target.value)}
                 />
                 {/* Preview Button with Icon */}

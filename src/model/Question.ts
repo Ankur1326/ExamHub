@@ -19,6 +19,12 @@ enum VideoType {
     VIMEO = 'vimeo',
 }
 
+enum AttachmentType {
+    COMPREHENSION_PASSAGE = 'comprehensionPassage',
+    AUDIO = 'audio',
+    VIDEO = 'video',
+}
+
 enum QuestionType {
     MCQ_SINGLE = 'Multiple Choice Single Answer',
     MCQ_MULTIPLE = 'Multiple Choice Multiple Answers',
@@ -30,6 +36,7 @@ enum QuestionType {
 }
 
 interface IQuestion extends Document {
+    // step 1
     questionCode: string;
     questionType: QuestionType;
     question: string;
@@ -40,6 +47,7 @@ interface IQuestion extends Document {
     trueFalseAnswer?: boolean; // For True/False
     shortAnswer?: string; // For Short Answer
     fillInTheBlanks?: string[]; // For Fill in the Blanks
+    // step 2
     sectionId?: Types.ObjectId;
     skillId?: Types.ObjectId;
     topicId?: Types.ObjectId
@@ -48,11 +56,16 @@ interface IQuestion extends Document {
     defaultMarks: number;
     defaultTimeToSolve: number; // in seconds
     isActive: boolean;
+    // step3
     solution: string;
     enableSolutionVideo: boolean;
     solutionVideoType?: VideoType;
     solutionVideoLink?: string;
     hint?: string;
+    // step 4
+    enableQuestionAttachment?: boolean;
+    attachmentType: AttachmentType;
+    comprehensionPassage?: string;
 }
 
 const QuestionSchema = new Schema<IQuestion>({
@@ -187,6 +200,20 @@ const QuestionSchema = new Schema<IQuestion>({
         type: String,
         required: false,
         trim: true,
+    },
+    enableQuestionAttachment: {
+        type: Boolean,
+        default: false,
+    },
+    attachmentType: {
+        type: String,
+        enum: AttachmentType,
+    },
+    comprehensionPassage: {
+        type: String,
+        required: function () {
+            return this.enableQuestionAttachment && this.attachmentType === AttachmentType.COMPREHENSION_PASSAGE;
+        },
     },
 }, {
     timestamps: true, // Add createdAt and updatedAt timestamps

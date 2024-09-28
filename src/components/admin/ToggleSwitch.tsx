@@ -10,7 +10,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ enabled, onToggle, label })
     return (
         <div className="mb-6">
             <label className="block text-sm font-semibold mb-1">{label}</label>
-            <div className="flex items-center space-x-4">
+            <div className="flex space-x-4">
                 <label className="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
                     <input
                         type="checkbox"

@@ -35,11 +35,10 @@ const SearchDropdown = ({
     // Handle selecting an item from the dropdown
     const handleSelect = (item: any) => {
         onSelect(item);
-        setSearchQuery(item.name);
+        setSearchQuery(item?.name ||item?.title);
         setShowDropdown(false);
         setSearchResults([]);
     };
-
 
     // Fetch results based on search query
     useEffect(() => {
@@ -117,7 +116,7 @@ const SearchDropdown = ({
                             className="cursor-pointer text-sm px-2 py-1 hover:bg-gray-100"
                             onClick={() => handleSelect(result)}
                         >
-                            {result.name}
+                            {result.name || result?.title}
                         </div>
                     ))}
                 </div>
