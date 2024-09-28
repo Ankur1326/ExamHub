@@ -35,7 +35,7 @@ function CreateOrEditPage({ params }: any) {
     const dispatch = useDispatch<AppDispatch>();
 
     const [selectedTab, setSelectedTab] = useState<any | null>(null);
-    const [currentStep, setCurrentStep] = useState<number>(4);
+    const [currentStep, setCurrentStep] = useState<number>(1);
     const [questionData, setQuestionData] = useState(null);
 
     useEffect(() => {
