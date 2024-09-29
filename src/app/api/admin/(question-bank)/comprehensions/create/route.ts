@@ -1,4 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
+import Comprehension from "@/model/Comprehension";
 import Compreshension from "@/model/Comprehension";
 // import { getSession } from "next-auth/react";
 
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
             return Response.json(
                 {
                     success: false,
-                    message: "Compreshension title is required."
+                    message: "Comprehension title is required."
                 },
                 {
                     status: 400
@@ -53,32 +54,32 @@ export async function POST(request: Request) {
         }
 
         // Check if the category already exists by title
-        const existingCompreshension = await Compreshension.findOne({ title });
-        // console.log("existingComreshension : ", existingCompreshension);
+        const existingComprehension = await Comprehension.findOne({ title });
+        // console.log("existingComrehension : ", existingComprehension);
 
-        if (existingCompreshension) {
+        if (existingComprehension) {
             return Response.json(
                 {
                     success: true,
-                    message: "Compreshension with this title already exists",
+                    message: "Comprehension with this title already exists",
                 },
                 { status: 400 }
             )
         }
 
-        const newCompreshension = new Compreshension({
+        const newComprehension = new Comprehension({
             title,
             body,
             isActive,
         });
 
         // Save the new tag to the database
-        await newCompreshension.save();
+        await newComprehension.save();
         return Response.json(
             {
                 success: true,
                 message: "Compreshension successfully created",
-                data: newCompreshension,
+                data: newComprehension,
             },
             {
                 status: 200
@@ -86,11 +87,11 @@ export async function POST(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while creating new Compreshension: ", error);
+        console.log("Error while creating new Comprehension: ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while creating new Compreshension",
+                message: "Internal server error while creating new Comprehension",
                 error
             },
             {

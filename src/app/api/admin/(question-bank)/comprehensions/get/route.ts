@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import Compreshension from "@/model/Comprehension";
+import Comprehension from "@/model/Comprehension";
 // import { getSession } from "next-auth/react";
 
 export async function GET(request: Request) {
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     const fetchAll = url.searchParams.get("fetchAll") === 'true'; // Check if fetchAll is true
 
     try {
-        console.log(title, isActive, currentPage, itemsPerPage);
+        // console.log(title, isActive, currentPage, itemsPerPage);
 
         let filter: any = {};
 
@@ -47,28 +47,28 @@ export async function GET(request: Request) {
             filter.title = { $regex: title, $options: "i" };
         }
 
-        let compreshensions;
-        let totalCompreshensions;
+        let comprehensions;
+        let totalComprehensions;
 
         if (fetchAll) {
-            compreshensions = await Compreshension.find(filter).exec();
-            totalCompreshensions = compreshensions.length;
+            comprehensions = await Comprehension.find(filter).exec();
+            totalComprehensions = comprehensions.length;
         } else {
             // Apply pagination when fetchAll is false or not provided
             const skip = (currentPage - 1) * itemsPerPage;
             const limit = itemsPerPage;
             
-            compreshensions = await Compreshension.find(filter).skip(skip).limit(limit).exec();
-            totalCompreshensions = await Compreshension.countDocuments(filter).exec();
+            comprehensions = await Comprehension.find(filter).skip(skip).limit(limit).exec();
+            totalComprehensions = await Comprehension.countDocuments(filter).exec();
         }
-        console.log("compreshensions : ", compreshensions);
+        console.log("comprehensions : ", comprehensions);
         
 
-        if (!compreshensions) {
+        if (!comprehensions) {
             return Response.json(
                 {
                     success: false,
-                    message: "compreshension not found"
+                    message: "comprehension not found"
                 },
                 {
                     status: 404
@@ -79,12 +79,12 @@ export async function GET(request: Request) {
         return Response.json(
             {
                 success: true,
-                message: "Compreshensions fetched successfully",
+                message: "Comprehensions fetched successfully",
                 data: {
-                    compreshensions,
-                    totalCompreshensions,
+                    comprehensions,
+                    totalComprehensions,
                     currentPage,
-                    totalPages: Math.ceil(totalCompreshensions / itemsPerPage)
+                    totalPages: Math.ceil(totalComprehensions / itemsPerPage)
                 }
             },
             {
@@ -93,11 +93,11 @@ export async function GET(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while fetching compreshension: ", error);
+        console.log("Error while fetching comprehension: ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while fetching compreshensions",
+                message: "Internal server error while fetching comprehensions",
                 error
             },
             {

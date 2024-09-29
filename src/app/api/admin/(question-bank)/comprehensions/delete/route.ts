@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import Compreshension from "@/model/Comprehension";
+import Comprehension from "@/model/Comprehension";
 // import { getSession } from "next-auth/react";
 
 export async function DELETE(request: Request) {
@@ -26,14 +26,14 @@ export async function DELETE(request: Request) {
 
     try {
         const data = await request.json();
-        const compreshensionId = data._id
+        const comprehensionId = data._id
 
         // Fixing validation to check for undefined for isActive
-        if (!compreshensionId) {
+        if (!comprehensionId) {
             return Response.json(
                 {
                     success: false,
-                    message: "Compreshension ID is required."
+                    message: "Comprehension ID is required."
                 },
                 {
                     status: 400
@@ -41,14 +41,14 @@ export async function DELETE(request: Request) {
             );
         }
 
-        const result = await Compreshension.deleteOne({ _id: compreshensionId });
+        const result = await Comprehension.deleteOne({ _id: comprehensionId });
         // console.log("result : ", result);
 
         if (result.deletedCount === 0) {
             return Response.json(
                 {
                     success: false,
-                    message: "Compreshension is not found.",
+                    message: "Comprehension is not found.",
                 },
                 {
                     status: 404,
@@ -59,7 +59,7 @@ export async function DELETE(request: Request) {
         return Response.json(
             {
                 success: true,
-                message: "Compreshension deleted successfully.",
+                message: "Comprehension deleted successfully.",
             },
             {
                 status: 200,
@@ -67,11 +67,11 @@ export async function DELETE(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while deleting Compreshension : ", error);
+        console.log("Error while deleting Comprehension : ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while Compreshension",
+                message: "Internal server error while Comprehension",
                 error
             },
             {

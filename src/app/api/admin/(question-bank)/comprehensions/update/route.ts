@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import Compreshension from "@/model/Comprehension";
+import Comprehension from "@/model/Comprehension";
 // import { getSession } from "next-auth/react";
 
 export async function PUT(request: Request) {
@@ -27,13 +27,13 @@ export async function PUT(request: Request) {
     try {
         const { _id, title, body, isActive } = await request.json();
         console.log(_id, title, body, isActive);
-        const compreshensionId = _id;
+        const comprehensionId = _id;
 
-        if (!compreshensionId) {
+        if (!comprehensionId) {
             return Response.json(
                 {
                     success: false,
-                    message: "compreshension is required",
+                    message: "comprehension is required",
                 },
                 {
                     status: 400,
@@ -42,12 +42,12 @@ export async function PUT(request: Request) {
         }
 
         // Check if the new title is already taken
-        const existingCompreshension: any = await Compreshension.findOne({ title });
-        if (existingCompreshension && existingCompreshension._id.toString() !== compreshensionId) {
+        const existingComprehension: any = await Comprehension.findOne({ title });
+        if (existingComprehension && existingComprehension._id.toString() !== comprehensionId) {
             return Response.json(
                 {
                     success: false,
-                    message: "Compreshension with this name already exists",
+                    message: "Comprehension with this name already exists",
                 },
                 {
                     status: 400,
@@ -56,17 +56,17 @@ export async function PUT(request: Request) {
         }
 
         // Find the tag by ID and update it
-        const updateCompreshension = await Compreshension.findByIdAndUpdate(
-            compreshensionId,
+        const updateComprehension = await Comprehension.findByIdAndUpdate(
+            comprehensionId,
             { title, body, isActive },
             { new: true, runValidators: true }
         );
 
-        if (!updateCompreshension) {
+        if (!updateComprehension) {
             return Response.json(
                 {
                     success: false,
-                    message: "Compreshension not found",
+                    message: "Comprehension not found",
                 },
                 {
                     status: 404
@@ -77,8 +77,8 @@ export async function PUT(request: Request) {
         return Response.json(
             {
                 success: true,
-                message: "Compreshension updated successfully",
-                data: updateCompreshension
+                message: "Comprehension updated successfully",
+                data: updateComprehension
             },
             {
                 status: 200
@@ -86,11 +86,11 @@ export async function PUT(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while deleting compreshension : ", error);
+        console.log("Error while deleting comprehension : ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while compreshension",
+                message: "Internal server error while comprehension",
                 error
             },
             {

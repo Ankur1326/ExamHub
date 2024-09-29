@@ -15,19 +15,20 @@ import FormSelect from "@/components/FormSelect";
 import TableLabelHeader from "@/components/TableLabelHeader";
 import SearchFilters from "@/components/SearchFilters";
 import { formatDate } from "@/utility/dateFormate";
-import { createCompreshension, deleteCompreshension, fetchCompreshensions, updateCompreshension } from "@/redux/slices/library/question-bank/compreshensionsSlice";
+import { createComprehension, deleteComprehension, fetchComprehensions, updateComprehension } from "@/redux/slices/library/question-bank/comprehensionsSlice";
 import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
 const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor"), { ssr: false });
 
 export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
-    const { totalPages = 1, totalCompreshensions } = useSelector((state: RootState) => state.compreshensions);
+    const { totalPages = 1, totalComprehensions } = useSelector((state: RootState) => state.comprehensions);
     const [title, setTitle] = useState<string>("");
     const [body, setBody] = useState<string>("");
     const [isActive, setIsActive] = useState<boolean>(true);
 
     const [isModalVisible, setModalVisible] = useState(false);
-    const [selectedCompreshension, setSelectedCompreshension] = useState<any | null>(null);
+    const [selectedComprehension, setSelectedComprehension] = useState<any | null>(null);
     const [loadingPage, setLoadingPage] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5)
@@ -40,17 +41,17 @@ export default function Page() {
     });
     const [searchQuery, setSearchQuery] = useState<any>({ title: "", isActive: null });
 
-    const compreshensions = pagesCache[currentPage] || []; // Get items for the current page from cache
+    const comprehensions = pagesCache[currentPage] || []; // Get items for the current page from cache
 
     useEffect(() => {
         const fetchData = async () => {
             if (!pagesCache[currentPage]) {
                 setLoadingPage(true);
-                const response: any = await dispatch(fetchCompreshensions({ ...searchQuery, currentPage, itemsPerPage }));
-                if (typeof response.payload !== 'string' && response.payload?.compreshensions) {
+                const response: any = await dispatch(fetchComprehensions({ ...searchQuery, currentPage, itemsPerPage }));
+                if (typeof response.payload !== 'string' && response.payload?.comprehensions) {
                     setPagesCache((prevCache) => ({
                         ...prevCache,
-                        [currentPage]: response?.payload?.compreshensions,
+                        [currentPage]: response?.payload?.comprehensions,
                     }));
                 } else {
                     console.error("Unexpected response format", response.payload);
@@ -65,12 +66,12 @@ export default function Page() {
         const preloadAdjacentPages = async (currentPage: number, itemsPerPage: number) => {
             // Preload next page if it exists
             if (currentPage < totalPages && !pagesCache[currentPage + 1]) {
-                const nextPageResponse: any = await dispatch(fetchCompreshensions({ currentPage: currentPage + 1, itemsPerPage }));
+                const nextPageResponse: any = await dispatch(fetchComprehensions({ currentPage: currentPage + 1, itemsPerPage }));
 
-                if (typeof nextPageResponse.payload !== 'string' && nextPageResponse.payload?.compreshensions) {
+                if (typeof nextPageResponse.payload !== 'string' && nextPageResponse.payload?.comprehensions) {
                     setPagesCache((prevCache) => ({
                         ...prevCache,
-                        [currentPage + 1]: nextPageResponse?.payload?.compreshensions,
+                        [currentPage + 1]: nextPageResponse?.payload?.comprehensions,
                     }));
                 }
             }
@@ -89,10 +90,10 @@ export default function Page() {
 
     const handleSearch = useCallback(() => {
         setSearchQuery(filterQuery);
-        setItemsPerPage(totalCompreshensions);
+        setItemsPerPage(totalComprehensions);
         setPagesCache({});
         setCurrentPage(1);
-    }, [filterQuery, totalCompreshensions]);
+    }, [filterQuery, totalComprehensions]);
 
     const handleItemsPerPageChange = (e: any) => {
         setPagesCache({})
@@ -100,47 +101,48 @@ export default function Page() {
         setCurrentPage(1);
     }
 
-    const handleCreateNewCompreshension = () => {
+    const handleCreateNewComprehension = () => {
         setTitle("")
-        setSelectedCompreshension(null)
+        setSelectedComprehension(null)
         setModalVisible(true)
     }
 
     const handleSave = async (e: any) => {
         e.preventDefault()
-        const compreshensionData: any = { title, body, isActive }
+        const comprehensionData: any = { title, body, isActive }
         if (!title) {
             return;
         }
         if (!body) {
+            toast.error("body is required")
             return;
         }
         setModalVisible(false);
         let response;
-        if (selectedCompreshension) {
+        if (selectedComprehension) {
             // If editing a item, dispatch the edit action
-            response = await dispatch(updateCompreshension({ ...selectedCompreshension, ...compreshensionData }));
+            response = await dispatch(updateComprehension({ ...selectedComprehension, ...comprehensionData }));
         } else {
             // If creating a new item, dispatch the create action
-            response = await dispatch(createCompreshension(compreshensionData));
+            response = await dispatch(createComprehension(comprehensionData));
         }
 
         // Wait for the response to resolve
         if (response && response.payload && typeof response.payload !== 'string') {
             // Update the state to show the new/updated item immediately
-            const updatedCompreshensions = selectedCompreshension
-                ? compreshensions.map(com => com._id === selectedCompreshension._id ? { ...com, ...compreshensionData } : com)
-                : [...compreshensions, response.payload]; // Add the new item to the list
+            const updatedComprehensions = selectedComprehension
+                ? comprehensions.map(com => com._id === selectedComprehension._id ? { ...com, ...comprehensionData } : com)
+                : [...comprehensions, response.payload]; // Add the new item to the list
 
             setPagesCache(prevCache => ({
                 ...prevCache,
-                [currentPage]: updatedCompreshensions
+                [currentPage]: updatedComprehensions
             }));
         }
     };
 
     const onEdit = (item: any) => {
-        setSelectedCompreshension(item); // Set the item data for editing
+        setSelectedComprehension(item); // Set the item data for editing
         setTitle(item.title); // Set the existing item name in state
         setBody(item.body);
         setIsActive(item.isActive);
@@ -148,16 +150,16 @@ export default function Page() {
         setDropdownOpen(null);
     };
 
-    const handleDelete = async (compreshensionId: string) => {
+    const handleDelete = async (comprehensionId: string) => {
         setDropdownOpen(null);
-        const response = await dispatch(deleteCompreshension(compreshensionId));
+        const response = await dispatch(deleteComprehension(comprehensionId));
         if (response?.payload) {
             // Remove the deleted item from the list of items
-            const updatedCompreshensions = compreshensions.filter(com => com._id !== compreshensionId);
+            const updatedComprehensions = comprehensions.filter(com => com._id !== comprehensionId);
 
             setPagesCache(prevCache => ({
                 ...prevCache,
-                [currentPage]: updatedCompreshensions
+                [currentPage]: updatedComprehensions
             }));
         }
     };
@@ -188,7 +190,7 @@ export default function Page() {
     return (
         <div className="container mx-auto p-4">
             {/* Header Section */}
-            <SectionHeader title="Manage Sections" onClick={handleCreateNewCompreshension} />
+            <SectionHeader title="Manage Comprehensions" onClick={handleCreateNewComprehension} />
 
             {/* items Table */}
             <table className="min-w-full bg-white shadow-md rounded-sm">
@@ -197,8 +199,8 @@ export default function Page() {
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
                 <tbody>
                     {!loadingPage ? (
-                        compreshensions.length > 0 ? (
-                            compreshensions.map((item: any) => (
+                        comprehensions.length > 0 ? (
+                            comprehensions.map((item: any) => (
                                 <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">{item?.title}</td>
                                     <td className="py-3 px-3 text-sm border-r border-gray-100">
@@ -232,7 +234,7 @@ export default function Page() {
                             :
                             (
                                 <tr>
-                                    <td colSpan={2} className="text-center py-4 text-gray-500"> Compreshensions not found</td>
+                                    <td colSpan={2} className="text-center py-4 text-gray-500"> Comprehensions not found</td>
                                 </tr>
                             )
                     ) : (
@@ -253,21 +255,21 @@ export default function Page() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 itemsPerPage={itemsPerPage}
-                totalItems={totalCompreshensions}
+                totalItems={totalComprehensions}
                 handlePreviousPage={handlePreviousPage}
                 handleNextPage={handleNextPage}
                 handleItemPerPageChange={handleItemsPerPageChange}
             />
 
             <EditOrCreateNewModalWrapper
-                title={selectedCompreshension ? "Edit Compreshension" : "Create Compreshension"}
+                title={selectedComprehension ? "Edit Comprehension" : "Create Comprehension"}
                 isVisible={isModalVisible}
                 onClose={() => setModalVisible(false)}
                 onSave={handleSave}
                 size="medium"
             >
                 <div className="mb-4">
-                    <FormInput label="Compreshension Name" value={title} onChange={(e) => setTitle(e.target.value)} required={true} placeholder="title" />
+                    <FormInput label="Comprehension Name" value={title} onChange={(e) => setTitle(e.target.value)} required={true} placeholder="title" />
                 </div>
 
                 <div className="mb-4">
