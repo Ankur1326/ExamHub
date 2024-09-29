@@ -29,7 +29,7 @@ function CreateOrEditPage({ params }: any) {
     const { slug } = params;
     const isEdit = slug[0] === 'edit'; // Check if the first part of the slug is "edit"
     const questionId = isEdit ? slug[1] : null; // Extract the questionId if editing
-    console.log(slug);
+    // console.log(slug);
 
     const { questionTypes, status, error } = useSelector((state: RootState) => state.questionTypes);
     const dispatch = useDispatch<AppDispatch>();
@@ -139,7 +139,7 @@ function CreateOrEditPage({ params }: any) {
                     <h1 className="text-xl font-bold text-gray-800">
                         {isEdit ? `Edit Question` : 'Add Question to Question Bank'}
                     </h1>
-                    <span>{selectedTab ? selectedTab.name : 'No Tab Selected'}</span>
+                    <span className='text-sm'>{selectedTab ? selectedTab.name : 'No Tab Selected'}</span>
                 </div>
                 <StepIndicator steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} isEdit={isEdit}  />
             </div>
@@ -150,7 +150,7 @@ function CreateOrEditPage({ params }: any) {
                         <button
                             key={item.code}
                             onClick={() => setSelectedTab(item)}
-                            className={`py-2 px-3 text-sm border-b font-semibold transition-all duration-200 ${selectedTab?.code === item.code
+                            className={`py-2 px-3 text-sm border-b font-medium transition-all duration-200 ${selectedTab?.code === item.code
                                 ? 'bg-white text-gray-900 border-b-0'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700'
                                 } rounded-t-md`}

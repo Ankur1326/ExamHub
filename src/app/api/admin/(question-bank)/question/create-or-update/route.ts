@@ -1,4 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
+import Compreshension from "@/model/Comprehension";
 import Question, { QuestionType } from "@/model/Question";
 import Skill from "@/model/Skill";
 import Tag from "@/model/Tag";
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
     try {
         const {
             step, // which step is being processed
+            questionId,
             questionType,
             question,
             options,
@@ -40,6 +42,7 @@ export async function POST(request: Request) {
             trueFalseAnswer,
             shortAnswer,
             fillInTheBlanks,
+            // step 2
             skillName,
             topicName,
             tagNames,
@@ -47,39 +50,54 @@ export async function POST(request: Request) {
             defaultMarks,
             defaultTimeToSolve,
             isActive,
+            // strp 3
             solution,
             enableSolutionVideo,
             solutionVideoType,
             solutionVideoLink,
             hint,
-            questionId
+            // step 4
+            enableQuestionAttachment,
+            attachmentType,
+            comprehensionPassageId,
+            selectedFormat,
+            audioLink,
+            videoType,
+            videoLinkOrId,
         } = await request.json();
 
-        // console.log(step,
-        //     step,
-        //     questionType,
-        //     question,
-        //     options,
-        //     correctOptions,
-        //     matchPairs,
-        //     sequenceOrder,
-        //     trueFalseAnswer,
-        //     shortAnswer,
-        //     fillInTheBlanks,
-        //     skillName,
-        //     topicName,
-        //     tagNames,
-        //     difficultyLevel,
-        //     defaultMarks,
-        //     defaultTimeToSolve,
-        //     isActive,
-        //     solution,
-        //     enableSolutionVideo,
-        //     solutionVideoType,
-        //     solutionVideoLink,
-        //     hint,
-        //     questionId
-        // );
+        console.log(' logged data',
+            step,
+            //     questionType,
+            //     question,
+            //     options,
+            //     correctOptions,
+            //     matchPairs,
+            //     sequenceOrder,
+            //     trueFalseAnswer,
+            //     shortAnswer,
+            //     fillInTheBlanks,
+            //     skillName,
+            //     topicName,
+            //     tagNames,
+            //     difficultyLevel,
+            //     defaultMarks,
+            //     defaultTimeToSolve,
+            //     isActive,
+            //     solution,
+            //     enableSolutionVideo,
+            //     solutionVideoType,
+            //     solutionVideoLink,
+            //     hint,
+            //     questionId
+            enableQuestionAttachment,
+            attachmentType,
+            comprehensionPassageId,
+            selectedFormat,
+            audioLink,
+            videoType,
+            videoLinkOrId,
+        );
 
 
         // Step 1: Create basic question details
@@ -260,6 +278,7 @@ export async function POST(request: Request) {
                     solutionVideoType,
                     solutionVideoLink,
                     hint,
+                    isActive
                 },
                 { new: true }
             );
@@ -288,9 +307,32 @@ export async function POST(request: Request) {
 
             const updatedQuestion = await Question.findByIdAndUpdate(
                 questionId,
-                { isActive },
+                {
+                    enableQuestionAttachment,
+                    attachmentType,
+                    comprehensionPassageId: comprehensionPassageId?.toString(),
+                    selectedFormat,
+                    audioLink,
+                    videoType,
+                    videoLinkOrId,
+                },
                 { new: true }
             );
+
+            console.log('updatedQuestion : ', updatedQuestion);
+
+            if (!updatedQuestion) {
+                return Response.json(
+                    {
+                        success: false,
+                        message: "failed"
+                    },
+                    {
+                        status: 400
+                    }
+                )
+
+            }
 
             return Response.json(
                 {

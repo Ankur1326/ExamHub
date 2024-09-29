@@ -10,7 +10,7 @@ interface PaginationProps {
   totalItems: number;
   handlePreviousPage: () => void;
   handleNextPage: () => void;
-  handleItemPerPageChange: (e : any) => void;
+  handleItemPerPageChange: (e: any) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -27,50 +27,50 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="flex flex-col sm:flex-row items-center justify-between mt-6 text-sm">
       {/* Items Per Page Selector */}
       <div className="flex items-center space-x-2 mb-4 sm:mb-0">
-        <label className="text-gray-700" htmlFor="itemsPerPage">Items per page:</label>
+        <label className="text-gray-500 text-sm font-normal " htmlFor="itemsPerPage">Items per page:</label>
         <div className="relative">
           <select
             id="itemsPerPage"
             value={itemsPerPage}
             onChange={(e) => handleItemPerPageChange(e)}
-          className="text-sm px-3 py-1 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="text-sm px-3 py-[5.5px] border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
           >
-          {[5, 10, 15].map(size => (
-            <option key={size} value={size}>{size}</option>
-          ))}
-        </select>
+            {[5, 10, 15].map(size => (
+              <option key={size} value={size} className='text-sm'>{size}</option>
+            ))}
+          </select>
+        </div>
+        <span className="text-gray-500 text-sm font-normal">
+          Showing {Math.min(itemsPerPage, totalItems)} of {totalItems} items
+        </span>
       </div>
-      <span className="text-gray-600">
-        Showing {Math.min(itemsPerPage, totalItems)} of {totalItems} items
-      </span>
-    </div>
 
-      {/* Pagination Controls */ }
-  <div className="flex items-center space-x-3">
-    <button
-      onClick={handlePreviousPage}
-      disabled={currentPage === 1}
-      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#716ACA] hover:bg-[#645eb3]'
-        }`}
-      aria-label="Previous Page"
-    >
-      <ChevronLeft />
-    </button>
+      {/* Pagination Controls */}
+      <div className="flex items-center space-x-3">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#716ACA] hover:bg-[#645eb3]'
+            }`}
+          aria-label="Previous Page"
+        >
+          <ChevronLeft />
+        </button>
 
-    <span className="text-gray-700 text-sm">
-      Page {currentPage} of {totalPages}
-    </span>
+        <span className="text-gray-700 text-sm">
+          Page {currentPage} of {totalPages}
+        </span>
 
-    <button
-      onClick={handleNextPage}
-      disabled={currentPage === totalPages}
-      className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#716ACA] hover:bg-[#645eb3]'
-        }`}
-      aria-label="Next Page"
-    >
-      <ChevronRight />
-    </button>
-  </div>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className={`w-10 h-10 flex items-center justify-center rounded-full text-white transition ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#716ACA] hover:bg-[#645eb3]'
+            }`}
+          aria-label="Next Page"
+        >
+          <ChevronRight />
+        </button>
+      </div>
     </div >
   );
 };

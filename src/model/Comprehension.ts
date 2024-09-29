@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface ICompreshension extends Document {
+export interface IComprehension extends Document {
     title: string;
     body: string;
     isActive: boolean;
@@ -8,7 +8,7 @@ export interface ICompreshension extends Document {
     updatedAt: Date;
 }
 
-const CompreshensionSchema: Schema<ICompreshension> = new mongoose.Schema(
+const ComprehensionSchema: Schema<IComprehension> = new mongoose.Schema(
     {
         title: {
             type: String,
@@ -30,6 +30,6 @@ const CompreshensionSchema: Schema<ICompreshension> = new mongoose.Schema(
     }
 )
 
-const Compreshension = (mongoose.models.Compreshension as mongoose.Model<ICompreshension>) || mongoose.model<ICompreshension>("Compreshension", CompreshensionSchema);
+const Comprehension = (mongoose.models.Comprehension as mongoose.Model<IComprehension>) || mongoose.model<IComprehension>("Comprehension", ComprehensionSchema);
 
-export default Compreshension;
+export default Comprehension;

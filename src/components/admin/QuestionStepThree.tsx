@@ -125,11 +125,11 @@ function QuestionStepThree({ questionId, questionData, nextStep, prevStep }: Que
 
             {/* Back and Update Buttons */}
             <div className="flex justify-between mt-6 items-center" >
-                <div onClick={prevStep} className="py-2 px-6 bg-slate-100 text-gray-500 hover:text-black rounded-md font-semibold border border-slate-300 cursor-pointer transition duration-200">
+                <div onClick={prevStep} className="py-2 px-6 bg-slate-100 text-gray-500 hover:text-black rounded-sm font-semibold border border-slate-300 cursor-pointer transition duration-200">
                     Back
                 </div>
                 <button
-                    className="px-6 py-2 bg-[#1BC5BD] text-white rounded-md hover:bg-[#18b7af]"
+                    className="px-6 py-2 bg-[#1BC5BD] text-white rounded-sm hover:bg-[#18b7af]"
                     onClick={handleUpdate}
                 >
                     Update

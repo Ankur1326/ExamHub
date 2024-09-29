@@ -1,6 +1,8 @@
 import dbConnect from "@/lib/dbConnect";
 import Question from "@/model/Question";
 import Section from "@/model/Section";
+import Skill from "@/model/Skill";
+import Topic from "@/model/Topic";
 // import { getSession } from "next-auth/react";
 
 export async function GET(request: Request) {
@@ -30,12 +32,12 @@ export async function GET(request: Request) {
     const itemsPerPage = parseInt(url.searchParams.get("itemsPerPage") || "5", 10)
     const fetchAll = url.searchParams.get("fetchAll") === 'true'
 
-    const code = url.searchParams.get("code") || "";
+    const code = url.searchParams.get("questionCode") || "";
     const question = url.searchParams.get("question") || "";
-    const type = url.searchParams.get("type") || "";
-    const sectionName = url.searchParams.get("sectionName") || "";
-    const skillName = url.searchParams.get("skillName") || "";
-    const topicName = url.searchParams.get("topicName") || "";
+    const type = url.searchParams.get("questionType") || "";
+    const sectionName = url.searchParams.get("section") || "";
+    const skillName = url.searchParams.get("skill") || "";
+    const topicName = url.searchParams.get("topic") || "";
     const isActive = url.searchParams.get("isActive")
 
     try {
@@ -59,13 +61,16 @@ export async function GET(request: Request) {
             filter.questionType = { $regex: type, $options: "i" };
         }
         if (sectionName) {
-            filter.sectionName = { $regex: sectionName, $options: "i" } // add sectionName in database
+            const section = await Section.findOne({ name: { $regex: sectionName, $options: "i" } })
+            filter.sectionId = section?._id
         }
         if (skillName) {
-            filter.skill = { $regex: skillName, $options: "i" }
+            const skill = await Skill.findOne({ name: { $regex: skillName, $options: "i" } })
+            filter.skillId = skill?._id
         }
         if (topicName) {
-            filter.topic = { $regex: topicName, $options: "i" }
+            const topic = await Topic.findOne({ name: { $regex: topicName, $options: "i" } })
+            filter.topicId = topic?._id
         }
 
         let questions;
@@ -79,9 +84,64 @@ export async function GET(request: Request) {
             const skip = (currentPage - 1) * itemsPerPage;
             const limit = itemsPerPage;
 
-            questions = await Question.find(filter).skip(skip).limit(limit).exec();
+            questions = await Question.aggregate([
+                {
+                    $match: filter,
+                },
+                {
+                    $skip: skip,
+                },
+                {
+                    $limit: limit,
+                },
+                {
+                    $lookup: {
+                        from: "sections",
+                        localField: "sectionId",
+                        foreignField: "_id",
+                        as: "sectionDetails",
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "skills",
+                        localField: "skillId",
+                        foreignField: "_id",
+                        as: "skillDetails",
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "topics",
+                        localField: "topicId",
+                        foreignField: "_id",
+                        as: "topicDetails",
+                    }
+                },
+                {
+                    $project: {
+                        questionCode: 1,
+                        question: 1,
+                        questionType: 1,
+                        isActive: 1,
+                        section: {
+                            $ifNull: [{ $arrayElemAt: ["$sectionDetails.name", 0] }, null],
+                        },
+                        skill: {
+                            $ifNull: [{ $arrayElemAt: ["$skillDetails.name", 0] }, null],
+                        },
+                        topic: {
+                            $ifNull: [{ $arrayElemAt: ["$topicDetails.name", 0] }, null],
+                        },
+                    }
+                }
+            ])
+
+            // questions = await Question.find(filter).skip(skip).limit(limit).exec();
             totalQuestions = await Question.countDocuments(filter).exec();
         }
+
+        // console.log("Questions result: ", questions);
 
         if (!questions) {
             return Response.json(

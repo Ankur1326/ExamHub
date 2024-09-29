@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomCKEditor from '../CustomCKEditor';
 import ToggleSwitch from './ToggleSwitch';
 import VideoTypeSelector from './VideoTypeSelector';
@@ -6,7 +6,7 @@ import VideoLinkOrIdInput from './VideoLinkOrIdInput';
 import SearchDropdown from '../SearchDropdown';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
-import { fetchCompreshensions } from '@/redux/slices/library/question-bank/compreshensionsSlice';
+import { fetchComprehensions } from '@/redux/slices/library/question-bank/comprehensionsSlice';
 import { FiEye } from 'react-icons/fi';
 import { createOrUpdateQuestion } from '@/redux/slices/library/question-bank/questionSlice';
 
@@ -19,14 +19,24 @@ interface QuestionStepThreeProps {
 
 function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: QuestionStepThreeProps) {
     const dispatch = useDispatch<AppDispatch>();
-    const [comprehensionTitle, setComprehensionTitle] = useState("")
     const [enableQuestionAttachment, setEnableQuestionAttachment] = useState<boolean>(false);
     const [attachmentType, setAttachmentType] = useState<'comprehensionPassage' | 'audio' | 'video'>('comprehensionPassage');
-    const [selectedFormat, setSelectedFormat] = useState("mp3")
-    const [audioLink, setAudioLink] = useState("")
+    const [comprehension, setComprehension] = useState<any>({})
+    const [selectedFormat, setSelectedFormat] = useState<string>("mp3")
+    const [audioLink, setAudioLink] = useState<string>("")
     const [showAudioPreview, setShowAudioPreview] = useState<boolean>(false);
-    const [videoLink, setVideoLink] = useState("")
     const [videoType, setVideoType] = useState<'mp4' | 'youtube' | 'vimeo'>("mp4")
+    const [videoLinkOrId, setVideoLinkOrId] = useState<string>("")
+
+    useEffect(() => {
+        setEnableQuestionAttachment(questionData?.enableQuestionAttachment)
+        setComprehension(questionData?.comprehensionPassage[0])
+        setAttachmentType(questionData?.attachmentType)
+        setSelectedFormat(questionData?.selectedFormat)
+        setAudioLink(questionData?.audioLink)
+        setVideoType(questionData?.videoType)
+        setVideoLinkOrId(questionData?.videoLinkOrId)
+    }, [questionData])
 
     // Handle the radio button change
     const handleAttachmentTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,8 +44,8 @@ function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: Ques
     };
 
     const fetchAllActiveItems = async (searchQuery: string, fetchAll: boolean) => {
-        const response = await dispatch(fetchCompreshensions({ title: searchQuery, fetchAll, isActive: true }));
-        return response.payload.compreshensions || [];
+        const response = await dispatch(fetchComprehensions({ title: searchQuery, fetchAll, isActive: true }));
+        return response.payload.comprehensions || [];
     };
 
     const handleAudioPreview = () => {
@@ -59,11 +69,11 @@ function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: Ques
         let videoUrl = '';
 
         if (videoType === 'mp4') {
-            videoUrl = videoLink; // Direct MP4 link
+            videoUrl = videoLinkOrId; // Direct MP4 link
         } else if (videoType === 'youtube') {
-            videoUrl = `https://www.youtube.com/embed/${videoLink}`; // YouTube link
+            videoUrl = `https://www.youtube.com/embed/${videoLinkOrId}`; // YouTube link
         } else if (videoType === 'vimeo') {
-            videoUrl = `https://player.vimeo.com/video/${videoLink}`; // Vimeo link
+            videoUrl = `https://player.vimeo.com/video/${videoLinkOrId}`; // Vimeo link
         }
         if (videoUrl) {
             window.open(videoUrl, '_blank');
@@ -72,13 +82,32 @@ function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: Ques
         }
     }
 
-    // const handleUpdate = async (e:any) => {
-    //     e.preventDefault()
-    //     let resultAction = await dispatch(createOrUpdateQuestion({ step: 3, data: { solution, enableSolutionVideo, solutionVideoType, solutionVideoLink, hint }, questionId }));
-    //     if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
-    //         nextStep()
-    //     }
-    // }
+    const handleUpdate = async (e: any) => {
+        e.preventDefault()
+
+        let data: any = { enableQuestionAttachment, attachmentType };
+
+        if (enableQuestionAttachment) {
+            switch (attachmentType) {
+                case 'comprehensionPassage':
+                    data = { ...data, comprehensionPassageId: comprehension?._id }; // Safely access comprehension._id.
+                    break;
+                case 'audio':
+                    data = { ...data, selectedFormat, audioLink };
+                    break;
+                case 'video':
+                    data = { ...data, videoType, videoLinkOrId };
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        let resultAction = await dispatch(createOrUpdateQuestion({ step: 4, data, questionId }));
+        if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
+            // nextStep()
+        }
+    }
 
     return (
         <div className="space-y-6 w-full md:w-2/3 mx-auto p-4 sm:p-6">
@@ -118,9 +147,9 @@ function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: Ques
                                 placeholder="Search for a Passage..."
                                 required={true}
                                 fetchResults={fetchAllActiveItems}
-                                sectionName={comprehensionTitle}
+                                sectionName={comprehension?.title}
                                 onSelect={(comprehension: any) => {
-                                    setComprehensionTitle(comprehension.title);
+                                    setComprehension(comprehension);
                                 }}
                             />
                         )}
@@ -171,9 +200,9 @@ function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: Ques
                                 <VideoTypeSelector selectedType={videoType} onChange={setVideoType} />
                                 <VideoLinkOrIdInput
                                     videoType={videoType}
-                                    videoLink={videoLink}
+                                    videoLink={videoLinkOrId}
                                     enableVideo={true}
-                                    setSolutionVideoLink={setVideoLink}
+                                    setSolutionVideoLink={setVideoLinkOrId}
                                     handlePreview={handleVideoPreview}
                                 />
                             </div>
@@ -184,12 +213,12 @@ function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: Ques
 
             {/* Step Navigation Buttons */}
             <div className="flex justify-between mt-6 items-center" >
-                <div onClick={prevStep} className="py-2 px-6 bg-slate-100 text-gray-500 hover:text-black rounded-md font-semibold border border-slate-300 cursor-pointer transition duration-200">
+                <div onClick={prevStep} className="py-2 px-6 bg-slate-100 text-gray-500 hover:text-black rounded-sm font-semibold border border-slate-300 cursor-pointer transition duration-200">
                     Back
                 </div>
                 <button
-                    className="px-6 py-2 bg-[#1BC5BD] text-white rounded-md hover:bg-[#18b7af]"
-                    // onClick={handleUpdate}
+                    className="px-6 py-2 bg-[#1BC5BD] text-white rounded-sm hover:bg-[#18b7af]"
+                    onClick={handleUpdate}
                 >
                     Update
                 </button>

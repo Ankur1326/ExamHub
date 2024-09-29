@@ -28,6 +28,14 @@ interface Question {
     solutionVideoLink?: string;
     hint?: string;
     isActive?: boolean;
+    // setp 4
+    enableQuestionAttachment?: boolean
+    attachmentType?: string;
+    comprehensionPassageId?: string;
+    selectedFormat?: string;
+    audioLink?: string;
+    videoType?: string;
+    videoLinkOrId?: string;
 }
 
 //shape of the state
@@ -92,15 +100,15 @@ export const createOrUpdateQuestion = createAsyncThunk<
 // Fetch questions with pagination
 export const fetchQuestions = createAsyncThunk<
     { questions: Question[], totalPages: number, totalQuestions: number, currentPage: number },
-    { currentPage?: number; itemsPerPage?: number },
+    { fetchAll?: boolean, questionCode?: string, question?: string, questionType?: string, section?: string, skill?: string, topic?: string, isActive?: boolean | null, currentPage?: number; itemsPerPage?: number },
     { rejectValue: { message: string } }
 >(
     'question/fetchQuestions',
-    async ({ currentPage = 1, itemsPerPage = 10 }, { dispatch, rejectWithValue }) => {
+    async ({ questionCode, question, questionType, section, skill, topic, isActive, currentPage = 1, itemsPerPage = 10 }, { dispatch, rejectWithValue }) => {
         try {
             dispatch(setLoading(true))
             const response = await axios.get('/api/admin/question/get', {
-                params: { currentPage, itemsPerPage },
+                params: { questionCode, question, questionType, section, skill, topic, isActive, currentPage, itemsPerPage },
             });
             return response.data.data;
         } catch (error: any) {

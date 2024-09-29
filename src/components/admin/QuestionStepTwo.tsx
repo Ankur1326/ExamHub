@@ -145,14 +145,14 @@ function QuestionStepTwo({ questionId, questionData, nextStep, prevStep }: Quest
                     </span>
                 </div>
                 <div className='flex justify-between items-center mt-6'>
-                    <div onClick={prevStep} className="py-2 px-4 bg-slate-100 text-gray-500 hover:text-black rounded-md font-semibold border border-slate-300 cursor-pointer transition duration-200">
+                    <div onClick={prevStep} className="py-2 px-4 bg-slate-100 text-gray-500 hover:text-black rounded-sm font-semibold border border-slate-300 cursor-pointer transition duration-200">
                         Back
                     </div>
 
                     {/* Submit Button */}
                     <button
                         type='submit'
-                        className="py-2 px-4 bg-[#1BC5BD] text-white rounded-md font-semibold hover:bg-[#18b7af] transition duration-200"
+                        className="py-2 px-4 bg-[#1BC5BD] text-white rounded-sm font-semibold hover:bg-[#18b7af] transition duration-200"
                     >
                         Update
                     </button>

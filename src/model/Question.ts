@@ -64,8 +64,12 @@ interface IQuestion extends Document {
     hint?: string;
     // step 4
     enableQuestionAttachment?: boolean;
-    attachmentType: AttachmentType;
-    comprehensionPassage?: string;
+    attachmentType?: AttachmentType;
+    comprehensionPassageId?: Types.ObjectId;
+    audioType?: string;
+    audioLink?: string;
+    videoType?: string;
+    videoLinkOrId?: string;
 }
 
 const QuestionSchema = new Schema<IQuestion>({
@@ -94,13 +98,13 @@ const QuestionSchema = new Schema<IQuestion>({
         required: function () {
             return this.questionType === QuestionType.MCQ_SINGLE || this.questionType === QuestionType.MCQ_MULTIPLE;
         },
-        validate: {
-            validator: function (correctOptions: number[]) {
-                // Check if options exist and if correctOptions indexes are valid
-                return this.options?.every((option, index) => correctOptions.every(co => co >= 0 && co < index)) ?? false;
-            },
-            message: 'Correct options must correspond to valid option indices',
-        },
+        // validate: {
+        //     validator: function (correctOptions: number[]) {
+        //         // Check if options exist and if correctOptions indexes are valid
+        //         return this.options?.every((option, index) => correctOptions.every(co => co >= 0 && co < index)) ?? false;
+        //     },
+        //     message: 'Correct options must correspond to valid option indices',
+        // },
     },
     matchPairs: {
         type: [{
@@ -209,63 +213,75 @@ const QuestionSchema = new Schema<IQuestion>({
         type: String,
         enum: AttachmentType,
     },
-    comprehensionPassage: {
+    comprehensionPassageId: {
+        type: Types.ObjectId,
+        ref: "Comprehension",
+        required: function () {
+            return this.enableQuestionAttachment && this.attachmentType === AttachmentType.COMPREHENSION_PASSAGE
+        }
+    },
+    audioType: {
         type: String,
         required: function () {
-            return this.enableQuestionAttachment && this.attachmentType === AttachmentType.COMPREHENSION_PASSAGE;
-        },
+            return this.attachmentType === AttachmentType.AUDIO
+        }
     },
+    audioLink: {
+        type: String,
+        required: function () {
+            return this.audioType
+        }
+    },
+    videoType: {
+        type: String,
+        required: function () {
+            return this.attachmentType === AttachmentType.VIDEO
+        }
+    },
+    videoLinkOrId: {
+        type: String,
+        required: function () {
+            return this.videoType
+        }
+    }
 }, {
     timestamps: true, // Add createdAt and updatedAt timestamps
 });
 
 // Function to generate a random alphanumeric string
-const generateRandomString = (length: number) => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        result += characters[randomIndex];
-    }
-    return result;
-};
+const generateRandomString = (length: number): string =>
+    Array.from({ length }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]).join('');
+
 
 // Function to generate unique question code
-const generateQuestionCode = (questionType: QuestionType) => {
-    const randomString = generateRandomString(11); // Generates an 11-character string
-    const getQuestionCode = (questionType: string) => {
-        switch (questionType) {
-            case 'Multiple Choice Single Answer':
-                return "MSA";
-            case 'Multiple Choice Multiple Answers':
-                return "MMA";
-            case 'True or False':
-                return "TOF"
-            case 'Short Answer':
-                return "SAQ"
-            case 'Match the Following':
-                return "MTF"
-            case 'Ordering/Sequence':
-                return "ORD"
-            case 'Fill in the Blanks':
-                return "FIB"
-            default:
-                return ""
-        }
+const getQuestionCodePrefix = (questionType: QuestionType): string => {
+    switch (questionType) {
+        case QuestionType.MCQ_SINGLE:
+            return 'MSA';
+        case QuestionType.MCQ_MULTIPLE:
+            return 'MMA';
+        case QuestionType.TRUE_FALSE:
+            return 'TOF';
+        case QuestionType.SHORT_ANSWER:
+            return 'SAQ';
+        case QuestionType.MATCH_FOLLOWING:
+            return 'MTF';
+        case QuestionType.SEQUENCE:
+            return 'ORD';
+        case QuestionType.FILL_BLANKS:
+            return 'FIB';
+        default:
+            return 'GEN';
     }
-    console.log("questionCode : ", getQuestionCode(questionType));
-
-    return `Q_${getQuestionCode(questionType)}_${randomString}`;
 };
 
 // Pre-save hook to generate a question code before saving the document
 QuestionSchema.pre<IQuestion>('save', function (next) {
     if (!this.questionCode) {
-        this.questionCode = generateQuestionCode(this.questionType);
+        this.questionCode = `Q_${getQuestionCodePrefix(this.questionType)}_${generateRandomString(8)}`;
     }
     next();
 });
-
 const Question = (mongoose.models.Question as mongoose.Model<IQuestion>) || mongoose.model<IQuestion>("Question", QuestionSchema);
 
 export default Question

@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface VideoTypeSelectorProps {
-    selectedType: 'mp4' | 'youtube' | 'vimeo';
+    selectedType: string;
     onChange: (type: 'mp4' | 'youtube' | 'vimeo') => void;
 }
 

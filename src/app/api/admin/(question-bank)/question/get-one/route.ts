@@ -54,6 +54,14 @@ export async function GET(request: Request) {
                 }
             },
             {
+                $lookup: {
+                    from: "comprehensions",
+                    localField: "comprehensionPassageId",
+                    foreignField: "_id",
+                    as: "comprehensionPassage"
+                }
+            },
+            {
                 $project: {
                     _id: 1,
                     questionType: 1,
@@ -83,7 +91,14 @@ export async function GET(request: Request) {
                                 name: "$$tag.name"
                             }
                         }
-                    } // Assuming tagDetails is an array
+                    }, // Assuming tagDetails is an array
+                    enableQuestionAttachment: 1,
+                    comprehensionPassage: 1,
+                    attachmentType: 1,
+                    selectedFormat: 1,
+                    audioLink: 1,
+                    videoType: 1,
+                    videoLinkOrId: 1,
                 }
             }
         ]);

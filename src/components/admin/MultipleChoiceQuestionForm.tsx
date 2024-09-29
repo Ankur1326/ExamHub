@@ -97,6 +97,8 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
             correctOptions: [correctOption - 1] // index wise
         }
 
+        // console.log(newQuestion);
+
         const resultAction = await dispatch(createOrUpdateQuestion({ step: 1, data: newQuestion, questionId: currentQuestionId }));
 
         if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
@@ -137,38 +139,54 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                                 </div>
 
                                 {/* CKEditor for Option Text */}
-                                <CustomCKEditor
-                                    content={option}
-                                    setContent={(value) => handleOptionChange(index, value)}
-                                />
-                                {optionErrors[index] && formSubmitted && <FormErrorMessage message="Option is required" />}
-
-                                {/* Correct Option and Remove Button */}
-                                <div className="flex justify-between items-center px-2 bg-white border border-t-0 border-gray-200">
-                                    {/* Correct Option Radio Button */}
-                                    <div onClick={() => handleCorrectOptionChange(index)} className="flex items-center space-x-2 py-1 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="correctOption"
-                                            checked={correctOption === index + 1}
-                                            onChange={() => handleCorrectOptionChange(index)}
-                                            className="form-radio h-4 w-4 text-indigo-600 cursor-pointer"
-                                        />
-                                        <label className="ml-2 text-sm text-gray-700 cursor-pointer">
-                                            Correct
-                                        </label>
-                                    </div>
-
-                                    {/* Remove Option Button */}
-                                    {options.length > 2 && (
-                                        <span
-                                            onClick={() => removeOption(index)}
-                                            className='py-1 px-1 rounded-full hover:bg-gray-100 cursor-pointer text-gray-700'
+                                <div className={`rounded-md overflow-hidden border-2 ${correctOption === index + 1 ? 'border border-green-400' : ' border-green-50'
+                                    }`}>
+                                    <CustomCKEditor
+                                        content={option}
+                                        setContent={(value) => handleOptionChange(index, value)}
+                                    />
+                                    {/* Correct Option and Remove Button */}
+                                    <div className="flex justify-between items-center px-2 bg-white border border-t-0 border-gray-200">
+                                        {/* Correct Option Radio Button */}
+                                        <div
+                                            onClick={() => handleCorrectOptionChange(index)}
+                                            className="flex items-center space-x-2 py-1 cursor-pointer "
                                         >
-                                            <MdDeleteOutline size={22} />
-                                        </span>
-                                    )}
+                                            <div
+                                                className={`h-4 w-4 rounded border-2 cursor-pointer ${correctOption === index + 1 ? 'bg-green-400 border-green-400' : 'border-gray-300'
+                                                    } flex items-center justify-center`}
+                                            >
+                                                {correctOption === index + 1 && (
+                                                    <svg
+                                                        className="w-3 h-3 text-white"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    >
+                                                        <polyline points="20 6 9 17 4 12" />
+                                                    </svg>
+                                                )}
+                                            </div>
+                                            <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${correctOption === index + 1 ? 'text-green-500' : ''
+                                                }`}>Set as correct answer</label>
+                                        </div>
+
+                                        {/* Remove Option Button */}
+                                        {options.length > 2 && (
+                                            <span
+                                                onClick={() => removeOption(index)}
+                                                className='py-1 px-1 rounded-full hover:bg-gray-100 cursor-pointer text-gray-700'
+                                            >
+                                                <MdDeleteOutline size={22} />
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
+                                {optionErrors[index] && formSubmitted && <FormErrorMessage message="Option is required" />}
                             </div>
                         ))}
 
@@ -185,7 +203,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                     <button
                         // onClick={nextStep}
                         onClick={(e) => handleSave(e)}
-                        className="mt-4 py-2 px-4 bg-[#1BC5BD] text-white rounded-md font-semibold hover:bg-[#18b7af] transition duration-200"
+                        className="mt-4 py-2 px-4 bg-[#1BC5BD] text-white rounded-sm font-semibold hover:bg-[#18b7af] transition duration-200"
                     >
                         Save Question
                     </button>

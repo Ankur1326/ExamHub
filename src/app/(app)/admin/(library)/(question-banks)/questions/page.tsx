@@ -18,6 +18,16 @@ import QuestionTypesDropdownSelector from "@/components/QuestionTypesDropdownSel
 import { useRouter } from "next/navigation";
 import { BsDash } from "react-icons/bs";
 
+type SearchQuery = {
+    questionCode: string;
+    question: string;
+    questionType: string;
+    section: string;
+    skill: string;
+    topic: string;
+    isActive: boolean | null;
+  };
+
 export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter()
@@ -29,7 +39,7 @@ export default function Page() {
     const [pagesCache, setPagesCache] = useState<Record<number, any[]>>({}); // Cache to store page data
     const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
 
-    const [filterQuery, setFilterQuery] = useState<any>({
+    const [filterQuery, setFilterQuery] = useState<SearchQuery>({
         questionCode: "",
         question: "",
         questionType: "",
@@ -39,7 +49,7 @@ export default function Page() {
         isActive: null,
     });
 
-    const [searchQuery, setSearchQuery] = useState({
+    const [searchQuery, setSearchQuery] = useState<SearchQuery>({
         questionCode: "",
         question: "",
         questionType: "",
@@ -64,6 +74,8 @@ export default function Page() {
                 } else {
                     console.error("Unexpected response format", response.payload);
                 }
+                console.log("response ::: ", response);
+
                 setLoadingPage(false);
             }
 
@@ -188,7 +200,7 @@ export default function Page() {
     return (
         <div className="container mx-auto p-3">
             {/* Header Section */}
-            <SectionHeader title="Manage Questions" onClick={() => router.push(`/admin/question/new`)} />
+            <SectionHeader title="Manage Questions" buttonText="Add Question" onClick={() => router.push(`/admin/question/new`)} />
             {/* Question Table */}
 
             <table className="min-w-full bg-white shadow-md rounded-sm">

@@ -1,11 +1,8 @@
 import React from 'react'
 
 interface QuestionTypesDropdownSelectorProps {
-    filterQuery: {
-        name: string;
-        questionType: string;
-    };
-    setFilterQuery: (query: { name: string; questionType: string }) => void;
+    filterQuery: any
+    setFilterQuery: (query: any) => void;
     width?: number
 }
 
@@ -13,7 +10,7 @@ const QuestionTypesDropdownSelector: React.FC<QuestionTypesDropdownSelectorProps
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const questionType = e.target.value;
-        
+
         setFilterQuery({ ...filterQuery, questionType });
     };
 

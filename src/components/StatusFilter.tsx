@@ -1,11 +1,8 @@
 import React from "react";
 
 interface StatusFilterProps {
-    filterQuery: {
-        name: string;
-        isActive: boolean | null;
-    };
-    setFilterQuery: (query: { name: string; isActive: boolean | null }) => void;
+    filterQuery: any;
+    setFilterQuery: (query: any) => void;
 }
 
 const StatusFilter: React.FC<StatusFilterProps> = ({ filterQuery, setFilterQuery }) => {

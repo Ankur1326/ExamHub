@@ -28,11 +28,11 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, setCu
           {/* Step Circle */}
           <div
             onClick={() => handleStepClick(index)}
-            className={`w-10 h-10 flex items-center justify-center rounded-full border-2 outline outline-1 outline-offset-[2px] outline-gray-200 ${isEdit ? 'cursor-pointer hover:outline-gray-300' : ""} ${currentStep === index + 1
+            className={`w-10 h-10 flex items-center justify-center rounded-full border-2 outline outline-1 outline-offset-[2px] outline-[#c7dffd] ${isEdit ? 'cursor-pointer hover:outline-[#93c5ff]' : ""} ${currentStep === index + 1
               ? 'bg-[#3699FF] border-[#3394f5] text-white'  // Current step (blue)
               : currentStep > index + 1
-                ? 'bg-[#1BC5BD] border-[#18b7af] text-white'  // Completed step (green)
-                : 'bg-gray-200 border-gray-300 text-gray-500'  // Upcoming step (gray)
+                ? 'bg-[#E9F3FF] border-[#c7dffd] text-[#3699FF]'  // Completed step (green)
+                : 'bg-white border-[#c7dffd] text-[#3394f5]'  // Upcoming step (gray)
               }`}
           >
             {index + 1}
@@ -44,8 +44,8 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, setCu
               className={`font-semibold ${currentStep === index + 1
                 ? 'text-[#3699FF]'  // Current step text (blue)
                 : currentStep > index + 1
-                  ? 'text-[#1BC5BD]'  // Completed step text (green)
-                  : 'text-gray-600'   // Upcoming step text (gray)
+                  ? 'text-[#3699FF]'  // Completed step text (green)
+                  : 'text-[#c7dffd]'   // Upcoming step text (gray)
                 }`}
             >
               {step.label}
@@ -56,7 +56,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, setCu
           {/* Divider (between steps) */}
           {index < steps.length - 1 && (
             <div className={`w-8 h-px mx-4 ${currentStep > index + 1
-              ? 'bg-[#1BC5BD]'   // Divider for completed step (green)
+              ? 'bg-[#3699FF]'   // Divider for completed step (green)
               : currentStep === index + 1
                 ? 'bg-[#3699FF]'   // Divider for current step (blue)
                 : 'bg-gray-400'    // Divider for upcoming steps (gray)
