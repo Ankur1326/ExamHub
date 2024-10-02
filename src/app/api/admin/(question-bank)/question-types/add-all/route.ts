@@ -31,7 +31,7 @@ export async function POST(request: Request) {
             shortDescription: "This question type is easy to set up and is the most frequent MCQ question in online exams. Users are allowed to pick just one answer from a list of given options.",
             isActive: true,
             defaultTimeToSolve: 60,
-            defaultMarks: 1
+            defaultMarks: 1,
         },
         {
             code: "MMA",
@@ -39,7 +39,8 @@ export async function POST(request: Request) {
             shortDescription: "Multiple Choice Multiple Answers type question allows users to select one or several answers from a list of given options.",
             isActive: true,
             defaultTimeToSolve: 60,
-            defaultMarks: 1
+            defaultMarks: 1,
+
         },
         {
             code: "TOF",
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
             shortDescription: "A true or false question consists of a statement that requires a true or false response. We can also format the options such as: Yes/No, Correct/Incorrect, and Agree/Disagree.",
             isActive: true,
             defaultTimeToSolve: 60,
-            defaultMarks: 1
+            defaultMarks: 1,
         },
         {
             code: "SAQ",
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
             shortDescription: "Short answer questions allow users to provide text or numeric answers. These responses will be validated against the provided possible answers.",
             isActive: true,
             defaultTimeToSolve: 60,
-            defaultMarks: 1
+            defaultMarks: 1,
         },
         {
             code: "MTF",
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
             shortDescription: "A matching question is two adjacent lists of related words, phrases, pictures, or symbols. Each item in one list is paired with at least one item in the other list.",
             isActive: true,
             defaultTimeToSolve: 60,
-            defaultMarks: 1
+            defaultMarks: 1,
         },
         {
             code: "ORD",
@@ -71,7 +72,7 @@ export async function POST(request: Request) {
             shortDescription: "An ordering/sequence question consists of a scrambled list of related words, phrases, pictures, or symbols. The User needs to arrange them in a logical order/sequence.",
             isActive: true,
             defaultTimeToSolve: 60,
-            defaultMarks: 1
+            defaultMarks: 1,
         },
         {
             code: "FIB",
@@ -79,7 +80,7 @@ export async function POST(request: Request) {
             shortDescription: "A Fill in the Blank question consists of a phrase, sentence, or paragraph with a blank space where a student provides the missing word or words.",
             isActive: true,
             defaultTimeToSolve: 60,
-            defaultMarks: 1
+            defaultMarks: 1,
         }
     ];
 

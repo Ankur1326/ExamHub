@@ -5,9 +5,12 @@ import { fetchQuestions } from '@/redux/slices/library/question-bank/questionSli
 import { fetchQuestionTypes } from '@/redux/slices/library/question-bank/questionTypeSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { MdRadioButtonChecked, MdCheckBox, MdTextFields, MdListAlt } from 'react-icons/md';
+import { FaSortNumericDown, FaPenAlt } from 'react-icons/fa';
+import { FiCheckSquare } from 'react-icons/fi';
+import TrueFalseQuestionForm from '@/components/admin/TrueFalseQuestionForm';
 
 interface IQuestionType {
     name?: string;
@@ -86,10 +89,16 @@ function CreateOrEditPage({ params }: any) {
                             nextStep={handleNextStep}
                             prevStep={handlePrevStep}
                             questionData={questionData}
+                            questionType='single'
                         />
                     );
                 case 'MMA':
-                    return <div>Multiple Choice Multiple Answers Form</div>;
+                    return <MultipleChoiceQuestionForm
+                        currentStep={currentStep}
+                        nextStep={handleNextStep}
+                        prevStep={handlePrevStep}
+                        questionType='multiple'
+                    />
                 case 'TOF':
                     return <div>True or False Form</div>;
                 case 'SAQ':
@@ -112,12 +121,22 @@ function CreateOrEditPage({ params }: any) {
                             currentStep={currentStep}
                             nextStep={handleNextStep}
                             prevStep={handlePrevStep}
+                            questionType='single'
                         />
                     );
                 case 'MMA':
-                    return <div>Multiple Choice Multiple Answers Form</div>;
+                    return <MultipleChoiceQuestionForm
+                        currentStep={currentStep}
+                        nextStep={handleNextStep}
+                        prevStep={handlePrevStep}
+                        questionType='multiple'
+                    />
                 case 'TOF':
-                    return <div>True or False Form</div>;
+                    return <TrueFalseQuestionForm
+                        currentStep={currentStep}
+                        nextStep={handleNextStep}
+                        prevStep={handlePrevStep}
+                    />
                 case 'SAQ':
                     return <div>Short Answer Form</div>;
                 case 'MTF':
@@ -134,36 +153,82 @@ function CreateOrEditPage({ params }: any) {
 
     return (
         <div className="w-full mx-auto p-3 rounded-md">
-            <div className='flex justify-between items-center gap-6 py-3 px-4 w-full bg-white mb-4 rounded-md shadow-sm'>
-                <div className='flex flex-col'>
-                    <h1 className="text-xl font-bold text-gray-800">
-                        {isEdit ? `Edit Question` : 'Add Question to Question Bank'}
-                    </h1>
-                    <span className='text-sm'>{selectedTab ? selectedTab.name : 'No Tab Selected'}</span>
-                </div>
-                <StepIndicator steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} isEdit={isEdit}  />
+            <div className='flex justify-between items-center gap-6 py-4 px-6 w-full border rounded-xl shadow-lg bg-white mb-6 border-gray-200'>
+                {/* Left Section: Title and Tab */}
+                <h1 className="text-xl font-bold text-gray-900 mb-1">
+                    {isEdit ? `Edit Question` : 'Add Question to Question Bank'}
+                </h1>
+
+                {/* Right Section: Step Indicator */}
+                <StepIndicator
+                    steps={steps}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
+                    isEdit={isEdit}
+                />
             </div>
-            {
-                !isEdit &&
-                <div className="flex">
-                    {questionTypes.map((item: any) => (
-                        <button
-                            key={item.code}
-                            onClick={() => setSelectedTab(item)}
-                            className={`py-2 px-3 text-sm border-b font-medium transition-all duration-200 ${selectedTab?.code === item.code
-                                ? 'bg-white text-gray-900 border-b-0'
-                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-700'
-                                } rounded-t-md`}
-                            disabled={!item.name} // Disable if name is undefined
-                        >
-                            {item.name || 'Unnamed Question Type'}
-                        </button>
-                    ))}
+
+            <div className='p-6 bg-white rounded-b-md'>
+                {
+                    !isEdit && currentStep === 1 &&
+                    <div>
+                        <Heading num="1" text="Select Question Type" />
+                        <div className="flex gap-2 items-center justify-center">
+                            {questionTypes.map((type) => (
+                                <div key={type.code} onClick={() => setSelectedTab(type)}
+                                    className={`w-32 h-32 p-3 flex flex-col justify-center items-center border rounded-lg cursor-pointer transition-transform duration-300 ${selectedTab === type ? 'border-gray-600 scale-105 shadow-sm' : 'border-gray-300 bg-gray-50'
+                                        }`}>
+                                    <div className="mb-2 text-gray-700">
+                                        {
+                                            (() => {
+                                                switch (type.code) {
+                                                    case "MSA":
+                                                        return <MdRadioButtonChecked size={22} />;
+                                                    case "MMA":
+                                                        return <MdCheckBox size={22} />;
+                                                    case "TOF":
+                                                        return <FiCheckSquare size={22} />;
+                                                    case "SAQ":
+                                                        return <MdTextFields size={22} />;
+                                                    case "MTF":
+                                                        return <MdListAlt size={22} />;
+                                                    case "ORD":
+                                                        return <FaSortNumericDown size={22} />;
+                                                    case "FIB":
+                                                        return <FaPenAlt size={22} />;
+                                                    default:
+                                                        return null;
+                                                }
+                                            })()
+                                        }
+                                    </div>
+                                    <button className="text-center text-gray-700 font-medium text-xs">
+                                        {type.name}
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                }
+                <div className="mt-6">
+                    <Heading num="2" text="Create Question" />
                 </div>
-            }
-            <div className="p-6 bg-white rounded-b-md">{renderQuestionForm()}</div>
+                <div className="">{renderQuestionForm()}</div>
+            </div>
         </div>
     );
+}
+
+const Heading = ({ num, text }: any) => {
+    return (
+        <div className='flex gap-4 mb-6'>
+            <span className='bg-black text-white rounded-full w-6 h-6 text-center'>{num}</span>
+            <div className='relative w-full h-12'>
+                <h2 className='font-medium text-md'>{text}</h2>
+                <span className='w-full border border-gray-100 absolute bottom-0'></span>
+            </div>
+        </div>
+    )
 }
 
 export default CreateOrEditPage;

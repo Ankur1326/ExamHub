@@ -6,8 +6,8 @@ interface IQuestionType extends Document {
     code?: string;
     _id?: string;
     isActive: boolean;
-    defaultTimeToSolve: Number;
-    defaultMarks: Number;
+    defaultTimeToSolve: number;
+    defaultMarks: number;
 }
 
 const QuestionTypeSchema = new Schema<IQuestionType>({
@@ -35,7 +35,7 @@ const QuestionTypeSchema = new Schema<IQuestionType>({
     defaultMarks: {
         type: Number,
         default: 1
-    }
+    },
 })
 
 // Main Configuration Document Interface

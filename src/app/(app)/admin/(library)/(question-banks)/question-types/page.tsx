@@ -1,7 +1,6 @@
 'use client'
 import DropdownMenu from '@/components/DropDownMenu';
 import { EditOrCreateNewModalWrapper } from '@/components/EditOrCreateNewModalWrapper';
-import EditSidebar from '@/components/EditSidebar';
 import FormInput from '@/components/FormInput';
 import FormSelect from '@/components/FormSelect';
 import FormTextarea from '@/components/FormTextarea';
@@ -87,7 +86,7 @@ const QuestionTypesPage = () => {
 
     if (error === "Configration is not found") {
         return (
-            <div className='w-full h-screen flex items-center justify-center text-red-400'>
+            <div onClick={handleAddAll} className='cursor-pointer w-full h-screen flex items-center justify-center text-red-400'>
                 <h1 className='text-2xl'>Configration is not found</h1>
             </div>
         )

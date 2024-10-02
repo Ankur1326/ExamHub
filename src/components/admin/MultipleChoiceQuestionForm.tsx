@@ -14,6 +14,7 @@ interface MultipleChoiceQuestionFormProps {
     currentStep: number;
     nextStep: () => void;
     prevStep: () => void;
+    questionType: 'single' | 'multiple';
     questionData?: any;
 }
 
@@ -21,12 +22,13 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
     currentStep,
     nextStep,
     prevStep,
+    questionType,
     questionData
 }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [question, setQuestion] = useState<string>('');
     const [options, setOptions] = useState<string[]>(['', '']);
-    const [correctOption, setCorrectOption] = useState<number | null>(null);
+    const [correctOptions, setCorrectOptions] = useState<number[]>([]);
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
     const [optionErrors, setOptionErrors] = useState<boolean[]>(new Array(options.length).fill(false));
     const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(null);
@@ -39,7 +41,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                     ? questionData.options
                     : ['', '']
             );
-            setCorrectOption(questionData ? questionData.correctOptions[0] + 1 : null);
+            setCorrectOptions(questionData.correctOptions || []);
             setCurrentQuestionId(questionData?._id || null);
         }
     }, [questionData]);
@@ -51,7 +53,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
         setOptions(updatedOptions);
         setOptionErrors((prev) => {
             const newErrors = [...prev];
-            newErrors[index] = !value; // Update error state based on current value
+            newErrors[index] = !value;
             return newErrors;
         });
     };
@@ -59,7 +61,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
     // Function to add a new option
     const addOption = () => {
         setOptions([...options, '']);
-        setOptionErrors((prev) => [...prev, false]); // Add a corresponding error state
+        setOptionErrors((prev) => [...prev, false]);
     };
 
     // Function to remove an option
@@ -67,12 +69,28 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
         const updatedOptions = options.filter((_, i) => i !== index);
         setOptions(updatedOptions);
         setOptionErrors((prev) => prev.filter((_, i) => i !== index)); // Remove corresponding error state
-        if (index + 1 === correctOption) setCorrectOption(null); // Reset correct option if it's deleted
+
+        // Update the correctOptions to reflect new indexes
+        setCorrectOptions((prev) =>
+            prev
+                .filter((opt) => opt !== index) // Remove the option if it was correct
+                .map((opt) => (opt > index ? opt - 1 : opt)) // Adjust indexes of the remaining options
+        );
     };
 
-    // Handle setting the correct option
+
+    // Handle setting the correct options
     const handleCorrectOptionChange = (index: number) => {
-        setCorrectOption(index + 1);
+        if (questionType === 'single') {
+            setCorrectOptions([index]);  // Single correct option for "Multiple Choice Single Answer"
+        } else {
+            // Toggle correct option for "Multiple Choice Multiple Answer"
+            setCorrectOptions(prev =>
+                prev.includes(index)
+                    ? prev.filter(opt => opt !== index) // Remove if already selected
+                    : [...prev, index]  // Add if not selected
+            );
+        }
     };
 
     const handleSave = async (e: any) => {
@@ -85,19 +103,19 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
         if (newOptionErrors.some(error => error)) {
             return; // Prevent submission if there are errors
         }
-        if (!correctOption) {
-            toast.error("Please specify correct answer")
+        if (correctOptions.length === 0) {
+            toast.error("Please specify correct answer(s)")
             return;
         }
 
         const newQuestion = {
-            questionType: 'Multiple Choice Single Answer', // Multiple Choice Single Answer
+            questionType: questionType === 'single' ? 'Multiple Choice Single Answer' : 'Multiple Choice Multiple Answers',
             question: question,
             options: options,
-            correctOptions: [correctOption - 1] // index wise
+            correctOptions: correctOptions
         }
 
-        // console.log(newQuestion);
+        console.log(newQuestion);
 
         const resultAction = await dispatch(createOrUpdateQuestion({ step: 1, data: newQuestion, questionId: currentQuestionId }));
 
@@ -139,8 +157,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                                 </div>
 
                                 {/* CKEditor for Option Text */}
-                                <div className={`rounded-md overflow-hidden border-2 ${correctOption === index + 1 ? 'border border-green-400' : ' border-green-50'
-                                    }`}>
+                                <div className={`rounded-md overflow-hidden border-2 ${correctOptions.includes(index) ? 'border-green-400' : 'border-green-50'}`}>
                                     <CustomCKEditor
                                         content={option}
                                         setContent={(value) => handleOptionChange(index, value)}
@@ -153,26 +170,17 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                                             className="flex items-center space-x-2 py-1 cursor-pointer "
                                         >
                                             <div
-                                                className={`h-4 w-4 rounded border-2 cursor-pointer ${correctOption === index + 1 ? 'bg-green-400 border-green-400' : 'border-gray-300'
-                                                    } flex items-center justify-center`}
+                                                className={`h-4 w-4 rounded border-2 cursor-pointer ${correctOptions.includes(index) ? 'bg-green-400 border-green-400' : 'border-gray-300'} flex items-center justify-center`}
                                             >
-                                                {correctOption === index + 1 && (
-                                                    <svg
-                                                        className="w-3 h-3 text-white"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        strokeWidth="2"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                    >
+                                                {correctOptions.includes(index) && (
+                                                    <svg className="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                         <polyline points="20 6 9 17 4 12" />
                                                     </svg>
                                                 )}
                                             </div>
-                                            <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${correctOption === index + 1 ? 'text-green-500' : ''
-                                                }`}>Set as correct answer</label>
+                                            <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${correctOptions.includes(index) ? 'text-green-500' : ''}`}>
+                                                {questionType === 'single' ? 'Set as correct answer' : 'Set as correct option'}
+                                            </label>
                                         </div>
 
                                         {/* Remove Option Button */}
