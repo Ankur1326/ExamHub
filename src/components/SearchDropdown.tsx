@@ -61,7 +61,7 @@ const SearchDropdown = ({
         }, 300);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [searchQuery, fetchResults, initialClick]);
+    }, [searchQuery, fetchResults, initialClick, showDropdown]);
 
     // Close dropdown when clicking outside
     useEffect(() => {

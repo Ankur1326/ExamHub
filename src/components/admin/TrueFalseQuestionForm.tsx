@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import CustomCKEditor from '../CustomCKEditor';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { createOrUpdateQuestion } from '@/redux/slices/library/question-bank/questionSlice';
@@ -8,38 +7,52 @@ import toast from 'react-hot-toast';
 import QuestionStepTwo from './QuestionStepTwo';
 import QuestionStepThree from './QuestionStepThree';
 import QuestionStepFour from './QuestionStepFour';
+import axios from 'axios';
+import dynamic from 'next/dynamic';
+// import CustomCKEditor from '../CustomCKEditor';
+const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor").then((module) => module.default), { ssr: false })
+
 
 interface TrueFalseQuestionFormProps {
     currentStep: number;
     nextStep: () => void;
     prevStep: () => void;
-    questionData?: any;
+    questionId: string;
 }
 
 const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
     currentStep,
     nextStep,
     prevStep,
-    questionData
+    questionId,
 }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [question, setQuestion] = useState<string>('');
-    const [correctAnswer, setCorrectAnswer] = useState<'true' | 'false' | null>(null);
-    const [options, setOptions] = useState<string[]>(['', '']);
+    const [trueFalseAnswer, setTrueFalseAnswer] = useState<boolean | null>(null);
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-    const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(null);
+    const [currentQuestionId, setCurrentQuestionId] = useState<string>("");
 
     useEffect(() => {
-        if (questionData) {
-            setQuestion(questionData?.question || '');
-            setCorrectAnswer(questionData.correctAnswer !== undefined ? questionData.correctAnswer : null);
-            setCurrentQuestionId(questionData?._id || null);
+        if (questionId) {
+            const fetchQuestionDetails = async () => {
+                try {
+                    const response = await axios.get(`/api/admin/question/get-one/`, {
+                        params: { questionId }
+                    });
+                    setQuestion(response.data.data.question);
+                    setTrueFalseAnswer(response.data.data?.trueFalseAnswer);
+                    setCurrentQuestionId(response.data.data?._id || null);
+                } catch (error) {
+                    console.error('Failed to fetch question data:', error);
+                }
+            };
+            fetchQuestionDetails();
         }
-    }, [questionData]);
+    }, [questionId]);
 
     // Handle setting the correct answer
-    const handleAnswerSelect = (answer: 'true' | 'false') => {
-        setCorrectAnswer(answer);
+    const handleAnswerSelect = (answer: true | false) => {
+        setTrueFalseAnswer(answer);
     };
     const handleSave = async (e: any) => {
         e.preventDefault();
@@ -49,22 +62,21 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
             toast.error("Please provide a question");
             return;
         }
-        if (correctAnswer === null) {
+        if (trueFalseAnswer === null) {
             toast.error("Please specify the correct answer");
             return;
         }
 
         const newQuestion = {
-            questionType: 'True/False',
+            questionType: 'True or False',
             question: question,
-            correctAnswer: correctAnswer,
+            trueFalseAnswer,
         };
-
-        console.log(newQuestion);
 
         const resultAction = await dispatch(createOrUpdateQuestion({ step: 1, data: newQuestion, questionId: currentQuestionId }));
 
         if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
+            console.log("resultAction.payload.questionId :", resultAction.payload.questionId)
             if (!currentQuestionId) {
                 setCurrentQuestionId(resultAction.payload.questionId);
             }
@@ -76,7 +88,7 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
     };
 
     return (
-        <div className="flex justify-center items-center w-full mx-auto p-6">
+        <>
             {/* Step 1: Add Question */}
             {currentStep === 1 && (
                 <div className="space-y-6 flex flex-col items-end w-full md:w-2/3">
@@ -88,65 +100,64 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
                     </div>
 
                     {/* True/False Options */}
-                    <div className="space-y-6 flex flex-col items-start w-full md:w-2/3 mx-auto">
+                    <div className="space-y-6 flex flex-col items-start w-full justify-start">
                         {/* True Option */}
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-start space-x-4">
                             <div
-                                className="flex items-center cursor-pointer"
-                                onClick={() => handleAnswerSelect('true')}
+                                className={`w-5 h-5 border-2 rounded-full flex justify-center items-center mr-2 
+                                                ${trueFalseAnswer === true ? 'border-green-500 bg-green-500' : 'border-gray-300'}`}
                             >
-                                <div
-                                    className={`w-5 h-5 border-2 rounded-full flex justify-center items-center mr-2 
-                        ${correctAnswer === 'true' ? 'border-green-500 bg-green-500' : 'border-gray-300'}`}
-                                >
-                                    {correctAnswer === 'true' && (
-                                        <div className="w-2.5 h-2.5 bg-white rounded-full" />
-                                    )}
-                                </div>
-                                <span className={`${correctAnswer === 'true' ? 'text-green-500' : 'text-gray-700'} text-sm font-semibold`}>
+                                {trueFalseAnswer === true && (
+                                    <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                                )}
+                            </div>
+                            <div
+                                className="flex flex-col gap-4 cursor-pointer"
+                                onClick={() => handleAnswerSelect(true)}
+                            >
+                                <span className={`${trueFalseAnswer === true ? 'text-green-500' : 'text-gray-700'} text-sm font-semibold`}>
                                     This answer is correct
                                 </span>
+                                <input
+                                    type="text"
+                                    value="True"
+                                    readOnly
+                                    className={`border px-4 py-2 rounded-md w-full
+                                         ${trueFalseAnswer === true ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-700'}`}
+                                />
                             </div>
-                            <input
-                                type="text"
-                                value="True"
-                                readOnly
-                                className={`border px-4 py-2 rounded-md w-full
-                    ${correctAnswer === 'true' ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-700'}`}
-                            />
                         </div>
-
                         {/* False Option */}
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-start space-x-4">
                             <div
-                                className="flex items-center cursor-pointer"
-                                onClick={() => handleAnswerSelect('false')}
+                                className={`w-5 h-5 border-2 rounded-full flex justify-center items-center mr-2 
+                        ${trueFalseAnswer === false ? 'border-green-500 bg-green-500' : 'border-gray-300'}`}
                             >
-                                <div
-                                    className={`w-5 h-5 border-2 rounded-full flex justify-center items-center mr-2 
-                        ${correctAnswer === 'false' ? 'border-green-500 bg-green-500' : 'border-gray-300'}`}
-                                >
-                                    {correctAnswer === 'false' && (
-                                        <div className="w-2.5 h-2.5 bg-white rounded-full" />
-                                    )}
-                                </div>
-                                <span className={`${correctAnswer === 'false' ? 'text-green-500' : 'text-gray-700'} text-sm font-semibold`}>
+                                {trueFalseAnswer === false && (
+                                    <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                                )}
+                            </div>
+                            <div
+                                className="flex flex-col gap-4 cursor-pointer"
+                                onClick={() => handleAnswerSelect(false)}
+                            >
+                                <span className={`${trueFalseAnswer === false ? 'text-green-500' : 'text-gray-700'} text-sm font-semibold`}>
                                     This answer is correct
                                 </span>
+                                <input
+                                    type="text"
+                                    value="False"
+                                    readOnly
+                                    className={`border px-4 py-2 rounded-md w-full
+                                        ${trueFalseAnswer === false ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-700'}`}
+                                />
                             </div>
-                            <input
-                                type="text"
-                                value="False"
-                                readOnly
-                                className={`border px-4 py-2 rounded-md w-full
-                    ${correctAnswer === 'false' ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-700'}`}
-                            />
                         </div>
                     </div>
                     {/* Save Button */}
                     <button
                         onClick={(e) => handleSave(e)}
-                        className="mt-4 py-2 px-4 bg-[#1BC5BD] text-white rounded-sm font-semibold hover:bg-[#18b7af] transition duration-200"
+                        className="mt-4 py-2 px-4 bg-[#3699FF] text-white rounded-sm font-semibold hover:bg-[#3699FF] transition duration-200"
                     >
                         Save Question
                     </button>
@@ -157,7 +168,6 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
             {currentStep === 2 && (
                 <QuestionStepTwo
                     questionId={currentQuestionId}
-                    questionData={questionData}
                     nextStep={nextStep}
                     prevStep={prevStep}
                 />
@@ -167,7 +177,6 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
             {currentStep === 3 && (
                 <QuestionStepThree
                     questionId={currentQuestionId}
-                    questionData={questionData}
                     nextStep={nextStep}
                     prevStep={prevStep}
                 />
@@ -177,12 +186,11 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
             {currentStep === 4 && (
                 <QuestionStepFour
                     questionId={currentQuestionId}
-                    questionData={questionData}
                     nextStep={nextStep}
                     prevStep={prevStep}
                 />
             )}
-        </div>
+        </>
     );
 };
 

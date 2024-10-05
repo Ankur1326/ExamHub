@@ -9,6 +9,7 @@ import { fetchTags } from '@/redux/slices/configuration/manage-categories/tagsSl
 import FormInput from '../FormInput';
 import { createOrUpdateQuestion } from '@/redux/slices/library/question-bank/questionSlice';
 import DifficultyLevel from '../DifficultyLevel';
+import axios from 'axios';
 
 interface QuestionStepTwoProps {
     questionId: string | null;
@@ -17,7 +18,7 @@ interface QuestionStepTwoProps {
     prevStep: () => void;
 }
 
-function QuestionStepTwo({ questionId, questionData, nextStep, prevStep }: QuestionStepTwoProps) {
+function QuestionStepTwo({ questionId, nextStep, prevStep }: QuestionStepTwoProps) {
     const dispatch = useDispatch<AppDispatch>();
 
     const [skillName, setSkillName] = useState<string>('');
@@ -28,15 +29,31 @@ function QuestionStepTwo({ questionId, questionData, nextStep, prevStep }: Quest
     const [defaultTimeToSolve, setDefaultTimeToSolve] = useState<number>(0);
     const [isActive, setIsActive] = useState<boolean>(false);
 
+    console.log("In step 2 : ", questionId);
+
     useEffect(() => {
-        setSkillName(questionData?.skillName)
-        setTopicName(questionData?.topicName)
-        setTagNames(questionData?.tagDetails)
-        setDifficultyLevel(questionData?.difficultyLevel)
-        setDefaultTimeToSolve(questionData?.defaultTimeToSolve)
-        setDefaultMarks(questionData?.defaultMarks)
-        setIsActive(questionData?.isActive)
-    }, [questionData])
+        if (questionId) {
+            const fetchQuestionDetails = async () => {
+                try {
+                    const response = await axios.get(`/api/admin/question/get-one/`, {
+                        params: { questionId }
+                    });
+                    // console.log("response : ", response);
+                    setSkillName(response.data.data?.skillName)
+                    setTopicName(response.data.data?.topicName)
+                    setTagNames(response.data.data.data?.tagDetails)
+                    setDifficultyLevel(response.data.data?.difficultyLevel)
+                    setDefaultTimeToSolve(response.data.data?.defaultTimeToSolve)
+                    setDefaultMarks(response.data.data?.defaultMarks)
+                    setIsActive(response.data.data?.isActive)
+                } catch (error) {
+                    console.error('Failed to fetch question data:', error);
+                }
+            };
+
+            fetchQuestionDetails();
+        }
+    }, [questionId]);
 
     const fetchAllActiveSkills = async (searchQuery: string, fetchAll: boolean) => {
         const response = await dispatch(fetchSkills({ name: searchQuery, fetchAll, isActive: true }));
@@ -59,10 +76,21 @@ function QuestionStepTwo({ questionId, questionData, nextStep, prevStep }: Quest
 
     const handleSave = async (e: any) => {
         e.preventDefault()
-        const tagNamesArray = tagNames.map((tag: any) => tag.name);
-        let resultAction = await dispatch(createOrUpdateQuestion({ step: 2, data: { skillName, difficultyLevel, topicName, tagNames: tagNamesArray, defaultMarks, defaultTimeToSolve, isActive }, questionId }));
-        if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
-            nextStep()
+        const tagNamesArray = tagNames?.map((tag: any) => tag.name);
+        try {
+            let resultAction = await dispatch(createOrUpdateQuestion({ step: 2, data: { skillName, difficultyLevel, topicName, tagNames: tagNamesArray, defaultMarks, defaultTimeToSolve, isActive }, questionId }));
+
+            console.log(createOrUpdateQuestion.fulfilled.match(resultAction));
+            console.log(resultAction);
+
+            if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
+                nextStep(); // Proceed to the next step only on success
+            } else {
+                // Handle failure with error message
+                console.log(resultAction?.payload?.message || 'Failed to update the question');
+            }
+        } catch (error) {
+            console.error('Error updating the question:', error);
         }
     }
 

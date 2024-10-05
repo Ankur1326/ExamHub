@@ -18,7 +18,9 @@ import { formatDate } from "@/utility/dateFormate";
 import { createComprehension, deleteComprehension, fetchComprehensions, updateComprehension } from "@/redux/slices/library/question-bank/comprehensionsSlice";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
-const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor"), { ssr: false });
+// const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor"), { ssr: false });
+const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor").then((module) => module.default), { ssr: false })
+
 
 export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
@@ -178,13 +180,13 @@ export default function Page() {
             placeHolder="title..."
             fieldName="title" // Pass the key corresponding to the filter
         />,
-        <></>,
+        <div key=""></div>,
         <StatusFilter
             key="status"
             filterQuery={filterQuery}
             setFilterQuery={setFilterQuery}
         />,
-        <></>,
+        <div key=""></div>
     ];
 
     return (
@@ -201,7 +203,7 @@ export default function Page() {
                     {!loadingPage ? (
                         comprehensions.length > 0 ? (
                             comprehensions.map((item: any) => (
-                                <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
+                                <tr key={item._id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">{item?.title}</td>
                                     <td className="py-3 px-3 text-sm border-r border-gray-100">
                                         {/* Render HTML content from the question field */}

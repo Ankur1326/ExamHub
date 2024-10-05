@@ -37,8 +37,8 @@ export async function POST(request: Request) {
             question,
             options,
             correctOptions,
-            matchPairs,
-            sequenceOrder,
+            pairs,
+            sequences,
             trueFalseAnswer,
             shortAnswer,
             fillInTheBlanks,
@@ -68,35 +68,35 @@ export async function POST(request: Request) {
 
         console.log(' logged data',
             step,
-            //     questionType,
-            //     question,
-            //     options,
-            //     correctOptions,
-            //     matchPairs,
-            //     sequenceOrder,
-            //     trueFalseAnswer,
-            //     shortAnswer,
-            //     fillInTheBlanks,
-            //     skillName,
-            //     topicName,
-            //     tagNames,
-            //     difficultyLevel,
-            //     defaultMarks,
-            //     defaultTimeToSolve,
-            //     isActive,
-            //     solution,
-            //     enableSolutionVideo,
-            //     solutionVideoType,
-            //     solutionVideoLink,
-            //     hint,
-            //     questionId
-            enableQuestionAttachment,
-            attachmentType,
-            comprehensionPassageId,
-            selectedFormat,
-            audioLink,
-            videoType,
-            videoLinkOrId,
+            questionType,
+            question,
+            options,
+            correctOptions,
+            pairs,
+            sequences,
+            trueFalseAnswer,
+            shortAnswer,
+            fillInTheBlanks,
+            skillName,
+            topicName,
+            tagNames,
+            difficultyLevel,
+            defaultMarks,
+            defaultTimeToSolve,
+            isActive,
+            solution,
+            enableSolutionVideo,
+            solutionVideoType,
+            solutionVideoLink,
+            hint,
+            questionId
+            // enableQuestionAttachment,
+            // attachmentType,
+            // comprehensionPassageId,
+            // selectedFormat,
+            // audioLink,
+            // videoType,
+            // videoLinkOrId,
         );
 
 
@@ -123,8 +123,8 @@ export async function POST(request: Request) {
                         question,
                         options,
                         correctOptions,
-                        matchPairs,
-                        sequenceOrder,
+                        pairs,
+                        sequences,
                         trueFalseAnswer,
                         shortAnswer,
                         fillInTheBlanks,
@@ -175,8 +175,8 @@ export async function POST(request: Request) {
                     question,
                     options,
                     correctOptions,
-                    matchPairs,
-                    sequenceOrder,
+                    pairs,
+                    sequences,
                     trueFalseAnswer,
                     shortAnswer,
                     fillInTheBlanks,
@@ -211,40 +211,51 @@ export async function POST(request: Request) {
             }
 
             // Fetch skill, topic, and tags in parallel
-            const [skill, topic, tags] = await Promise.all([
+            const [skill, tags] = await Promise.all([
                 Skill.findOne({ name: skillName }),
-                Topic.findOne({ name: topicName }),
-                Tag.find({ name: { $in: tagNames } }) // Assuming you are searching for multiple tag names
+                Tag.find({ name: { $in: tagNames } }) // Assuming you're searching for multiple tag names
             ]);
 
-            console.log(skill, topic, tags);
+            // Conditionally fetch topic if topicName is provided
+            let topic = null;
+            if (topicName) {
+                topic = await Topic.findOne({ name: topicName });
+            }
 
+            console.log("skill : ", skill);
 
-            if (!skill || !topic) {
+            if (!skill) {
                 return Response.json(
                     {
                         success: false,
-                        message: "Invalid skill or topic"
-                    }, { status: 400 }
-                )
+                        message: "Invalid skill",
+                    },
+                    { status: 400 }
+                );
             }
 
             // Extract tag IDs
             const tagIds = tags.map((tag: any) => new mongoose.Types.ObjectId(tag._id));
 
-            console.log(tagIds);
+            // Prepare the update object
+            const updateData: any = {
+                sectionId: skill.sectionId,
+                skillId: skill._id,
+                tags: tagIds,
+                difficultyLevel,
+                defaultMarks,
+                defaultTimeToSolve
+            };
 
+            // Conditionally add topicId if topic exists
+            if (topic && topic._id) {
+                updateData.topicId = topic._id;
+            }
+
+            // Update the question with the new information
             const updatedQuestion = await Question.findByIdAndUpdate(
                 questionId,
-                {
-                    sectionId: skill.sectionId,
-                    skillId: skill._id,
-                    topicId: topic._id,
-                    tags: tagIds,
-                    difficultyLevel,
-                    defaultMarks,
-                    defaultTimeToSolve
-                },
+                updateData,
                 { new: true }
             );
 

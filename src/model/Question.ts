@@ -42,10 +42,10 @@ interface IQuestion extends Document {
     question: string;
     options?: string[]; // Optional for non-MCQ types
     correctOptions?: number[]; // Can hold single or multiple correct options
-    matchPairs?: { left: string, right: string[] }[]; // For "Match the Following"
-    sequenceOrder?: string[]; // For "Ordering/Sequence"
+    pairs?: { left: string, right: string }[]; // For "Match the Following"
+    sequence?: string[]; // For "Ordering/Sequence"
     trueFalseAnswer?: boolean; // For True/False
-    shortAnswer?: string; // For Short Answer
+    shortAnswer?: number; // For Short Answer
     fillInTheBlanks?: string[]; // For Fill in the Blanks
     // step 2
     sectionId?: Types.ObjectId;
@@ -89,15 +89,15 @@ const QuestionSchema = new Schema<IQuestion>({
     },
     options: {
         type: [String],
-        required: function () {
-            return this.questionType === QuestionType.MCQ_SINGLE || this.questionType === QuestionType.MCQ_MULTIPLE;
-        },
+        // required: function () {
+        //     return this.questionType === QuestionType.MCQ_SINGLE || this.questionType === QuestionType.MCQ_MULTIPLE;
+        // },
     },
     correctOptions: {
         type: [Number],
-        required: function () {
-            return this.questionType === QuestionType.MCQ_SINGLE || this.questionType === QuestionType.MCQ_MULTIPLE;
-        },
+        // required: function () {
+        //     return this.questionType === QuestionType.MCQ_SINGLE || this.questionType === QuestionType.MCQ_MULTIPLE;
+        // },
         // validate: {
         //     validator: function (correctOptions: number[]) {
         //         // Check if options exist and if correctOptions indexes are valid
@@ -106,38 +106,41 @@ const QuestionSchema = new Schema<IQuestion>({
         //     message: 'Correct options must correspond to valid option indices',
         // },
     },
-    matchPairs: {
+    pairs: {
         type: [{
             left: String,
-            right: [String],
+            right: String,
         }],
-        required: function () {
-            return this.questionType === QuestionType.MATCH_FOLLOWING;
-        },
+        // required: function () {
+        //     return this.questionType === QuestionType.MATCH_FOLLOWING;
+        // },
     },
-    sequenceOrder: {
+    sequence: {
         type: [String],
-        required: function () {
-            return this.questionType === QuestionType.SEQUENCE;
-        },
+        // required: function () {
+        //     return this.questionType === QuestionType.SEQUENCE;
+        // },
     },
     trueFalseAnswer: {
         type: Boolean,
-        required: function () {
-            return this.questionType === QuestionType.TRUE_FALSE;
-        },
+        // required: function () {
+        //     console.log("this : ", this );
+        //     console.log("this.questionType : ", this.questionType );
+        //     console.log("QuestionType.TRUE_FALSE : ", QuestionType.TRUE_FALSE );
+        //     return this.questionType === QuestionType.TRUE_FALSE;
+        // },
     },
     shortAnswer: {
         type: String,
-        required: function () {
-            return this.questionType === QuestionType.SHORT_ANSWER;
-        },
+        // required: function () {
+        //     return this.questionType === QuestionType.SHORT_ANSWER;
+        // },
     },
     fillInTheBlanks: {
         type: [String],
-        required: function () {
-            return this.questionType === QuestionType.FILL_BLANKS;
-        },
+        // required: function () {
+        //     return this.questionType === QuestionType.FILL_BLANKS;
+        // },
     },
     sectionId: {
         type: Types.ObjectId,
@@ -190,9 +193,9 @@ const QuestionSchema = new Schema<IQuestion>({
     },
     solutionVideoLink: {
         type: String,
-        required: function () {
-            return this.enableSolutionVideo;
-        },
+        // required: function () {
+        //     return this.enableSolutionVideo;
+        // },
         validate: {
             validator: function (link: string) {
                 return this.enableSolutionVideo ? link.trim().length > 0 : true;
@@ -216,33 +219,33 @@ const QuestionSchema = new Schema<IQuestion>({
     comprehensionPassageId: {
         type: Types.ObjectId,
         ref: "Comprehension",
-        required: function () {
-            return this.enableQuestionAttachment && this.attachmentType === AttachmentType.COMPREHENSION_PASSAGE
-        }
+        // required: function () {
+        //     return this.enableQuestionAttachment && this.attachmentType === AttachmentType.COMPREHENSION_PASSAGE
+        // }
     },
     audioType: {
         type: String,
-        required: function () {
-            return this.attachmentType === AttachmentType.AUDIO
-        }
+        // required: function () {
+        //     return this.attachmentType === AttachmentType.AUDIO
+        // }
     },
     audioLink: {
         type: String,
-        required: function () {
-            return this.audioType
-        }
+        // required: function () {
+        //     return this.audioType
+        // }
     },
     videoType: {
         type: String,
-        required: function () {
-            return this.attachmentType === AttachmentType.VIDEO
-        }
+        // required: function () {
+        //     return this.attachmentType === AttachmentType.VIDEO
+        // }
     },
     videoLinkOrId: {
         type: String,
-        required: function () {
-            return this.videoType
-        }
+        // required: function () {
+        //     return this.videoType
+        // }
     }
 }, {
     timestamps: true, // Add createdAt and updatedAt timestamps

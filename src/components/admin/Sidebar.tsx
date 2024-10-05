@@ -2,7 +2,7 @@
 
 import { Dot } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineUser, AiOutlineSetting, AiOutlineHome, AiOutlineDashboard, AiOutlineTags } from 'react-icons/ai';
 import { FaAngleDown, FaQuestionCircle } from 'react-icons/fa';
 
@@ -172,83 +172,68 @@ const LogoSection = () => (
     </div>
 );
 
-const Logo = memo(() => (
-    <div className="mb-4">
-        <a href="/" className="text-2xl text-[#00A261] font-bold flex items-center space-x-2">
-            <span>Logo</span>
-        </a>
-    </div>
-));
-
-const SectionDivider = memo(({ name }: { name: string }) => (
+const SectionDivider = ({ name }: { name: string }) => (
     <div className="flex items-center justify-start py-3 mt-6">
         <h3 className="font-bold text-xs tracking-wider uppercase px-3 text-slate-400">{name}</h3>
         <span className="w-[70%] h-[0.5px] bg-slate-600"></span>
     </div>
-));
+)
 
-
-const ExpandableSection = memo(
-    ({
-        title,
-        icon,
-        isActive,
-        isExpanded,
-        onClick,
-        children,
-    }: {
-        title: string;
-        icon: React.ReactNode;
-        isActive: string;
-        isExpanded: boolean;
-        onClick: () => void;
-        children: React.ReactNode;
-    }) => (
-        <>
-            <div
-                onClick={onClick}
-                className={`flex items-center justify-between px-4 py-2 cursor-pointer ${isActive} hover:text-white hover:bg-[#00A261] transition-colors text-sm duration-300 ease-in-out`}
-            >
-                <div className="flex items-center space-x-2">
-                    {icon}
-                    <span>{title}</span>
-                </div>
-                <FaAngleDown
-                    className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
-                />
-            </div>
-            <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-[500px]' : 'max-h-0'
-                    }`}
-            >
-                <div className=" space-y-2">{children}</div>
-            </div>
-        </>
-    )
-);
-
-
-
-const ChildNavItem = memo(
-    ({
-        title,
-        icon,
-        route,
-        isActive,
-        onClick,
-    }: {
-        title: string;
-        icon: React.ReactNode;
-        route: string;
-        isActive: string;
-        onClick: () => void;
-    }) => (
+const ExpandableSection = ({
+    title,
+    icon,
+    isActive,
+    isExpanded,
+    onClick,
+    children,
+}: {
+    title: string;
+    icon: React.ReactNode;
+    isActive: string;
+    isExpanded: boolean;
+    onClick: () => void;
+    children: React.ReactNode;
+}) => (
+    <div>
         <div
             onClick={onClick}
-            className={`flex items-center space-x-1 px-4 pl-8 py-2 cursor-pointer text-slate-400 hover:text-white text-sm ${isActive}`}
+            className={`flex items-center justify-between px-4 py-2 cursor-pointer ${isActive} hover:text-white hover:bg-[#00A261] transition-colors text-sm duration-300 ease-in-out`}
         >
-            {icon}
-            <span>{title}</span>
+            <div className="flex items-center space-x-2">
+                {icon}
+                <span>{title}</span>
+            </div>
+            <FaAngleDown
+                className={`transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+            />
         </div>
-    )
-);
+        <div
+            className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-[500px]' : 'max-h-0'
+                }`}
+        >
+            <div className=" space-y-2">{children}</div>
+        </div>
+    </div>
+)
+
+const ChildNavItem = ({
+    title,
+    icon,
+    route,
+    isActive,
+    onClick,
+}: {
+    title: string;
+    icon: React.ReactNode;
+    route: string;
+    isActive: string;
+    onClick: () => void;
+}) => (
+    <div
+        onClick={onClick}
+        className={`flex items-center space-x-1 px-4 pl-8 py-2 cursor-pointer text-slate-400 hover:text-white text-sm ${isActive}`}
+    >
+        {icon}
+        <span>{title}</span>
+    </div>
+)

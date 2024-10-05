@@ -5,7 +5,6 @@ import DropdownMenu from "../DropDownMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { createTag, deleteTag, fetchTags, updateTag } from "@/redux/slices/configuration/manage-categories/tagsSlice";
-import { Filter, Plus } from "lucide-react";
 import Skeleton from 'react-loading-skeleton';
 import Pagination from "../Pagination";
 import { EditOrCreateNewModalWrapper } from "../EditOrCreateNewModalWrapper";
@@ -174,7 +173,7 @@ export default function TagsTable() {
             filterQuery={filterQuery}
             setFilterQuery={setFilterQuery}
         />,
-        <></>
+        <div key=""></div>
     ];
 
     return (
@@ -190,18 +189,18 @@ export default function TagsTable() {
                     {!loadingPage ? (
                         tags.length > 0 ? (
                             tags.map((tag: any) => (
-                                <tr key={tag.id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
+                                <tr key={tag?._id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">{tag?.name}</td>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">
-                                        <span className={`px-2 py-1 rounded-sm text-xs font-medium ${tag.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
-                                            {tag.isActive ? "Active" : "Inactive"}
+                                        <span className={`px-2 py-1 rounded-sm text-xs font-medium ${tag?.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
+                                            {tag?.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
                                     <td className="py-3 px-4 border-r border-gray-100 text-gray-400 text-xs">{formatDate(tag?.createdAt)}</td>
                                     <td className="py-3 px-4 text-sm relative w-fit">
                                         <button
                                             className="text-gray-600 hover:text-gray-800 focus:outline-none"
-                                            onClick={() => setDropdownOpen(dropdownOpen === tag._id ? null : tag._id)}
+                                            onClick={() => setDropdownOpen(dropdownOpen === tag?._id ? null : tag._id)}
                                         >
                                             <FiMoreVertical />
                                         </button>

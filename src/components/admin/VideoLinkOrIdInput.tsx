@@ -2,7 +2,7 @@ import React from 'react';
 import { FiEye } from 'react-icons/fi';
 
 interface VideoLinkOrIdInputProps {
-    videoType: 'mp4' | 'youtube' | 'vimeo';
+    videoType: string;
     videoLink: string;
     enableVideo: boolean;
     setSolutionVideoLink: (link: string) => void;

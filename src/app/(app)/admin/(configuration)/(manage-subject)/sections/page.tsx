@@ -176,7 +176,7 @@ export default function Page() {
             filterQuery={filterQuery}
             setFilterQuery={setFilterQuery}
         />,
-        <></>,
+        <div key=""></div>
     ];
 
     return (
@@ -193,7 +193,7 @@ export default function Page() {
                     {!loadingPage ? (
                         sections.length > 0 ? (
                             sections.map((item: any) => (
-                                <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
+                                <tr key={item._id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">{item?.name}</td>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100">
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>

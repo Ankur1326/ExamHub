@@ -11,10 +11,13 @@ interface Question {
     question?: string;
     options?: string[];
     correctOptions?: number[];
-    matchPairs?: string[];
-    sequenceOrder?: string[];
-    trueFalseAnswer?: boolean;
-    shortAnswer?: string;
+    pairs?: {
+        left: string;
+        right: string;
+    }[];
+    sequences?: string[];
+    trueFalseAnswer?: boolean | null;
+    shortAnswer?: number;
     fillInTheBlanks?: string;
     skillName?: string;
     topicName?: string;

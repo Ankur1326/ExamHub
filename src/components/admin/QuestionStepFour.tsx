@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import CustomCKEditor from '../CustomCKEditor';
 import ToggleSwitch from './ToggleSwitch';
 import VideoTypeSelector from './VideoTypeSelector';
 import VideoLinkOrIdInput from './VideoLinkOrIdInput';
@@ -9,15 +8,15 @@ import { AppDispatch } from '@/redux/store';
 import { fetchComprehensions } from '@/redux/slices/library/question-bank/comprehensionsSlice';
 import { FiEye } from 'react-icons/fi';
 import { createOrUpdateQuestion } from '@/redux/slices/library/question-bank/questionSlice';
+import axios from 'axios';
 
 interface QuestionStepThreeProps {
     questionId: string | null;
-    questionData?: any;
     nextStep: () => void;
     prevStep: () => void;
 }
 
-function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: QuestionStepThreeProps) {
+function QuestionStepFour({ questionId, nextStep, prevStep }: QuestionStepThreeProps) {
     const dispatch = useDispatch<AppDispatch>();
     const [enableQuestionAttachment, setEnableQuestionAttachment] = useState<boolean>(false);
     const [attachmentType, setAttachmentType] = useState<'comprehensionPassage' | 'audio' | 'video'>('comprehensionPassage');
@@ -29,14 +28,27 @@ function QuestionStepFour({ questionId, questionData, nextStep, prevStep }: Ques
     const [videoLinkOrId, setVideoLinkOrId] = useState<string>("")
 
     useEffect(() => {
-        setEnableQuestionAttachment(questionData?.enableQuestionAttachment)
-        setComprehension(questionData?.comprehensionPassage[0])
-        setAttachmentType(questionData?.attachmentType)
-        setSelectedFormat(questionData?.selectedFormat)
-        setAudioLink(questionData?.audioLink)
-        setVideoType(questionData?.videoType)
-        setVideoLinkOrId(questionData?.videoLinkOrId)
-    }, [questionData])
+        if (questionId) {
+            const fetchQuestionDetails = async () => {
+                try {
+                    const response = await axios.get(`/api/admin/question/get-one/`, {
+                        params: { questionId }
+                    });
+                    setEnableQuestionAttachment(response.data.data?.enableQuestionAttachment)
+                    setComprehension(response.data.data?.comprehensionPassage[0])
+                    setAttachmentType(response.data.data.data?.attachmentType)
+                    setSelectedFormat(response.data.data?.selectedFormat)
+                    setAudioLink(response.data.data?.audioLink)
+                    setVideoType(response.data.data?.videoType)
+                    setVideoLinkOrId(response.data.data?.videoLinkOrId)
+                } catch (error) {
+                    console.error('Failed to fetch question data:', error);
+                }
+            };
+
+            fetchQuestionDetails();
+        }
+    }, [questionId]);
 
     // Handle the radio button change
     const handleAttachmentTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {

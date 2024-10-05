@@ -184,7 +184,6 @@ export default function Page() {
             filterQuery={filterQuery}
             setFilterQuery={setFilterQuery}
         />,
-        <></>
     ];
 
     return (

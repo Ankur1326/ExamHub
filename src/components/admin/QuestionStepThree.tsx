@@ -1,36 +1,51 @@
 import React, { useEffect, useState } from 'react'
-import CustomCKEditor from '../CustomCKEditor';
-import { FiEye } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { createOrUpdateQuestion } from '@/redux/slices/library/question-bank/questionSlice';
 import { AppDispatch } from '@/redux/store';
 import VideoTypeSelector from './VideoTypeSelector';
 import ToggleSwitch from './ToggleSwitch';
 import VideoLinkOrIdInput from './VideoLinkOrIdInput';
+import axios from 'axios';
+// import CustomCKEditor from '../CustomCKEditor';
+import dynamic from 'next/dynamic';
+const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor").then((module) => module.default), { ssr: false })
+
 
 interface QuestionStepThreeProps {
-    questionId: string | null;
-    questionData?: any;
+    questionId: string;
     nextStep: () => void;
     prevStep: () => void;
 }
 
-function QuestionStepThree({ questionId, questionData, nextStep, prevStep }: QuestionStepThreeProps) {
+function QuestionStepThree({ questionId, nextStep, prevStep }: QuestionStepThreeProps) {
     const dispatch = useDispatch<AppDispatch>()
     const [solution, setSolution] = useState<string>('');
     const [enableSolutionVideo, setEnableSolutionVideo] = useState<boolean>(false);
-    const [solutionVideoType, setSolutionVideoType] = useState<'mp4' | 'youtube' | 'vimeo'>('mp4');
+    const [solutionVideoType, setSolutionVideoType] = useState<string>('');
     const [solutionVideoLink, setSolutionVideoLink] = useState<string>('');
     const [previewUrl, setPreviewUrl] = useState('');
     const [hint, setHint] = useState<string>('');
 
     useEffect(() => {
-        setSolution(questionData?.solution)
-        setEnableSolutionVideo(questionData?.enableSolutionVideo)
-        setSolutionVideoType(questionData?.solutionVideoType)
-        setSolutionVideoLink(questionData?.solutionVideoLink)
-        setHint(questionData?.hint)
-    }, [questionData])
+        if (questionId) {
+            const fetchQuestionDetails = async () => {
+                try {
+                    const response = await axios.get(`/api/admin/question/get-one/`, {
+                        params: { questionId }
+                    });
+                    setSolution(response.data.data?.solution || "")
+                    setEnableSolutionVideo(response.data.data?.enableSolutionVideo || false)
+                    setSolutionVideoType(response.data.data.data?.solutionVideoType || "mp4")
+                    setSolutionVideoLink(response.data.data?.solutionVideoLink || '')
+                    setHint(response.data.data?.hint || '')
+                } catch (error) {
+                    console.error('Failed to fetch question data:', error);
+                }
+            };
+
+            fetchQuestionDetails();
+        }
+    }, [questionId]);
 
     // Preview Video
     const handlePreview = () => {
@@ -53,7 +68,7 @@ function QuestionStepThree({ questionId, questionData, nextStep, prevStep }: Que
     const handleUpdate = async (e: any) => {
         e.preventDefault()
         let resultAction = await dispatch(createOrUpdateQuestion({ step: 3, data: { solution, enableSolutionVideo, solutionVideoType, solutionVideoLink, hint }, questionId }));
-        if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
+        if (resultAction && createOrUpdateQuestion?.fulfilled?.match(resultAction)) {
             nextStep()
         }
     }

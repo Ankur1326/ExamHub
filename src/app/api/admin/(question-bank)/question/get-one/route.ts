@@ -68,8 +68,9 @@ export async function GET(request: Request) {
                     question: 1, // Add any other fields you want to return from the Question model
                     options: 1,
                     correctOptions: 1,
-                    matchPairs: 1,
-                    sequenceOrder: 1,
+                    pairs: 1,
+                    sequences: 1,
+                    shortAnswer: 1,
                     fillInTheBlanks: 1,
                     difficultyLevel: 1,
                     defaultMarks: 1,
