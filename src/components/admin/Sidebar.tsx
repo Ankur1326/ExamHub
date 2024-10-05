@@ -26,7 +26,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
         }
     }, []);
 
-    const isActive = (route: string) => currentRoute === route ? 'bg-[#00A261] text-white' : 'text-slate-300';
+    const isActive = (route: string) => currentRoute === route ? 'bg-[#DB1430] text-white' : 'text-slate-300';
 
     const navigateTo = (path: string) => {
         setCurrentRoute(path);
@@ -168,7 +168,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
 
 const LogoSection = () => (
     <div className="mb-4 text-center">
-        <span className="text-[#0e9f6e] text-2xl font-bold">Logo</span>
+        <span className="text-[#DB1430] text-2xl font-bold">Logo</span>
     </div>
 );
 
@@ -197,7 +197,7 @@ const ExpandableSection = ({
     <div>
         <div
             onClick={onClick}
-            className={`flex items-center justify-between px-4 py-2 cursor-pointer ${isActive} hover:text-white hover:bg-[#00A261] transition-colors text-sm duration-300 ease-in-out`}
+            className={`flex items-center justify-between px-4 py-2 cursor-pointer ${isActive} hover:text-white hover:bg-[#DB1430] transition-colors text-sm duration-300 ease-in-out`}
         >
             <div className="flex items-center space-x-2">
                 {icon}
