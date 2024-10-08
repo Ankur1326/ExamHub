@@ -26,7 +26,7 @@ type SearchQuery = {
     skill: string;
     topic: string;
     isActive: boolean | null;
-  };
+};
 
 export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
@@ -215,7 +215,11 @@ export default function Page() {
                                     <td className="py-3 px-3 text-sm border-r border-gray-100 flex items-center dark:border-border_secondary">
                                         <button
                                             className="bg-[#3699FF] hover:bg-[#3291F0] text-white px-2 py-1 text-xs rounded flex items-center focus:outline-none"
-                                            onClick={() => navigator.clipboard.writeText(item?.questionCode)}
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(item?.questionCode)
+                                                toast.success("copied!")
+                                            }
+                                            }
                                         >
                                             <FiCopy className="mr-1" /> {item?.questionCode}
                                         </button>
@@ -240,7 +244,7 @@ export default function Page() {
                                     </td>
                                     <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary" >
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
-                                            {item.isActive ? "Active" : "Inactive"}z
+                                            {item.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
                                     <td className="py-3 px-3 text-sm relative w-fit">
