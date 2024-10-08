@@ -181,7 +181,7 @@ function CreateOrEditPage({ params }: any) {
 
     return (
         <div className="w-full mx-auto p-3 rounded-md">
-            <div className='flex justify-between items-center gap-6 py-4 px-6 w-full border rounded-t-md bg-white mb-4 border-gray-200'>
+            <div className='flex justify-between items-center gap-6 py-4 px-6 w-full border rounded-t-md bg-white dark:bg-bg_secondary  mb-4 border-gray-200 dark:border-border_secondary'>
                 {/* Left Section: Title and Tab */}
                 <h1 className="text-xl font-bold text-gray-900 mb-1">
                     {isEdit ? `Edit Question` : 'Add Question to Question Bank'}
@@ -196,7 +196,7 @@ function CreateOrEditPage({ params }: any) {
                 />
             </div>
 
-            <div className='p-6 bg-white rounded-b-md border'>
+            <div className='p-6 bg-white rounded-b-md border dark:bg-bg_secondary dark:border-border_secondary'>
                 {
                     !isEdit && currentStep === 1 &&
                     <div>
@@ -206,10 +206,10 @@ function CreateOrEditPage({ params }: any) {
                                 <div
                                     key={type.code}
                                     onClick={() => setSelectedTab(type)}
-                                    className={`w-32 h-28 p-3 flex flex-col justify-center items-center border rounded-lg cursor-pointer transition-transform duration-300 group ${selectedTab === type ? 'border-gray-600 scale-105 shadow-sm' : 'border-gray-300 bg-gray-50'
+                                    className={`w-32 h-28 p-3 flex flex-col justify-center items-center border rounded-lg cursor-pointer transition-transform duration-300 group ${selectedTab === type ? 'border-gray-600 scale-105 shadow-sm' : 'border-gray-300 bg-gray-50 dark:bg-bg_secondary dark:border-border_secondary'
                                         }`}
                                 >
-                                    <div className={`mb-2 ${selectedTab === type ? 'text-blue-500' : 'text-gray-700 group-hover:text-blue-500'}`}>
+                                    <div className={`mb-2 ${selectedTab === type ? 'text-text_red' : 'text-gray-700 group-hover:text-text_red dark:text-text_secondary'}`}>
                                         {
                                             (() => {
                                                 switch (type.code) {
@@ -233,7 +233,7 @@ function CreateOrEditPage({ params }: any) {
                                             })()
                                         }
                                     </div>
-                                    <button className="text-center text-gray-700 font-medium text-xs">
+                                    <button className="text-center text-gray-700 dark:text-text_secondary font-medium text-xs">
                                         {type.name}
                                     </button>
                                 </div>
@@ -254,10 +254,10 @@ function CreateOrEditPage({ params }: any) {
 const Heading = ({ num, text }: any) => {
     return (
         <div className='flex gap-4 mb-6'>
-            <span className='bg-black text-white rounded-full w-6 h-6 text-center'>{num}</span>
+            <span className='bg-black dark:bg-bg_primary dark:border-border_secondary text-white dark:text-white rounded-full w-6 h-6 text-center'>{num}</span>
             <div className='relative w-full h-12'>
                 <h2 className='font-medium text-md'>{text}</h2>
-                <span className='w-full border border-gray-100 absolute bottom-0'></span>
+                <span className='w-full border border-gray-100 dark:border-text_secondary absolute bottom-0'></span>
             </div>
         </div>
     )

@@ -93,7 +93,7 @@ const MultiTagSearchDropdown = ({
 
     return (
         <div className="mb-4 relative" ref={dropdownRef}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-text_secondary">
                 {label}
                 {required && <span className="text-red-500 ml-1">*</span>}  {/* Required indicator */}
             </label>
@@ -127,7 +127,7 @@ const MultiTagSearchDropdown = ({
                         setInitialClick(true)
                     }}
                     placeholder={placeholder}
-                    className="border p-2 rounded-md w-full"
+                    className="border p-2 rounded-md w-full dark:border-border_secondary dark:hover:border-hover_border"
                 />
                 {isLoading && (
                     <span className="absolute right-2">
@@ -138,7 +138,7 @@ const MultiTagSearchDropdown = ({
 
             {/* Dropdown for search results */}
             {showDropdown && searchResults.length > 0 && (
-                <div className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 max-h-48 overflow-auto w-full">
+                <div className="absolute z-10 bg-white border dark:bg-bg_primary dark:border-border_secondary border-gray-300 rounded-md mt-1 max-h-48 overflow-auto w-full">
                     {searchResults.map((result) => (
                         <div
                             key={result._id}

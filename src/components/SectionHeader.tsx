@@ -4,7 +4,7 @@ import { IoAddSharp } from "react-icons/io5";
 function SectionHeader({ title, onClick, buttonText="Create" }: any) {
     return (
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-600">{title}</h2>
+            <h2 className="text-2xl font-bold text-gray-600 dark:text-text_primary">{title}</h2>
             <button
                 onClick={onClick}
                 className="bg-blue_button text-white flex items-center gap-1 px-3 py-2 hover:bg-blue_hover_button rounded-sm transition duration-200 ease-in-out"

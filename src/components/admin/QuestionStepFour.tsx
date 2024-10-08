@@ -169,12 +169,12 @@ function QuestionStepFour({ questionId, nextStep, prevStep }: QuestionStepThreeP
                         {attachmentType === 'audio' && (
                             <div className="mb-6">
                                 <label className="block text-sm font-semibold mb-1">Audio Type (Supported .mp3 & .ogg files)</label>
-                                <div className="flex text-sm border border-slate-200 w-fit overflow-hidden rounded-md">
+                                <div className="flex text-sm border border-slate-200 dark:border-border_secondary w-fit overflow-hidden rounded-md">
                                     {
                                         [{ format: 'mp3', label: 'MP3 Format' }, { format: 'ogg', label: 'OGG Format' }].map((item) => (
                                             <button
                                                 key={item.format}
-                                                className={`px-4 py-2 ${selectedFormat === item.format ? 'bg-slate-600 text-white' : 'bg-gray-50 text-gray-700'}`}
+                                                className={`px-4 py-2 ${selectedFormat === item.format ? 'bg-slate-600 text-white' : 'bg-gray-50 text-gray-700 dark:bg-bg_primary dark:text-text_secondary'}`}
                                                 onClick={() => setSelectedFormat(item.format)}
                                             >
                                                 {item.label}
@@ -185,7 +185,7 @@ function QuestionStepFour({ questionId, nextStep, prevStep }: QuestionStepThreeP
 
                                 <div className="mt-4">
                                     <label className="block text-sm font-semibold mb-1">Audio Link</label>
-                                    <div className="flex items-center overflow-hidden border border-slate-200 rounded-md">
+                                    <div className="flex items-center overflow-hidden border border-slate-200 rounded-md dark:border-border_secondary dark:hover:border-hover_border">
                                         <input
                                             type="text"
                                             className="w-full px-4 py-2 rounded-l-md text-sm"

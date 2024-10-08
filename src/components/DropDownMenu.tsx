@@ -32,12 +32,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, width = 36, isOpen, 
     if (!isOpen) return null;
 
     return (
-        <div ref={menuRef} className={`absolute left-0 mt-2 w-${width} bg-white rounded-md shadow-lg z-10`}>
+        <div ref={menuRef} className={`absolute left-0 mt-2 w-${width} bg-white rounded-md shadow-lg z-10 dark:bg-bg_primary`}>
             <ul className="py-1">
                 {items.map((item) => (
                     <li
                         key={item.id}
-                        className="block px-3 py-1 text-gray-800 hover:bg-gray-100 cursor-pointer"
+                        className="block px-3 py-1 text-gray-800 dark:text-text_primary hover:bg-gray-100 dark:hover:bg-hover_secondary cursor-pointer"
                         onClick={() => item.onClick(item.id)}
                     >
                         {item.label}

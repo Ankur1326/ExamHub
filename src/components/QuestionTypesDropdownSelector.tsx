@@ -20,7 +20,7 @@ const QuestionTypesDropdownSelector: React.FC<QuestionTypesDropdownSelectorProps
             // defaultValue={null}
             // onChange={onChange}
             onChange={handleChange}
-            className="border border-gray-300 text-xs rounded-md px-2 py-1"
+            className="border border-gray-300 text-xs rounded-md px-2 py-1 dark:border-border dark:hover:border-hover_border"
             style={{ width: width ? `${width}px` : 'auto' }}
         >
             <option value="">Select Q Type</option>

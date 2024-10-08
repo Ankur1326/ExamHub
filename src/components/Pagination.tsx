@@ -1,7 +1,6 @@
 'use client'
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 interface PaginationProps {
   currentPage: number;
@@ -33,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({
             id="itemsPerPage"
             value={itemsPerPage}
             onChange={(e) => handleItemPerPageChange(e)}
-            className="text-sm px-3 py-[5.5px] border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+            className="text-sm px-3 py-[5.5px] border border-gray-300 dark:border-border_secondary dark:hover:border-hover_border rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
           >
             {[5, 10, 15].map(size => (
               <option key={size} value={size} className='text-sm'>{size}</option>
@@ -57,7 +56,7 @@ const Pagination: React.FC<PaginationProps> = ({
           <ChevronLeft />
         </button>
 
-        <span className="text-gray-700 text-sm">
+        <span className="text-gray-700 dark:text-slate-400 text-sm">
           Page {currentPage} of {totalPages}
         </span>
 

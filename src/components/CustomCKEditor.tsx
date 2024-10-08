@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import 'ckeditor5/ckeditor5.css';
 
 interface CustomCKEditorProps {
     content: string;
@@ -16,7 +17,7 @@ const CKEditor = dynamic<any>(() =>
 const CustomCKEditor: React.FC<CustomCKEditorProps> = ({ content, setContent }) => {
     // const editorRef = useRef(null);
 
-    useEffect(() => { 
+    useEffect(() => {
         // Load MathJax
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML';
@@ -50,15 +51,18 @@ const CustomCKEditor: React.FC<CustomCKEditorProps> = ({ content, setContent }) 
     // };
 
     return (
-        <CKEditor
-            editor={ClassicEditor}
-            data={content}
-            // config={editorConfiguration}
-            // onReady={(editor: any) => {
-            //     editorRef.current = editor;
-            // }}
-            onChange={(event: any, editor: any) => setContent(editor.getData())}
-        />
+        <div className={`border dark:bg-black dark:text-black dark:border-border_primary rounded-lg`}>
+            <CKEditor
+                editor={ClassicEditor}
+                data={content}
+                // config={editorConfiguration}
+                // onReady={(editor: any) => {
+                //     editorRef.current = editor;
+                // }}
+                onChange={(event: any, editor: any) => setContent(editor.getData())}
+                className="dark:bg-bg_secondary dark:text-black"
+            />
+        </div>
     );
 }
 

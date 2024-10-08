@@ -31,8 +31,8 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, setCu
               } ${currentStep === index + 1
                 ? 'bg-[#3699FF] border-[#3394f5] text-white'  // Current step (blue)
                 : currentStep > index + 1
-                  ? 'bg-[#E9F3FF] border-[#c7dffd] text-[#3699FF]'  // Completed step (blue)
-                  : 'bg-white border-[#c7dffd] text-[#3699FF]'  // Upcoming step (gray)
+                  ? 'bg-[#E9F3FF] border-[#c7dffd] text-text_secondary dark:bg-bg_primary dark:border-border_secondary' // Completed step (blue)
+                  : 'bg-white border-[#c7dffd] dark:bg-bg_secondary dark:border-border_secondary dark:text-text_secondary' // Upcoming step (gray)
               }`}
           >
             {index + 1}

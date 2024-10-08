@@ -152,7 +152,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                 <div className="space-y-6 flex flex-col items-end w-full md:w-2/3">
                     {/* Question */}
                     <div className="w-full">
-                        <label className="text-sm font-semibold text-gray-700">Question</label>
+                        <label className="text-sm font-semibold text-gray-700 dark:text-text_primary">Question</label>
                         <CustomCKEditor content={question} setContent={setQuestion} />
                         {
                             !question && formSubmitted &&

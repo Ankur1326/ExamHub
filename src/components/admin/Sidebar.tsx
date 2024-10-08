@@ -65,13 +65,6 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             isActive={isActive('/user/profile')}
                             onClick={() => navigateTo('/user/profile')}
                         />
-                        <ChildNavItem
-                            title="My Account"
-                            icon={<AiOutlineSetting />}
-                            route="/dashboard/settings"
-                            isActive={isActive('/dashboard/settings')}
-                            onClick={() => navigateTo('/dashboard/settings')}
-                        />
                     </ExpandableSection>
 
                     {/* Question Banks Section */}
@@ -168,6 +161,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
 
 const LogoSection = () => (
     <div className="mb-4 text-center">
+
         <span className="text-[#DB1430] text-2xl font-bold">Logo</span>
     </div>
 );

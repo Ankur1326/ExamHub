@@ -124,9 +124,9 @@ const ProfileClient = ({ username, email }: any) => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-200">
+        <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-bg_secondary dark:border-0 shadow-lg rounded-lg border border-gray-200">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-gray-800">
+                <h2 className="text-3xl font-bold text-gray-800 dark:text-text_secondary">
                     Profile Details
                     <span className="text-white bg-green-500 px-2 py-1 rounded-full text-sm ml-3 shadow-sm">
                         {profile?.user?.role}
@@ -143,13 +143,13 @@ const ProfileClient = ({ username, email }: any) => {
             {isEditing ? (
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                     <div className="flex flex-col">
-                        <label className="text-gray-500 w-40">Username</label>
+                        <label className="text-gray-500 w-40 ">Username</label>
                         <input
                             type="text"
                             name="username"
                             value={formData.username}
                             onChange={handleInputChange}
-                            className="p-2 border rounded"
+                            className="p-2 border rounded dark:border-border_secondary dark:hover:border-hover_border"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -159,7 +159,7 @@ const ProfileClient = ({ username, email }: any) => {
                             name="fullName"
                             value={formData.fullName}
                             onChange={handleInputChange}
-                            className="p-2 border rounded"
+                            className="p-2 border rounded dark:border-border_secondary dark:hover:border-hover_border"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -169,7 +169,7 @@ const ProfileClient = ({ username, email }: any) => {
                             name="mobileNum"
                             value={formData.mobileNum}
                             onChange={handleInputChange}
-                            className="p-2 border rounded"
+                            className="p-2 border rounded dark:border-border_secondary dark:hover:border-hover_border"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -179,7 +179,7 @@ const ProfileClient = ({ username, email }: any) => {
                             name="address"
                             value={formData?.address}
                             onChange={handleInputChange}
-                            className="p-2 border rounded"
+                            className="p-2 border rounded dark:border-border_secondary dark:hover:border-hover_border"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -189,7 +189,7 @@ const ProfileClient = ({ username, email }: any) => {
                             name="dateOfBirth"
                             value={formateDate(formData?.dateOfBirth)}
                             onChange={handleInputChange}
-                            className="p-2 border rounded"
+                            className="p-2 border rounded dark:border-border_secondary dark:hover:border-hover_border"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -366,8 +366,8 @@ const ProfileClient = ({ username, email }: any) => {
 
 const ProfileItem = ({ label, value, isVerified }: any) => (
     <div className="flex items-center">
-        <span className="text-gray-500 w-40">{label}</span>
-        <span className="text-gray-900 font-medium">{value}</span>
+        <span className="text-gray-500  dark:text-gray-700 w-40 dark:font-bold">{label}</span>
+        <span className="text-gray-900 font-medium dark:text-text_secondary">{value}</span>
         {isVerified !== undefined && (
             <span
                 className={`ml-2 px-2 py-1 rounded-lg text-xs text-white ${isVerified ? "bg-green-500" : "bg-red-500"

@@ -195,7 +195,7 @@ export default function Page() {
             <SectionHeader title="Manage Comprehensions" onClick={handleCreateNewComprehension} />
 
             {/* items Table */}
-            <table className="min-w-full bg-white shadow-md rounded-sm">
+            <table className="min-w-full bg-white shadow-md rounded-sm dark:bg-bg_secondary">
                 <TableLabelHeader headings={["Title", "body", "Status", "Created at", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
@@ -203,20 +203,20 @@ export default function Page() {
                     {!loadingPage ? (
                         comprehensions.length > 0 ? (
                             comprehensions.map((item: any) => (
-                                <tr key={item._id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
-                                    <td className="py-3 px-4 text-sm border-r border-gray-100">{item?.title}</td>
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                <tr key={item._id} className="border-t border-r border-gray-100 hover:bg-gray-50 dark:border-border_secondary dark:hover:bg-hover_secondary" style={{ height: '45px' }}>
+                                    <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary">{item?.title}</td>
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         {/* Render HTML content from the question field */}
                                         <div
                                             dangerouslySetInnerHTML={{ __html: item?.body }}
                                         />
                                     </td>
-                                    <td className="py-3 px-4 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
                                             {item.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
-                                    <td className="py-3 px-4 border-r text-gray-400 text-xs">{formatDate(item?.createdAt)}</td>
+                                    <td className="py-3 px-4 border-r text-gray-400 text-xs dark:border-border_secondary">{formatDate(item?.createdAt)}</td>
                                     <td className="py-3 px-4 text-sm relative w-fit">
                                         <button
                                             className="text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -242,11 +242,11 @@ export default function Page() {
                     ) : (
                         Array.from({ length: itemsPerPage }).map((_, index) => (
                             <tr key={index} style={{ height: '45px' }}>
-                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={150} height={20} /></td>
-                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={150} height={20} /></td>
-                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={60} height={20} /></td>
-                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={80} height={20} /></td>
-                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={30} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={150} height={20}/></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={150} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={60} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={80} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={30} height={20} /></td>
                             </tr>
                         ))
                     )}

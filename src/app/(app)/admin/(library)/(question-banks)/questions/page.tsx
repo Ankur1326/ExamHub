@@ -203,7 +203,7 @@ export default function Page() {
             <SectionHeader title="Manage Questions" buttonText="Add Question" onClick={() => router.push(`/admin/question/new`)} />
             {/* Question Table */}
 
-            <table className="min-w-full bg-white shadow-md rounded-sm">
+            <table className="min-w-full bg-white dark:bg-bg_secondary shadow-md rounded-sm">
                 <TableLabelHeader headings={["Code", "Question", "Type", "Section", "Skill", "Topic", "Status", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
@@ -211,8 +211,8 @@ export default function Page() {
                     {!loadingPage ? (
                         questions.length > 0 ? (
                             questions.map((item: any) => (
-                                <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50" >
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100 flex items-center">
+                                <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50 dark:border-border_secondary dark:hover:bg-hover_secondary" >
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 flex items-center dark:border-border_secondary">
                                         <button
                                             className="bg-[#3699FF] hover:bg-[#3291F0] text-white px-2 py-1 text-xs rounded flex items-center focus:outline-none"
                                             onClick={() => navigator.clipboard.writeText(item?.questionCode)}
@@ -220,32 +220,32 @@ export default function Page() {
                                             <FiCopy className="mr-1" /> {item?.questionCode}
                                         </button>
                                     </td>
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         {/* Render HTML content from the question field */}
                                         <div
                                             dangerouslySetInnerHTML={{ __html: item?.question }}
                                         />
                                     </td>
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         {item?.questionType}
                                     </td>
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         {item?.section ? item?.section : <BsDash />}
                                     </td>
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         {item?.skill ? item?.skill : <BsDash />}
                                     </td>
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         {item?.topic ? item?.topic : <BsDash />}
                                     </td>
-                                    <td className="py-3 px-3 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary" >
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
-                                            {item.isActive ? "Active" : "Inactive"}
+                                            {item.isActive ? "Active" : "Inactive"}z
                                         </span>
                                     </td>
                                     <td className="py-3 px-3 text-sm relative w-fit">
                                         <button
-                                            className="text-gray-600 hover:text-gray-800 focus:outline-none"
+                                            className="text-gray-600 hover:text-gray-800 dark:text-text_primary focus:outline-none"
                                             onClick={() => setDropdownOpen(dropdownOpen === item._id ? null : item._id)}
                                         >
                                             <FiMoreVertical />
@@ -268,14 +268,14 @@ export default function Page() {
                     ) : (
                         Array.from({ length: itemsPerPage }).map((_, index) => (
                             <tr key={index} style={{ height: '45px' }}>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={140} height={20} /></td>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={150} height={30} /></td>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={80} height={20} /></td>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={80} height={20} /></td>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={80} height={20} /></td>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={80} height={20} /></td>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={70} height={20} /></td>
-                                <td className="px-3 py-2 border-b border-r border-gray-200"><Skeleton width={10} height={20} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={140} height={20} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={150} height={30} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={80} height={20} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={80} height={20} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={80} height={20} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={80} height={20} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={70} height={20} /></td>
+                                <td className="px-3 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={10} height={20} /></td>
                             </tr>
                         ))
                     )}

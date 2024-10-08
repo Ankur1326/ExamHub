@@ -6,6 +6,7 @@ import { useState } from "react";
 import { AiOutlineMenu } from 'react-icons/ai';
 import { Provider } from "react-redux";
 import 'react-loading-skeleton/dist/skeleton.css'
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
 export default function RootLayout({ children }: any) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -20,23 +21,26 @@ export default function RootLayout({ children }: any) {
       <Sidebar isSidebarOpen={isSidebarOpen} />
 
       {/* Content Area */}
-      <Provider store={store}>
-        <div className="flex-1 ml-0 md:ml-64">
-          <header className="flex justify-between h-16 bg-white items-center fixed top-0 left-0 right-0 z-10 shadow-sm">
-            <button
-              className="text-2xl md:hidden"
-              onClick={toggleSidebar}
-            >
-              <AiOutlineMenu />
-            </button>
-            <div className="absolute right-5">
-              <Navbar />
-            </div>
-          </header>
-          <main className="mt-16 px-2 py-3 bg-[#F6F5F6] h-full">{children}</main>
-        </div>
-      </Provider>
-
+      <NextThemesProvider attribute="class">
+        <Provider store={store}>
+          <div className="flex-1 ml-0 md:ml-64">
+            <header className="flex justify-between h-16 bg-[#181920] dark:border-b dark:border-border_secondary items-center fixed top-0 left-0 right-0 z-10 shadow-sm">
+              <button
+                className="text-2xl md:hidden"
+                onClick={toggleSidebar}
+              >
+                <AiOutlineMenu />
+              </button>
+              <div className="absolute right-5">
+                <Navbar />
+              </div>
+            </header>
+            <main className="mt-16 px-2 py-3 bg-[#f6f5f6] dark:bg-bg_primary h-full">
+              {children}
+            </main>
+          </div>
+        </Provider>
+      </NextThemesProvider>
       {/* Overlay for small screens */}
       {isSidebarOpen && (
         <div

@@ -206,7 +206,7 @@ export default function Page() {
             {/* Header Skill */}
             <SectionHeader title="Manage Skills" onClick={handleCreateNewItem} />
             {/* Skill Table */}
-            <table className="min-w-full bg-white shadow-md rounded-sm">
+            <table className="min-w-full bg-white dark:bg-bg_secondary shadow-md rounded-sm">
                 <TableLabelHeader headings={["Skill Name", "Sections", "Status", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
@@ -215,20 +215,20 @@ export default function Page() {
                     {!loadingPage ? (
                         skills.length > 0 ? (
                             skills.map((item: any) => (
-                                <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
-                                    <td className="py-4 px-6 text-sm border-r border-gray-200 text-gray-700">
+                                <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50 dark:hover:bg-hover_secondary dark:bg-bg_secondary dark:border-border_secondary" style={{ height: '45px' }}>
+                                    <td className="py-4 px-6 text-sm border-r border-gray-200 text-gray-700 dark:border-border_secondary">
                                         <div className="flex flex-col">
-                                            <span className="font-medium truncate">{item?.name}</span>
-                                            <span className="text-gray-400 text-xs">{formatDate(item?.createdAt)}</span>
+                                            <span className="font-medium truncate dark:text-white">{item?.name}</span>
+                                            <span className="text-gray-400 text-xs dark:text-slate-500">{formatDate(item?.createdAt)}</span>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-6 text-sm border-r border-gray-200 text-gray-700">
+                                    <td className="py-4 px-6 text-sm border-r border-gray-200 text-gray-700 dark:border-border_secondary">
                                         <div className="flex flex-col">
-                                            <span className="font-medium truncate">{item?.sectionDetails?.name}</span>
-                                            <span className="text-gray-400 text-xs">{formatDate(item?.sectionDetails?.createdAt)}</span>
+                                            <span className="font-medium truncate dark:text-white">{item?.sectionDetails?.name}</span>
+                                            <span className="text-gray-400 text-xs dark:text-slate-500">{formatDate(item?.sectionDetails?.createdAt)}</span>
                                         </div>
                                     </td>
-                                    <td className="py-3 px-4 text-sm border-r border-gray-100">
+                                    <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
                                             {item.isActive ? "Active" : "Inactive"}
                                         </span>
@@ -259,20 +259,20 @@ export default function Page() {
                         Array.from({ length: itemsPerPage }).map((_, index) => (
                             <tr key={index} style={{ height: '45px' }}>
                                 {/* <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={150} height={20} /></td> */}
-                                <td className="border-b py-[13.5px] px-6 text-sm border-r border-gray-200 text-gray-700">
+                                <td className="border-b py-[13.5px] px-6 text-sm border-r border-gray-200 text-gray-700 dark:border-border_secondary">
                                     <div className="flex flex-col">
                                         <Skeleton width={120} height={18} />
                                         <Skeleton width={100} height={10} />
                                     </div>
                                 </td>
-                                <td className="border-b border-gray-200 py-[13.5px] px-6 text-sm border-r text-gray-700">
+                                <td className="border-b border-gray-200 py-[13.5px] px-6 text-sm border-r text-gray-700 dark:border-border_secondary">
                                     <div className="flex flex-col">
                                         <Skeleton width={120} height={18} />
                                         <Skeleton width={100} height={10} />
                                     </div>
                                 </td>
-                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={50} height={20} /></td>
-                                <td className="px-4 py-2 border-b border-r border-gray-200"><Skeleton width={30} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={50} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r border-gray-200 dark:border-border_secondary"><Skeleton width={30} height={20} /></td>
                             </tr>
                         ))
                     )}

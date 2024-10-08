@@ -77,7 +77,7 @@ function QuestionStepThree({ questionId, nextStep, prevStep }: QuestionStepThree
         <div className="p-6">
             {/* Solution Section */}
             <div className="mb-6">
-                <label className="block text-lg font-semibold mb-2">Solution</label>
+                <label className="block text-lg font-semibold mb-2 dark:text-text_secondary">Solution</label>
                 <CustomCKEditor
                     content={solution} setContent={setSolution}
                 />
@@ -132,7 +132,7 @@ function QuestionStepThree({ questionId, nextStep, prevStep }: QuestionStepThree
 
             {/* Hint Section */}
             <div className="my-12">
-                <label className="block text-sm font-semibold mb-1">Hint</label>
+                <label className="block text-sm font-semibold mb-1 dark:text-text_secondary">Hint</label>
                 <CustomCKEditor
                     content={hint} setContent={setHint}
                 />

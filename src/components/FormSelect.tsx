@@ -16,7 +16,7 @@ interface FormSelectProps {
     className = "",
   }) => {
     return (
-      <>
+      <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}  {/* Required indicator */}
@@ -25,7 +25,7 @@ interface FormSelectProps {
           value={value}
           onChange={onChange}
           required={required}
-          className={`w-full px-3 py-2 border rounded shadow-sm text-sm ${className}`}
+          className={`w-full px-3 py-2 border rounded shadow-sm text-sm dark:border-border_secondary dark:hover:border-hover_border ${className}`}
         >
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -33,7 +33,7 @@ interface FormSelectProps {
             </option>
           ))}
         </select>
-      </>
+      </div>
     );
   };
   

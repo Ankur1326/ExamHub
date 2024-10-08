@@ -181,7 +181,7 @@ export default function TagsTable() {
             {/* Header Section */}
             <SectionHeader title="Manage Tags" onClick={handleCreateNewTag} />
             {/* Tags Table */}
-            <table className="min-w-full bg-white shadow-md rounded-sm">
+            <table className="min-w-full bg-white dark:bg-bg_secondary shadow-md rounded-sm">
                 <TableLabelHeader headings={["Section Name", "Status", "Created at", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
@@ -189,15 +189,15 @@ export default function TagsTable() {
                     {!loadingPage ? (
                         tags.length > 0 ? (
                             tags.map((tag: any) => (
-                                <tr key={tag?._id} className="border-t border-r border-gray-100 hover:bg-gray-50" style={{ height: '45px' }}>
-                                    <td className="py-3 px-4 text-sm border-r border-gray-100">{tag?.name}</td>
-                                    <td className="py-3 px-4 text-sm border-r border-gray-100">
+                                <tr key={tag?._id} className="border-t border-r border-gray-100 hover:bg-gray-50 dark:border-border_secondary dark:bg-bg_secondary dark:hover:bg-hover_secondary" style={{ height: '45px' }}>
+                                    <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary ">{tag?.name}</td>
+                                    <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${tag?.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
                                             {tag?.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
-                                    <td className="py-3 px-4 border-r border-gray-100 text-gray-400 text-xs">{formatDate(tag?.createdAt)}</td>
-                                    <td className="py-3 px-4 text-sm relative w-fit">
+                                    <td className="py-3 px-4 border-r border-gray-100 text-gray-400 text-xs dark:border-border_secondary">{formatDate(tag?.createdAt)}</td>
+                                    <td className="py-3 px-4 text-sm relative w-fit ">
                                         <button
                                             className="text-gray-600 hover:text-gray-800 focus:outline-none"
                                             onClick={() => setDropdownOpen(dropdownOpen === tag?._id ? null : tag._id)}
@@ -222,10 +222,10 @@ export default function TagsTable() {
                     ) : (
                         Array.from({ length: itemsPerPage }).map((_, index) => (
                             <tr key={index} style={{ height: '45px' }}>
-                                <td className="px-4 py-2 border-b"><Skeleton width={150} height={20} /></td>
-                                <td className="px-4 py-2 border-b"><Skeleton width={50} height={20} /></td>
-                                <td className="px-4 py-2 border-b"><Skeleton width={50} height={20} /></td>
-                                <td className="px-4 py-2 border-b"><Skeleton width={30} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r dark:border-border_secondary"><Skeleton width={150} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r dark:border-border_secondary"><Skeleton width={50} height={20} /></td>
+                                <td className="px-4 py-2 border-b border-r dark:border-border_secondary"><Skeleton width={50} height={20} /></td>
+                                <td className="px-4 py-2 border-b dark:border-border_secondary"><Skeleton width={30} height={20} /></td>
                             </tr>
                         ))
                     )}

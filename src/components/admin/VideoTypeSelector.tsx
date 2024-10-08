@@ -10,8 +10,8 @@ const VideoTypeSelector: React.FC<VideoTypeSelectorProps> = ({ selectedType, onC
 
     return (
         <div className="mb-6">
-            <label className="block text-sm font-semibold mb-1">Video Type</label>
-            <div className="flex text-sm border border-slate-200 w-fit overflow-hidden rounded-md">
+            <label className="block text-sm font-semibold mb-1 dark:text-text_secondary">Video Type</label>
+            <div className="flex text-sm border border-slate-200 dark:border-border_primary  w-fit overflow-hidden rounded-md">
                 {
                     videoTypes.map((type) => (
                         <VideoTypeButton
@@ -43,7 +43,7 @@ const VideoTypeButton= ({ type, selectedType, onChange }:any) => {
 
     return (
         <button
-            className={`px-4 py-2 ${selectedType === type ? 'bg-slate-600 text-white' : 'bg-gray-50 text-gray-700'}`}
+            className={`px-4 py-2 ${selectedType === type ? 'bg-slate-600 text-white' : 'bg-gray-50 text-gray-700 dark:bg-bg_primary dark:text-text_secondary'}`}
             onClick={() => onChange(type)}
         >
             {getLabel(type)}

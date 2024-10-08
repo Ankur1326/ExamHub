@@ -18,7 +18,7 @@ const FormTextarea: React.FC<FormTextareaProps> = ({
     placeholder = "",
 }) => {
     return (
-        <>
+        <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
                 {label}
                 {required && <span className="text-red-500 ml-1">*</span>} {/* Required indicator */}
@@ -29,9 +29,9 @@ const FormTextarea: React.FC<FormTextareaProps> = ({
                 required={required}
                 rows={rows}
                 placeholder={placeholder}
-                className={`w-full px-3 py-2 border rounded shadow-sm text-sm resize-none ${className}`}
+                className={`w-full px-3 py-2 border rounded shadow-sm text-sm resize-none dark:border-border_secondary dark:hover:border-hover_border ${className}`}
             />
-        </>
+        </div>
     );
 };
 

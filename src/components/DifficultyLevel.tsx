@@ -10,7 +10,7 @@ interface DifficultyLevelProps {
 const DifficultyLevel: React.FC<DifficultyLevelProps> = ({ difficulty, setDifficulty, required }) => {
     return (
         <div className="relative mb-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-text_secondary">
                 Difficulty Level
                 {required && <span className="text-red-500 ml-1">*</span>} {/* Required indicator */}
             </label>
@@ -18,7 +18,7 @@ const DifficultyLevel: React.FC<DifficultyLevelProps> = ({ difficulty, setDiffic
                 value={difficulty}
                 required={required}
                 onChange={(e) => setDifficulty(e.target.value)}
-                className="w-full px-3 py-2 border rounded shadow-sm text-sm pr-10" // Add pr-10 to avoid text overlap with the icon
+                className="w-full px-3 py-2 border rounded shadow-sm text-sm pr-10 dark:border-border_secondary dark:hover:border-hover_border" // Add pr-10 to avoid text overlap with the icon
             >
                 <option value="">Select Difficulty</option>
                 <option value="Very Easy">Very Easy</option>

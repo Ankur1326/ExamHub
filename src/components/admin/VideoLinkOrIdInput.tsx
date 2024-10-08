@@ -30,8 +30,8 @@ const VideoLinkOrIdInput: React.FC<VideoLinkOrIdInputProps> = ({
 
     return (
         <div className="mt-4">
-            <label className="block text-sm font-semibold mb-1">{label}</label>
-            <div className="flex items-center overflow-hidden border border-slate-200 rounded-md">
+            <label className="block text-sm font-semibold mb-1 dark:text-text_secondary">{label}</label>
+            <div className="flex items-center overflow-hidden border border-slate-200 dark:border-border_secondary rounded-md dark:hover:border-hover_border">
                 <input
                     type="text"
                     className="w-full px-4 py-2 rounded-l-md text-sm"
@@ -42,7 +42,7 @@ const VideoLinkOrIdInput: React.FC<VideoLinkOrIdInputProps> = ({
                 />
                 {/* Preview Button with Icon */}
                 <button
-                    className="flex items-center text-sm px-4 py-2 bg-slate-600 text-white hover:bg-slate-700"
+                    className="flex items-center text-sm px-4 py-2 bg-slate-600 text-white dark:text-text_primary hover:bg-slate-700"
                     onClick={handlePreview}
                 >
                     <FiEye className="mr-2" />

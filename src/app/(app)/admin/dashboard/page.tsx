@@ -1,9 +1,9 @@
+import ThemeSelector from "@/components/admin/ThemeSelector";
+
 export default function Dashboard() {
     return (
-        <div className="w-full h-screen flex items-center justify-center ">
-            <p className="text-3xl opacity-35">
-                Dashboard
-            </p>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-black dark:text-white">
+           Dashboard Home
         </div>
     );
 }

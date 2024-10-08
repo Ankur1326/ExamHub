@@ -27,7 +27,7 @@ const QuestionTypesPage = () => {
     const [questionTypeId, setQuestionTypeId] = useState<string>("")
 
     useEffect(() => {
-        dispatch(fetchQuestionTypes({ isActive : null}));
+        dispatch(fetchQuestionTypes({ isActive: null }));
     }, [dispatch]);
 
     const handleAddAll = () => {
@@ -107,27 +107,27 @@ const QuestionTypesPage = () => {
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="container mx-auto">
-                <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="bg-white dark:bg-bg_secondary p-6 rounded-lg shadow-md">
                     <h2 className="text-lg font-semibold mb-4">Question Types</h2>
                     <div className="overflow-x-auto">
-                        <table className="min-w-full bg-white border border-gray-200">
+                        <table className="min-w-full bg-white border border-gray-200 dark:border-border_secondary">
                             <TableLabelHeader headings={["#", "Name", "Description", "Default Time", "Default Mark", "Status", "Actions"]} />
                             <tbody>
                                 {status === 'succeeded' ? (
                                     questionTypes.length > 0 &&
                                     questionTypes.map((type: any, index: number) => (
-                                        <tr key={type._id} className={`cursor-default ${(index + 1) % 2 === 0 ? 'bg-gray-100' : ""} h-12`}>
-                                            <td className="px-4 py-2 border-t border-b text-sm border-gray-100 text-gray-700">{index + 1}</td>
-                                            <td className="py-2 px-4 text-sm border-t border-b border-r border-gray-100">{type.name}</td>
-                                            <td className="py-2 px-4 text-sm border-t border-b border-r border-gray-100 text-gray-700">{type.shortDescription}</td>
-                                            <td className="px-4 py-2 border-t border-b text-sm border-r border-gray-100 text-gray-700">{type.defaultTimeToSolve} sec</td>
-                                            <td className="px-4 py-2 border-t border-r border-gray-100 border-b text-sm text-gray-700">{type.defaultMarks}</td>
-                                            <td className="px-4 py-2 border-t border-b border-r border-gray-100 text-sm text-gray-700">
+                                        <tr key={type._id} className={`cursor-default ${(index + 1) % 2 === 0 ? 'bg-gray-100 dark:bg-bg_secondary' : " dark:bg-bg_primary"} h-12`}>
+                                            <td className="px-4 py-2 border-t border-b border-r text-sm border-gray-100 dark:border-border_secondary">{index + 1}</td>
+                                            <td className="py-2 px-4 text-sm border-t border-b border-r border-gray-100 dark:border-border_secondary">{type.name}</td>
+                                            <td className="py-2 px-4 text-sm border-t border-b border-r border-gray-100  dark:border-border_secondary">{type.shortDescription}</td>
+                                            <td className="px-4 py-2 border-t border-b text-sm border-r border-gray-100 dark:border-border_secondary">{type.defaultTimeToSolve} sec</td>
+                                            <td className="px-4 py-2 border-t border-r border-gray-100 border-b text-sm dark:border-border_secondary">{type.defaultMarks}</td>
+                                            <td className="px-4 py-2 border-t border-b border-r border-gray-100 text-sm dark:border-border_secondary">
                                                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${type.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                                                     {type.isActive ? 'Active' : 'Inactive'}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-2 border-t border-b text-sm text-gray-700 relative">
+                                            <td className="px-4 py-2 border-t border-b text-sm relative dark:border-border_secondary">
                                                 <button
                                                     className="text-gray-600 hover:text-gray-800 focus:outline-none"
                                                     onClick={() => handleDropdownToggle(index)}

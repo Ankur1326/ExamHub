@@ -80,7 +80,7 @@ const SearchDropdown = ({
 
     return (
         <div className="mb-4 relative" ref={dropdownRef}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-text_secondary">
                 {label}
                 {required && <span className="text-red-500 ml-1">*</span>}  {/* Required indicator */}
             </label>
@@ -98,7 +98,7 @@ const SearchDropdown = ({
                         setShowDropdown(true);
                     }}
                     placeholder={placeholder}
-                    className="border p-2 rounded-md w-full"
+                    className="border p-2 rounded-md w-full dark:border-border_secondary dark:hover:border-hover_border"
                 />
                 {
                     isLoading &&

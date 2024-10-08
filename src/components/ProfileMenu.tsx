@@ -82,7 +82,7 @@ export default function ProfileMenu() {
             {isOpen && (
                 <div
                     ref={menuRef}
-                    className="absolute right-0 mt-2 w-72 z-20 p-4 bg-white shadow-lg rounded-lg border border-gray-200"
+                    className="absolute right-0 mt-2 w-72 z-20 p-4 bg-white dark:bg-bg_secondary shadow-lg rounded-lg border border-gray-200 dark:border-0"
                 >
                     <div className="flex items-center gap-4">
                         {
@@ -96,15 +96,15 @@ export default function ProfileMenu() {
                                 )
                         }
                         <div>
-                            <p className="font-semibold text-gray-800 text-lg">{profile?.user?.username}</p>
-                            <p className="text-sm text-gray-500">{profile?.user?.email}</p>
+                            <p className="font-semibold text-gray-800 text-lg dark:text-text_primary">{profile?.user?.username}</p>
+                            <p className="text-sm text-gray-500 dark:text-text_secondary">{profile?.user?.email}</p>
                         </div>
                     </div>
                     <div className="mt-4">
-                        <Link href="/dashboard/profile">
+                        <Link href="/user/profile">
                             <div
                                 onClick={closeMenu}
-                                className="flex items-center space-x-3 hover:bg-gray-100 text-primary-700 px-3 py-2 rounded-lg cursor-pointer transition-all"
+                                className="flex items-center space-x-3 hover:bg-gray-100 dark:text-text_primary dark:hover:bg-bg_primary text-primary-700 px-3 py-2 rounded-lg cursor-pointer transition-all"
                             >
                                 <AiOutlineUser size={20} />
                                 <span className="font-medium">My Profile</span>

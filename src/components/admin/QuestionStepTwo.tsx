@@ -156,19 +156,19 @@ function QuestionStepTwo({ questionId, nextStep, prevStep }: QuestionStepTwoProp
 
                 {/* Active/Inactive Toggle */}
                 <div className="mt-4">
-                    <div className='flex items-center'>
-                        <label className="mr-2 text-sm font-semibold text-gray-700">Status:</label>
+                    <div className='flex items-center' >
+                        <label className="mr-2 text-sm font-semibold text-gray-700 dark:text-text_secondary"  >Status:</label>
                         <input
                             type="checkbox"
                             checked={isActive}
                             onChange={() => setIsActive(!isActive)}
                             className="form-checkbox h-4 w-4 text-indigo-600 cursor-pointer"
                         />
-                        <span className="ml-2 text-sm text-gray-700">
+                        <span className="ml-2 text-sm text-gray-700 dark:text-text_secondary">
                             {isActive ? "Active" : "Inactive"}
                         </span>
                     </div>
-                    <span className='text-xs'>
+                    <span className='text-xs dark:text-text_secondary'>
                         {isActive ? "(Shown Everywhere)" : "(Hidden Everywhere)"}
                     </span>
                 </div>
