@@ -202,11 +202,11 @@ export default function Page() {
     };
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 bg-white shadow-md dark:bg-bg_secondary">
             {/* Header Skill */}
             <SectionHeader title="Manage Topics" onClick={handleCreateNewItem} />
             {/* Skill Table */}
-            <table className="min-w-full bg-white dark:bg-bg_secondary shadow-md rounded-sm">
+            <table className="min-w-full border dark:text-text_secondary dark:border-border_secondary dark:bg-bg_secondary">
                 <TableLabelHeader headings={["Skill Name", "Skills", "Status", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
@@ -215,16 +215,16 @@ export default function Page() {
                     {!loadingPage ? (
                         topics.length > 0 ? (
                             topics.map((item: any) => (
-                                <tr key={item.id} className="border-t border-r border-gray-100 hover:bg-gray-50 dark:hover:bg-hover_secondary dark:bg-bg_secondary dark:border-border_secondary" style={{ height: '45px' }}>
-                                    <td className="py-4 px-6 text-sm border-r border-gray-200 text-gray-700 dark:border-border_secondary">
+                                <tr key={item.id} className="border-t border-gray-100 hover:bg-gray-50 dark:hover:bg-hover_secondary dark:bg-bg_secondary dark:border-border_secondary" style={{ height: '45px' }}>
+                                    <td className="py-4 px-6 text-sm border-r border-gray-200 dark:border-border_secondary">
                                         <div className="flex flex-col">
-                                            <span className="font-medium truncate dark:text-white">{item?.name}</span>
-                                            <span className="text-gray-400 text-xs dark:text-slate-500">{formatDate(item?.createdAt)}</span>
+                                            <span className="font-medium">{item?.name}</span>
+                                            <span className="text-gray-400 text-xs dark:text-slate-600">{formatDate(item?.createdAt)}</span>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-6 text-sm border-r border-gray-200 text-gray-700 dark:border-border_secondary">
+                                    <td className="py-4 px-6 text-sm border-r border-gray-200 dark:border-border_secondary">
                                         <div className="flex flex-col">
-                                            <span className="font-medium truncate dark:text-white">{item?.skillDetails?.name}</span>
+                                            <span className="font-medium ">{item?.skillDetails?.name}</span>
                                             <span className="text-gray-400 text-xs dark:text-slate-500">{formatDate(item?.skillDetails?.createdAt)}</span>
                                         </div>
                                     </td>

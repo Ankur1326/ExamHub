@@ -107,10 +107,10 @@ const QuestionTypesPage = () => {
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="container mx-auto">
-                <div className="bg-white dark:bg-bg_secondary p-6 rounded-lg shadow-md">
+                <div className="bg-white dark:bg-bg_secondary p-6 shadow-md">
                     <h2 className="text-lg font-semibold mb-4">Question Types</h2>
                     <div className="overflow-x-auto">
-                        <table className="min-w-full bg-white border border-gray-200 dark:border-border_secondary">
+                        <table className="min-w-full bg-white dark:text-text_secondary border border-gray-200 dark:border-border_secondary">
                             <TableLabelHeader headings={["#", "Name", "Description", "Default Time", "Default Mark", "Status", "Actions"]} />
                             <tbody>
                                 {status === 'succeeded' ? (

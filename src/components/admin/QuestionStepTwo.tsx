@@ -180,9 +180,9 @@ function QuestionStepTwo({ questionId, nextStep, prevStep }: QuestionStepTwoProp
                     {/* Submit Button */}
                     <button
                         type='submit'
-                        className="py-2 px-4 bg-[#1BC5BD] text-white rounded-sm font-semibold hover:bg-[#18b7af] transition duration-200"
+                        className="py-2 px-4 bg-blue_button hover:bg-blue_hover_button text-white rounded-sm font-semibold transition duration-200"
                     >
-                        Update
+                        Save & Next
                     </button>
                 </div>
             </form>

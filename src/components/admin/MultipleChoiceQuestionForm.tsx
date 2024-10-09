@@ -224,9 +224,9 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                     <button
                         // onClick={nextStep}
                         onClick={(e) => handleSave(e)}
-                        className="mt-4 py-2 px-4 bg-[#3699FF] text-white rounded-sm font-semibold hover:bg-[#3699FF] transition duration-200"
+                        className="mt-4 py-2 px-4 bg-blue_button hover:bg-blue_hover_button text-white rounded-sm font-semibold transition duration-200"
                     >
-                        Save Question
+                        Save & Next
                     </button>
                 </div>
             )}

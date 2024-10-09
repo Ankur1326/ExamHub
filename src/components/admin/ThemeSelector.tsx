@@ -45,7 +45,7 @@ const ThemeSelector = () => {
                 {/* Button to toggle dropdown */}
                 <button
                     onClick={handleDropdownToggle} // Toggle dropdown on button click
-                    className="text-2xl font-medium text-slate-400 hover:text-white"
+                    className="text-2xl font-medium text-slate-400 hover:text-gray-600 dark:hover:text-white"
                 >
                     {/* Theme Icon based on current theme */}
                     {theme === 'light' && <HiOutlineSun />}

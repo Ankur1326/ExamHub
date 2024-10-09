@@ -37,7 +37,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, width = 36, isOpen, 
                 {items.map((item) => (
                     <li
                         key={item.id}
-                        className="block px-3 py-1 text-gray-800 dark:text-text_primary hover:bg-gray-100 dark:hover:bg-hover_secondary cursor-pointer"
+                        className="block px-3 py-1 text-gray-800 dark:text-text_secondary hover:bg-gray-100 dark:hover:bg-hover_secondary cursor-pointer"
                         onClick={() => item.onClick(item.id)}
                     >
                         {item.label}

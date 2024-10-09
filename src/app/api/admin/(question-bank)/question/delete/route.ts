@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import Section from "@/model/Section";
-import Skill from "@/model/Skill";
+import Question from "@/model/Question";
 // import { getSession } from "next-auth/react";
 
 export async function DELETE(request: Request) {
@@ -27,41 +26,28 @@ export async function DELETE(request: Request) {
 
     try {
         const data = await request.json();
-        const sectionId = data._id
+        const questionId = data._id
 
-        if (!sectionId) {
+        if (!questionId) {
             return Response.json(
                 {
                     success: false,
-                    message: "Section ID is required."
+                    message: "Question ID is required."
                 },
                 {
                     status: 400
                 }
             );
         }
-        const associateSkills = await Skill.findOne({ sectionId })
-        if (associateSkills) {
-            return Response.json(
-                {
-                    success: false,
-                    message: "Unable to Delete Section . Remove all associate skills first",
-                },
-                {
-                    status: 400,
-                }
-            );
-        }
 
-        const result = await Section.deleteOne({ _id: sectionId });
-        console.log("result : ", result);
-
+        const result = await Question.deleteOne({ _id: questionId });
+        // console.log("result : ", result);
 
         if (result.deletedCount === 0) {
             return Response.json(
                 {
                     success: false,
-                    message: "Section is not found.",
+                    message: "Question is not found.",
                 },
                 {
                     status: 404,
@@ -72,7 +58,7 @@ export async function DELETE(request: Request) {
         return Response.json(
             {
                 success: true,
-                message: "Section deleted successfully.",
+                message: "Question deleted successfully.",
             },
             {
                 status: 200,
@@ -80,11 +66,11 @@ export async function DELETE(request: Request) {
         );
 
     } catch (error) {
-        console.log("Error while deleting Section : ", error);
+        console.log("Error while deleting Question : ", error);
         return Response.json(
             {
                 success: false,
-                message: "Internal server error while Section",
+                message: "Internal server error while Question",
                 error
             },
             {

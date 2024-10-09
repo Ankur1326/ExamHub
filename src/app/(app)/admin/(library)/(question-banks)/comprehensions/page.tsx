@@ -190,12 +190,12 @@ export default function Page() {
     ];
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 bg-white shadow-md dark:bg-bg_secondary">
             {/* Header Section */}
             <SectionHeader title="Manage Comprehensions" onClick={handleCreateNewComprehension} />
 
             {/* items Table */}
-            <table className="min-w-full bg-white shadow-md rounded-sm dark:bg-bg_secondary">
+            <table className="min-w-full dark:text-text_secondary rounded-sm border dark:border-border_secondary dark:bg-bg_secondary">
                 <TableLabelHeader headings={["Title", "body", "Status", "Created at", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
@@ -203,7 +203,7 @@ export default function Page() {
                     {!loadingPage ? (
                         comprehensions.length > 0 ? (
                             comprehensions.map((item: any) => (
-                                <tr key={item._id} className="border-t border-r border-gray-100 hover:bg-gray-50 dark:border-border_secondary dark:hover:bg-hover_secondary" style={{ height: '45px' }}>
+                                <tr key={item._id} className="border-t border-gray-100 hover:bg-gray-50 dark:border-border_secondary dark:hover:bg-hover_secondary" style={{ height: '45px' }}>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary">{item?.title}</td>
                                     <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         {/* Render HTML content from the question field */}

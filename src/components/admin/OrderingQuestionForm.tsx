@@ -118,7 +118,7 @@ const OrderingQuestionForm: React.FC<OrderingQuestionFormProps> = ({
                 <div className="space-y-6 flex flex-col items-end w-full md:w-2/3">
                     {/* Question */}
                     <div className="w-full">
-                        <label className="text-sm font-semibold text-gray-700">Question</label>
+                        <label className="text-sm font-semibold text-gray-700 dark:text-slate-400">Question</label>
                         <CustomCKEditor content={question} setContent={setQuestion} />
                         {
                             !question && formSubmitted &&
@@ -137,7 +137,7 @@ const OrderingQuestionForm: React.FC<OrderingQuestionFormProps> = ({
                                 </div>
 
                                 {/* CKEditor for sequence Text */}
-                                <div className={`rounded-md overflow-hidden border-2`}>
+                                <div className={`rounded-md overflow-hidden`}>
                                     <CustomCKEditor
                                         content={sequence}
                                         setContent={(value) => handleSequenceChange(index, value)}
@@ -171,9 +171,9 @@ const OrderingQuestionForm: React.FC<OrderingQuestionFormProps> = ({
                     {/* Save Button */}
                     <button
                         onClick={(e) => handleSave(e)}
-                        className="mt-4 py-2 px-4 bg-[#3699FF] text-white rounded-sm font-semibold hover:bg-[#3699FF] transition duration-200"
+                        className="mt-4 py-2 px-4 bg-blue_button hover:bg-blue_hover_button text-white rounded-sm font-semibold transition duration-200"
                     >
-                        Save Question
+                        Save & Next
                     </button>
                 </div>
             )}

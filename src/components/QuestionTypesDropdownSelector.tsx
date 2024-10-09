@@ -23,7 +23,7 @@ const QuestionTypesDropdownSelector: React.FC<QuestionTypesDropdownSelectorProps
             className="border border-gray-300 text-xs rounded-md px-2 py-1 dark:border-border dark:hover:border-hover_border"
             style={{ width: width ? `${width}px` : 'auto' }}
         >
-            <option value="">Select Q Type</option>
+            <option value="">All</option>
             <option value="Multiple Choice Single Answer">Multiple Choice Single Answer</option>
             <option value="Multiple Choice Multiple Answers">Multiple Choice Multiple Answers</option>
             <option value="True or False">True or False</option>

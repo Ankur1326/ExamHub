@@ -12,7 +12,6 @@ import dynamic from 'next/dynamic';
 // import CustomCKEditor from '../CustomCKEditor';
 const CustomCKEditor = dynamic(() => import("@/components/CustomCKEditor").then((module) => module.default), { ssr: false })
 
-
 interface TrueFalseQuestionFormProps {
     currentStep: number;
     nextStep: () => void;
@@ -94,7 +93,7 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
                 <div className="space-y-6 flex flex-col items-end w-full md:w-2/3">
                     {/* Question */}
                     <div className="w-full">
-                        <label className="text-sm font-semibold text-gray-700">Question</label>
+                        <label className="text-sm font-semibold text-gray-700 dark:text-slate-400">Question</label>
                         <CustomCKEditor content={question} setContent={setQuestion} />
                         {!question && formSubmitted && <FormErrorMessage message="Question is required" />}
                     </div>
@@ -115,7 +114,7 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
                                 className="flex flex-col gap-4 cursor-pointer"
                                 onClick={() => handleAnswerSelect(true)}
                             >
-                                <span className={`${trueFalseAnswer === true ? 'text-green-500' : 'text-gray-700'} text-sm font-semibold`}>
+                                <span className={`${trueFalseAnswer === true ? 'text-green-500' : 'text-gray-700 dark:text-slate-400'} text-sm font-semibold`}>
                                     This answer is correct
                                 </span>
                                 <input
@@ -123,7 +122,7 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
                                     value="True"
                                     readOnly
                                     className={`border px-4 py-2 rounded-md w-full
-                                         ${trueFalseAnswer === true ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-700'}`}
+                                         ${trueFalseAnswer === true ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-700 dark:text-slate-400 dark:border-border_secondary'}`}
                                 />
                             </div>
                         </div>
@@ -141,15 +140,15 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
                                 className="flex flex-col gap-4 cursor-pointer"
                                 onClick={() => handleAnswerSelect(false)}
                             >
-                                <span className={`${trueFalseAnswer === false ? 'text-green-500' : 'text-gray-700'} text-sm font-semibold`}>
+                                <span className={`${trueFalseAnswer === false ? 'text-green-500' : 'text-gray-700 dark:text-slate-400'} text-sm font-semibold`}>
                                     This answer is correct
                                 </span>
                                 <input
                                     type="text"
                                     value="False"
                                     readOnly
-                                    className={`border px-4 py-2 rounded-md w-full
-                                        ${trueFalseAnswer === false ? 'border-green-500 text-green-500' : 'border-gray-300 text-gray-700'}`}
+                                    className={`border px-4 py-2 rounded-md w-full 
+                                        ${trueFalseAnswer === false ? 'border-green-500 text-green-500' : 'border-gray-300 dark:border-border_secondary text-gray-700 dark:text-slate-400'}`}
                                 />
                             </div>
                         </div>
@@ -157,9 +156,9 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
                     {/* Save Button */}
                     <button
                         onClick={(e) => handleSave(e)}
-                        className="mt-4 py-2 px-4 bg-[#3699FF] text-white rounded-sm font-semibold hover:bg-[#3699FF] transition duration-200"
+                        className="mt-4 py-2 px-4 bg-blue_button hover:bg-blue_hover_button text-white rounded-sm font-semibold transition duration-200"
                     >
-                        Save Question
+                        Save & Next
                     </button>
                 </div>
             )}

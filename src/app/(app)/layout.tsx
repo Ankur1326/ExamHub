@@ -24,7 +24,7 @@ export default function RootLayout({ children }: any) {
       <NextThemesProvider attribute="class">
         <Provider store={store}>
           <div className="flex-1 ml-0 md:ml-64">
-            <header className="flex justify-between h-16 bg-[#181920] dark:border-b dark:border-border_secondary items-center fixed top-0 left-0 right-0 z-10 shadow-sm">
+            <header className="flex justify-between h-16 bg-white dark:bg-[#181920] dark:border-b dark:border-border_secondary items-center fixed top-0 left-0 right-0 z-10 shadow-sm">
               <button
                 className="text-2xl md:hidden"
                 onClick={toggleSidebar}

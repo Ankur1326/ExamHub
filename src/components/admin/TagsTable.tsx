@@ -177,11 +177,11 @@ export default function TagsTable() {
     ];
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 bg-white shadow-md dark:bg-bg_secondary">
             {/* Header Section */}
             <SectionHeader title="Manage Tags" onClick={handleCreateNewTag} />
             {/* Tags Table */}
-            <table className="min-w-full bg-white dark:bg-bg_secondary shadow-md rounded-sm">
+            <table className="min-w-full border dark:border-border_secondary dark:bg-bg_secondary">
                 <TableLabelHeader headings={["Section Name", "Status", "Created at", "Actions"]} />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
@@ -189,7 +189,7 @@ export default function TagsTable() {
                     {!loadingPage ? (
                         tags.length > 0 ? (
                             tags.map((tag: any) => (
-                                <tr key={tag?._id} className="border-t border-r border-gray-100 hover:bg-gray-50 dark:border-border_secondary dark:bg-bg_secondary dark:hover:bg-hover_secondary" style={{ height: '45px' }}>
+                                <tr key={tag?._id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-border_secondary dark:bg-bg_secondary dark:hover:bg-hover_secondary" style={{ height: '45px' }}>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary ">{tag?.name}</td>
                                     <td className="py-3 px-4 text-sm border-r border-gray-100 dark:border-border_secondary">
                                         <span className={`px-2 py-1 rounded-sm text-xs font-medium ${tag?.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>

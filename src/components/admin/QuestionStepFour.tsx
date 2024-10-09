@@ -229,10 +229,10 @@ function QuestionStepFour({ questionId, nextStep, prevStep }: QuestionStepThreeP
                     Back
                 </div>
                 <button
-                    className="px-6 py-2 bg-[#1BC5BD] text-white rounded-sm hover:bg-[#18b7af]"
+                    className="px-6 py-2 bg-blue_button hover:bg-blue_hover_button text-white rounded-sm"
                     onClick={handleUpdate}
                 >
-                    Update
+                    Save
                 </button>
             </div>
         </div>

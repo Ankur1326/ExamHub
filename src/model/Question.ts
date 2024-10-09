@@ -43,7 +43,7 @@ interface IQuestion extends Document {
     options?: string[]; // Optional for non-MCQ types
     correctOptions?: number[]; // Can hold single or multiple correct options
     pairs?: { left: string, right: string }[]; // For "Match the Following"
-    sequence?: string[]; // For "Ordering/Sequence"
+    sequences?: string[]; // For "Ordering/Sequence"
     trueFalseAnswer?: boolean; // For True/False
     shortAnswer?: number; // For Short Answer
     fillInTheBlanks?: string[]; // For Fill in the Blanks
@@ -52,9 +52,9 @@ interface IQuestion extends Document {
     skillId?: Types.ObjectId;
     topicId?: Types.ObjectId
     tags?: Types.ObjectId[] | ITag[];
-    difficultyLevel: DifficultyLevel;
-    defaultMarks: number;
-    defaultTimeToSolve: number; // in seconds
+    difficultyLevel?: DifficultyLevel;
+    defaultMarks?: number;
+    defaultTimeToSolve?: number; // in seconds
     isActive: boolean;
     // step3
     solution: string;
@@ -115,7 +115,7 @@ const QuestionSchema = new Schema<IQuestion>({
         //     return this.questionType === QuestionType.MATCH_FOLLOWING;
         // },
     },
-    sequence: {
+    sequences: {
         type: [String],
         // required: function () {
         //     return this.questionType === QuestionType.SEQUENCE;

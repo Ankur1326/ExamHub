@@ -11,7 +11,6 @@ function Navbar() {
 
     return (
         <nav className="text-black flex gap-3 items-center">
-                <ThemeSelector />
             <div className="relative flex items-center">
                 <div className="h-1 w-full bg-gradient-to-r from-blue-400 to-blue-800 animate-pulse"></div>
                 {isLoading && (
@@ -21,6 +20,7 @@ function Navbar() {
                     </div>
                 )}
             </div>
+            <ThemeSelector />
             <ProfileMenu />
         </nav>
     )

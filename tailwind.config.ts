@@ -21,8 +21,8 @@ const config: Config = {
         bg_primary: "#000",
         bg_secondary: "#181920",
 
-        text_primary: "#fff",
-        text_secondary: "#636674",
+        text_primary: "#E4E6EF",
+        text_secondary: "#7E8299",
         text_red: "#DB1430",
         text_hover_red: "",
         
@@ -30,7 +30,7 @@ const config: Config = {
         hover_border: "#5a5a5a",
 
         border_primary: "#424242",
-        border_secondary: "#393939",
+        border_secondary: "#343434",
 
         hover_primary: "#424242",
         hover_secondary: "#282a30",

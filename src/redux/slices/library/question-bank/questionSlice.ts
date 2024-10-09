@@ -122,6 +122,22 @@ export const fetchQuestions = createAsyncThunk<
     }
 );
 
+export const deleteQuestion = createAsyncThunk(
+    'question/deleteQuestion',
+    async (_id: string, { dispatch, rejectWithValue }) => {
+        dispatch(setLoading(true))
+        try {
+            await axios.delete(`/api/admin/question/delete`, { data: { _id } });
+            return { _id };
+        } catch (error: any) {
+            console.error(error.response?.data?.message || "Failed to delete question");
+            return handleError(error, rejectWithValue);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+)
+
 const questionSlice = createSlice({
     name: 'question',
     initialState,
@@ -162,7 +178,13 @@ const questionSlice = createSlice({
             .addCase(fetchQuestions.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload?.message || 'Failed to fetch questions';
-            });
+            })
+            .addCase(deleteQuestion.fulfilled, (state, action: PayloadAction<{ _id: string }>) => {
+                state.questions = state.questions.filter(que => que._id !== action.payload._id)
+            })
+            .addCase(deleteQuestion.rejected, (state, action) => {
+                state.error = action.error.message || "Failed to delete question"
+            })
     },
 });
 
