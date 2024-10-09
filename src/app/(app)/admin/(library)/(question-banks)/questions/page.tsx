@@ -167,7 +167,7 @@ export default function Page() {
     };
 
     const filterFields = [
-        <span></span>,
+        <span key=""></span>,
         <SearchBar
             key="code"
             filterQuery={filterQuery}
