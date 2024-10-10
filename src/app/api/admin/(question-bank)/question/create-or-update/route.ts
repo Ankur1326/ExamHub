@@ -36,7 +36,6 @@ export async function POST(request: Request) {
             questionType,
             question,
             options,
-            correctOptions,
             pairs,
             sequences,
             trueFalseAnswer,
@@ -71,7 +70,6 @@ export async function POST(request: Request) {
             questionType,
             question,
             options,
-            correctOptions,
             pairs,
             sequences,
             trueFalseAnswer,
@@ -122,7 +120,6 @@ export async function POST(request: Request) {
                         questionType,
                         question,
                         options,
-                        correctOptions,
                         pairs,
                         sequences,
                         trueFalseAnswer,
@@ -174,7 +171,6 @@ export async function POST(request: Request) {
                     questionType,
                     question,
                     options,
-                    correctOptions,
                     pairs,
                     sequences,
                     trueFalseAnswer,
@@ -198,7 +194,7 @@ export async function POST(request: Request) {
 
         // Step 2: Update question with skill, topic, tags, etc.
         if (step === 2) {
-            console.log(step, questionId, skillName, difficultyLevel, defaultMarks, defaultTimeToSolve, topicName, tagNames);
+            // console.log(step, questionId, skillName, difficultyLevel, defaultMarks, defaultTimeToSolve, topicName, tagNames);
 
             if (!questionId || !skillName || !difficultyLevel || !defaultMarks || !defaultTimeToSolve) {
                 return Response.json(
@@ -221,8 +217,7 @@ export async function POST(request: Request) {
             if (topicName) {
                 topic = await Topic.findOne({ name: topicName });
             }
-
-            console.log("skill : ", skill);
+            // console.log("skill : ", skill);
 
             if (!skill) {
                 return Response.json(
@@ -244,7 +239,8 @@ export async function POST(request: Request) {
                 tags: tagIds,
                 difficultyLevel,
                 defaultMarks,
-                defaultTimeToSolve
+                defaultTimeToSolve,
+                isActive
             };
 
             // Conditionally add topicId if topic exists

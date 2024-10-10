@@ -288,7 +288,7 @@ export default function Page() {
                 handleNextPage={handleNextPage}
                 handleItemPerPageChange={handleItemsPerPageChange}
             />
-
+            
             <EditOrCreateNewModalWrapper
                 title={selectedTopic ? "Edit Skill" : "Create Skill"}
                 isVisible={isModalVisible}

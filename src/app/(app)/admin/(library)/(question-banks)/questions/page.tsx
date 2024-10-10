@@ -18,6 +18,7 @@ import QuestionTypesDropdownSelector from "@/components/QuestionTypesDropdownSel
 import { useRouter } from "next/navigation";
 import { BsDash } from "react-icons/bs";
 import { IoAddSharp } from "react-icons/io5";
+import { QuestionViewModal } from "@/components/QuesitonViewModal";
 
 type SearchQuery = {
     questionCode: string;
@@ -33,13 +34,14 @@ export default function Page() {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter()
     const { totalPages = 1, totalQuestions } = useSelector((state: RootState) => state.question);
-    const [selectedQuestion, setSelectedQuestion] = useState<any | null>(null);
     const [loadingPage, setLoadingPage] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [pagesCache, setPagesCache] = useState<Record<number, any[]>>({}); // Cache to store page data
     const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
     const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
+    const [isShowViewModal, setIsShowViewModal] = useState<boolean>(false)
+    const [selectedQuestionId, setSelectedQuestionId] = useState<string>('')
 
     const [filterQuery, setFilterQuery] = useState<SearchQuery>({
         questionCode: "",
@@ -76,7 +78,7 @@ export default function Page() {
                 } else {
                     console.error("Unexpected response format", response.payload);
                 }
-                console.log("response ::: ", response);
+                // console.log("response ::: ", response);
 
                 setLoadingPage(false);
             }
@@ -137,8 +139,21 @@ export default function Page() {
         }
     };
 
+    const handleView = async (questionId: string) => {
+        // Fetch the question details and open modal (handled in component state)
+        setIsShowViewModal(true)
+        setSelectedQuestionId(questionId)
+        setDropdownOpen(null)
+
+    };
+
+    const onClose = () => {
+        setIsShowViewModal(false)
+    }
+
     const menuItems = (item: any) => [
         // { id: item._id, label: item.isActive ? 'Deactivate' : 'Activate', onClick: () => onEdit(item) },
+        { id: item._id, label: 'View', onClick: () => handleView(item._id) }, // View button
         { id: item._id, label: 'Edit', onClick: () => router.push(`/admin/question/edit/${item._id}`) },
         { id: item._id, label: 'Delete', onClick: () => handleDelete(item._id) },
     ];
@@ -226,7 +241,7 @@ export default function Page() {
         <div className="container mx-auto p-3 dark:bg-bg_secondary bg-white shadow-md">
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-600 dark:text-text_secondary">Manage Questions</h2>
+                <h2 className="text-xl font-bold text-gray-600 dark:text-text_secondary">Manage Questions</h2>
                 <div className="flex gap-3">
                     {selectedQuestions.length > 0 && (
                         <div className="flex items-center gap-3">
@@ -319,7 +334,7 @@ export default function Page() {
                                         {item?.topic ? item?.topic : <BsDash />}
                                     </td>
                                     <td className="py-3 px-3 text-sm  border-gray-100 dark:border-border_secondary" >
-                                        <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
+                                        <span className={`px-2 py-1 rounded-sm text-xs font-medium ${item.isActive ? "bg-green-100 text-green-500 dark:bg-green-900 dark:text-green-300" : "bg-red-100 text-red-500 dark:bg-red-900 dark:text-red-300"}`}>
                                             {item.isActive ? "Active" : "Inactive"}
                                         </span>
                                     </td>
@@ -372,6 +387,7 @@ export default function Page() {
                 handleNextPage={handleNextPage}
                 handleItemPerPageChange={handleItemsPerPageChange}
             />
+            <QuestionViewModal onClose={onClose} size="very_large" isVisible={isShowViewModal} questionId={selectedQuestionId} title="Question Details" />
         </div>
     );
 }
