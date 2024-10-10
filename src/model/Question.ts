@@ -40,8 +40,7 @@ interface IQuestion extends Document {
     questionCode: string;
     questionType: QuestionType;
     question: string;
-    options?: string[]; // Optional for non-MCQ types
-    correctOptions?: number[]; // Can hold single or multiple correct options
+    options?: { text: string, isCorrect: boolean }[]; // Optional for non-MCQ types
     pairs?: { left: string, right: string }[]; // For "Match the Following"
     sequences?: string[]; // For "Ordering/Sequence"
     trueFalseAnswer?: boolean; // For True/False
@@ -88,22 +87,9 @@ const QuestionSchema = new Schema<IQuestion>({
         trim: true,
     },
     options: {
-        type: [String],
+        type: [{ text: String, isCorrect: Boolean }]
         // required: function () {
         //     return this.questionType === QuestionType.MCQ_SINGLE || this.questionType === QuestionType.MCQ_MULTIPLE;
-        // },
-    },
-    correctOptions: {
-        type: [Number],
-        // required: function () {
-        //     return this.questionType === QuestionType.MCQ_SINGLE || this.questionType === QuestionType.MCQ_MULTIPLE;
-        // },
-        // validate: {
-        //     validator: function (correctOptions: number[]) {
-        //         // Check if options exist and if correctOptions indexes are valid
-        //         return this.options?.every((option, index) => correctOptions.every(co => co >= 0 && co < index)) ?? false;
-        //     },
-        //     message: 'Correct options must correspond to valid option indices',
         // },
     },
     pairs: {

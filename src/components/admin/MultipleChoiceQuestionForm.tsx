@@ -31,8 +31,10 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
 }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [question, setQuestion] = useState<string>('');
-    const [options, setOptions] = useState<string[]>(['', '']);
-    const [correctOptions, setCorrectOptions] = useState<number[]>([]);
+    const [options, setOptions] = useState<{text:string, isCorrect: boolean}[]>([
+        { text: '', isCorrect: false },
+        { text: '', isCorrect: false },
+    ]);
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
     const [optionErrors, setOptionErrors] = useState<boolean[]>(new Array(options.length).fill(false));
     const [currentQuestionId, setCurrentQuestionId] = useState<string>("");
@@ -47,9 +49,8 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                     setQuestion(response.data.data.question)
                     setOptions(response.data.data.options && response.data.data.options.length > 0
                         ? response.data.data.options
-                        : ['', '']
+                        : [{ option: '', isCorrect: false }, { option: '', isCorrect: false }]
                     );
-                    setCorrectOptions(response.data.data.correctOptions || []);
                     setCurrentQuestionId(response.data.data?._id || null);
                 } catch (error) {
                     console.error('Failed to fetch question data:', error);
@@ -62,7 +63,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
     // Function to handle option change
     const handleOptionChange = (index: number, value: string) => {
         const updatedOptions = [...options];
-        updatedOptions[index] = value;
+        updatedOptions[index].text = value;
         setOptions(updatedOptions);
         setOptionErrors((prev) => {
             const newErrors = [...prev];
@@ -71,53 +72,47 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
         });
     };
 
+    // Handle setting the correct option
+    const handleCorrectOptionChange = (index: number) => {
+        if (questionType === 'single') {
+            setOptions((prev) =>
+                prev.map((opt, i) => ({ ...opt, isCorrect: i === index })) // Only one option can be correct
+            );
+        } else {
+            setOptions((prev) =>
+                prev.map((opt, i) => i === index ? { ...opt, isCorrect: !opt.isCorrect } : opt) // Toggle for multiple correct answers
+            );
+        }
+    };
+
     // Function to add a new option
     const addOption = () => {
-        setOptions([...options, '']);
+        setOptions([...options, { text: '', isCorrect: false }]);
         setOptionErrors((prev) => [...prev, false]);
     };
 
     // Function to remove an option
     const removeOption = (index: number) => {
+        // Use the filter method to create a new array without the removed option
         const updatedOptions = options.filter((_, i) => i !== index);
         setOptions(updatedOptions);
-        setOptionErrors((prev) => prev.filter((_, i) => i !== index)); // Remove corresponding error state
-
-        // Update the correctOptions to reflect new indexes
-        setCorrectOptions((prev) =>
-            prev
-                .filter((opt) => opt !== index) // Remove the option if it was correct
-                .map((opt) => (opt > index ? opt - 1 : opt)) // Adjust indexes of the remaining options
-        );
-    };
-
-
-    // Handle setting the correct options
-    const handleCorrectOptionChange = (index: number) => {
-        if (questionType === 'single') {
-            setCorrectOptions([index]);  // Single correct option for "Multiple Choice Single Answer"
-        } else {
-            // Toggle correct option for "Multiple Choice Multiple Answer"
-            setCorrectOptions(prev =>
-                prev.includes(index)
-                    ? prev.filter(opt => opt !== index) // Remove if already selected
-                    : [...prev, index]  // Add if not selected
-            );
-        }
+        const updatedOptionErrors = optionErrors.filter((_, i) => i !== index);
+        setOptionErrors(updatedOptionErrors);
     };
 
     const handleSave = async (e: any) => {
         e.preventDefault()
         setFormSubmitted(true)
 
-        const newOptionErrors = options.map(option => !option); // Validate all options
+        const newOptionErrors = options.map(option => !option.text); // Validate all options
         setOptionErrors(newOptionErrors);
 
         if (newOptionErrors.some(error => error)) {
             return; // Prevent submission if there are errors
         }
-        if (correctOptions.length === 0) {
-            toast.error("Please specify correct answer(s)")
+
+        if (options.every(opt => !opt.isCorrect)) {
+            toast.error("Please specify at least one correct option");
             return;
         }
 
@@ -125,17 +120,18 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
             questionType: questionType === 'single' ? 'Multiple Choice Single Answer' : 'Multiple Choice Multiple Answers',
             question: question,
             options: options,
-            correctOptions: correctOptions
         }
 
         console.log(newQuestion);
 
         const resultAction = await dispatch(createOrUpdateQuestion({ step: 1, data: newQuestion, questionId: currentQuestionId }));
+        console.log("resultAction : ", resultAction);
 
         if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
             // If the action was fulfilled, go to the next step
+            
             if (!currentQuestionId) {
-                setCurrentQuestionId(resultAction.payload.questionId);
+                setCurrentQuestionId(resultAction?.payload?.questionId);
             }
             nextStep();
         } else {
@@ -147,71 +143,58 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
 
     return (
         <>
-            {/* Step 1: Add Question */}
             {currentStep === 1 && (
                 <div className="space-y-6 flex flex-col items-end w-full md:w-2/3">
-                    {/* Question */}
                     <div className="w-full">
                         <label className="text-sm font-semibold text-gray-700 dark:text-text_primary">Question</label>
                         <CustomCKEditor content={question} setContent={setQuestion} />
-                        {
-                            !question && formSubmitted &&
-                            <FormErrorMessage message="Question is required" />
-                        }
+                        {!question && formSubmitted && <FormErrorMessage message="Question is required" />}
                     </div>
 
-                    {/* Options */}
                     <div className="mt-6 w-full bg-slate-50 p-6">
+
                         {options.map((option, index) => (
                             <div key={index} className="mb-4 last:mb-0">
-                                {/* Option Label */}
                                 <div className="mb-2 text-sm font-semibold text-gray-700">
                                     {`Option ${index + 1}`}
                                 </div>
 
-                                {/* CKEditor for Option Text */}
-                                <div className={`rounded-md overflow-hidden border-2 ${correctOptions.includes(index) ? 'border-green-400' : 'border-green-50'}`}>
+                                <div className={`rounded-md overflow-hidden border-2 ${option.isCorrect ? 'border-green-400' : 'border-green-50'}`}>
                                     <CustomCKEditor
-                                        content={option}
+                                        key={`editor-${index}-${option.text}`}
+                                        content={option.text}
                                         setContent={(value) => handleOptionChange(index, value)}
                                     />
-                                    {/* Correct Option and Remove Button */}
                                     <div className="flex justify-between items-center px-2 bg-white border border-t-0 border-gray-200">
-                                        {/* Correct Option Radio Button */}
                                         <div
                                             onClick={() => handleCorrectOptionChange(index)}
-                                            className="flex items-center space-x-2 py-1 cursor-pointer "
+                                            className="flex items-center space-x-2 py-1 cursor-pointer"
                                         >
                                             <div
-                                                className={`h-4 w-4 rounded border-2 cursor-pointer ${correctOptions.includes(index) ? 'bg-green-400 border-green-400' : 'border-gray-300'} flex items-center justify-center`}
+                                                className={`h-4 w-4 rounded border-2 cursor-pointer ${option.isCorrect ? 'bg-green-400 border-green-400' : 'border-gray-300'} flex items-center justify-center`}
                                             >
-                                                {correctOptions.includes(index) && (
+                                                {option.isCorrect && (
                                                     <svg className="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                         <polyline points="20 6 9 17 4 12" />
                                                     </svg>
                                                 )}
                                             </div>
-                                            <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${correctOptions.includes(index) ? 'text-green-500' : ''}`}>
+                                            <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${option.isCorrect ? 'text-green-500' : ''}`}>
                                                 {questionType === 'single' ? 'Set as correct answer' : 'Set as correct option'}
                                             </label>
                                         </div>
-
-                                        {/* Remove Option Button */}
-                                        {options.length > 2 && (
-                                            <span
-                                                onClick={() => removeOption(index)}
-                                                className='py-1 px-1 rounded-full hover:bg-gray-100 cursor-pointer text-gray-700'
-                                            >
-                                                <MdDeleteOutline size={22} />
-                                            </span>
-                                        )}
+                                        <span
+                                            onClick={() => removeOption(index)}
+                                            className='py-1 px-1 rounded-full hover:bg-gray-100 cursor-pointer text-gray-700'
+                                        >
+                                            <MdDeleteOutline size={22} />
+                                        </span>
                                     </div>
                                 </div>
                                 {optionErrors[index] && formSubmitted && <FormErrorMessage message="Option is required" />}
                             </div>
                         ))}
 
-                        {/* Add New Option Button */}
                         <button
                             onClick={addOption}
                             className="mt-6 w-full py-2 border border-dashed border-gray-600 text-black text-sm rounded-md hover:bg-gray-100 transition duration-200"
@@ -220,9 +203,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                         </button>
                     </div>
 
-                    {/* Next Button */}
                     <button
-                        // onClick={nextStep}
                         onClick={(e) => handleSave(e)}
                         className="mt-4 py-2 px-4 bg-blue_button hover:bg-blue_hover_button text-white rounded-sm font-semibold transition duration-200"
                     >
@@ -231,7 +212,6 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                 </div>
             )}
 
-            {/* Step 2: Skill Topic, Time Period, tags, default time and Default Marks */}
             {currentStep === 2 && (
                 <QuestionStepTwo
                     questionId={currentQuestionId}
@@ -240,7 +220,6 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                 />
             )}
 
-            {/* Step 3: Solution */}
             {currentStep === 3 && (
                 <QuestionStepThree
                     questionId={currentQuestionId}
@@ -249,7 +228,6 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                 />
             )}
 
-            {/* Step 4: Attachment */}
             {currentStep === 4 && (
                 <QuestionStepFour
                     questionId={currentQuestionId}

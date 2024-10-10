@@ -9,8 +9,7 @@ interface Question {
     _id?: string;
     questionType?: string;
     question?: string;
-    options?: string[];
-    correctOptions?: number[];
+    options?: {text:string, isCorrect: boolean}[];
     pairs?: {
         left: string;
         right: string;
