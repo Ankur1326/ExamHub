@@ -29,8 +29,10 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
 }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [question, setQuestion] = useState<string>('');
-    const [options, setOptions] = useState<string[]>(['', '']);
-    const [shortAnswer, setShortAnswer] = useState<number | null>(null); // Single correct option
+    const [options, setOptions] = useState<{ text: string, isCorrect: boolean }[]>([
+        { text: '', isCorrect: false },
+        { text: '', isCorrect: false },
+    ]);
     const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
     const [currentQuestionId, setCurrentQuestionId] = useState<string>("");
     const [optionErrors, setOptionErrors] = useState<boolean[]>(new Array(options.length).fill(false));
@@ -42,11 +44,11 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
                     const response = await axios.get(`/api/admin/question/get-one/`, {
                         params: { questionId }
                     });
-                    console.log(response.data.data);
-                    
                     setQuestion(response.data.data?.question);
-                    setShortAnswer(Number(response.data.data?.shortAnswer));
-                    setOptions(response.data.data?.options || ['', '']);
+                    setOptions(response.data.data.options && response.data.data.options.length > 0
+                        ? response.data.data.options
+                        : [{ option: '', isCorrect: false }, { option: '', isCorrect: false }]
+                    );
                     setCurrentQuestionId(response.data.data?._id || null);
                 } catch (error) {
                     console.error('Failed to fetch question data:', error);
@@ -58,35 +60,32 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
 
     const handleOptionChange = (index: number, value: string) => {
         const updatedOptions = [...options];
-        updatedOptions[index] = value;
+        updatedOptions[index].text = value;
         setOptions(updatedOptions);
         setOptionErrors((prev) => {
             const newErrors = [...prev];
             newErrors[index] = !value;
             return newErrors;
-        })
+        });
     };
 
     const handleCorrectOptionChange = (index: number) => {
-        setShortAnswer(index); // Set the single correct option
+        setOptions((prev) =>
+            prev.map((opt, i) => ({ ...opt, isCorrect: i === index })) // Only one option can be correct
+        );
     };
 
     const addOption = () => {
-        setOptions([...options, '']);
+        setOptions([...options, { text: '', isCorrect: false }]);
         setOptionErrors((prev) => [...prev, false]);
     };
 
     const removeOption = (index: number) => {
+        // Use the filter method to create a new array without the removed option
         const updatedOptions = options.filter((_, i) => i !== index);
         setOptions(updatedOptions);
-        setOptionErrors((prev) => prev.filter((_, i) => i !== index)); // Remove corresponding error state
-
-        // If the correct option was removed, reset the shortAnswer state
-        if (shortAnswer === index) {
-            setShortAnswer(null);
-        } else if (shortAnswer !== null && shortAnswer > index) {
-            setShortAnswer(shortAnswer - 1); // Adjust the correct option index
-        }
+        const updatedOptionErrors = optionErrors.filter((_, i) => i !== index);
+        setOptionErrors(updatedOptionErrors);
     };
 
     const handleSave = async (e: any) => {
@@ -97,8 +96,16 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
             toast.error('Question is required');
             return;
         }
-        if (shortAnswer === null) {
-            toast.error('A correct answer is required');
+
+        const newOptionErrors = options.map(option => !option.text); // Validate all options
+        setOptionErrors(newOptionErrors);
+
+        if (newOptionErrors.some(error => error)) {
+            return; // Prevent submission if there are errors
+        }
+
+        if (options.every(opt => !opt.isCorrect)) {
+            toast.error("Please specify at least one correct option");
             return;
         }
 
@@ -106,7 +113,6 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
             questionType: 'Short Answer',
             question,
             options,
-            shortAnswer,
         };
 
         const resultAction = await dispatch(createOrUpdateQuestion({ step: 1, data: newQuestion, questionId: currentQuestionId }));
@@ -140,52 +146,47 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
                     <div className="mt-6 w-full bg-slate-50 p-6">
                         {options.map((option, index) => (
                             <div key={index} className="mb-4 last:mb-0">
-                                {/* Option Label */}
                                 <div className="mb-2 text-sm font-semibold text-gray-700">
                                     {`Option ${index + 1}`}
                                 </div>
 
-                                {/* Input Field for Option */}
-                                <div className={`overflow-hidden border ${shortAnswer === index ? 'border-green-400' : 'border-slate-50'}`}>
+                                <div className={`rounded-md overflow-hidden border-2 ${option.isCorrect ? 'border-green-400' : 'border-green-50'}`}>
                                     <input
                                         type="text"
-                                        value={option}
+                                        value={option.text}
                                         onChange={(e) => handleOptionChange(index, e.target.value)}
                                         className="w-full outline-0 focus:outline-0 border border-gray-200 focus:border-gray-400 hover:border-gray-400 px-3 py-2 "
                                     />
-                                    {/* Correct Option and Remove Button */}
                                     <div className="flex justify-between items-center px-2 bg-white border border-t-0 border-gray-200">
-                                        {/* Correct Option Radio Button */}
                                         <div
                                             onClick={() => handleCorrectOptionChange(index)}
-                                            className="flex items-center space-x-2 py-1 cursor-pointer "
+                                            className="flex items-center space-x-2 py-1 cursor-pointer"
                                         >
                                             <div
-                                                className={`h-4 w-4 rounded-full border-2 cursor-pointer ${shortAnswer === index ? 'bg-green-400 border-green-400' : 'border-gray-300'} flex items-center justify-center`}
+                                                className={`h-4 w-4 rounded border-2 cursor-pointer ${option.isCorrect ? 'bg-green-400 border-green-400' : 'border-gray-300'} flex items-center justify-center`}
                                             >
-                                                {shortAnswer === index && (
+                                                {option.isCorrect && (
                                                     <svg className="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                         <polyline points="20 6 9 17 4 12" />
                                                     </svg>
                                                 )}
                                             </div>
-                                            <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${shortAnswer === index ? 'text-green-500' : ''}`}>
-                                                Set as correct answer
+                                            <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${option.isCorrect ? 'text-green-500' : ''}`}>
+                                                Set as correct option
                                             </label>
                                         </div>
-
-                                        {/* Remove Option Button */}
-                                        {options.length > 2 && (
+                                        {
+                                            options.length > 2 &&
                                             <span
                                                 onClick={() => removeOption(index)}
                                                 className='py-1 px-1 rounded-full hover:bg-gray-100 cursor-pointer text-gray-700'
                                             >
                                                 <MdDeleteOutline size={22} />
                                             </span>
-                                        )}
+                                        }
                                     </div>
                                 </div>
-                                {!option && formSubmitted && <FormErrorMessage message="Option is required" />}
+                                {optionErrors[index] && formSubmitted && <FormErrorMessage message="Option is required" />}
                             </div>
                         ))}
 

@@ -31,7 +31,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
 }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [question, setQuestion] = useState<string>('');
-    const [options, setOptions] = useState<{text:string, isCorrect: boolean}[]>([
+    const [options, setOptions] = useState<{ text: string, isCorrect: boolean }[]>([
         { text: '', isCorrect: false },
         { text: '', isCorrect: false },
     ]);
@@ -122,14 +122,12 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
             options: options,
         }
 
-        console.log(newQuestion);
-
         const resultAction = await dispatch(createOrUpdateQuestion({ step: 1, data: newQuestion, questionId: currentQuestionId }));
-        console.log("resultAction : ", resultAction);
+        // console.log("resultAction : ", resultAction);
 
         if (resultAction && createOrUpdateQuestion.fulfilled.match(resultAction)) {
             // If the action was fulfilled, go to the next step
-            
+
             if (!currentQuestionId) {
                 setCurrentQuestionId(resultAction?.payload?.questionId);
             }
@@ -183,12 +181,15 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
                                                 {questionType === 'single' ? 'Set as correct answer' : 'Set as correct option'}
                                             </label>
                                         </div>
-                                        <span
-                                            onClick={() => removeOption(index)}
-                                            className='py-1 px-1 rounded-full hover:bg-gray-100 cursor-pointer text-gray-700'
-                                        >
-                                            <MdDeleteOutline size={22} />
-                                        </span>
+                                        {
+                                            options.length > 2 &&
+                                            <span
+                                                onClick={() => removeOption(index)}
+                                                className='py-1 px-1 rounded-full hover:bg-gray-100 cursor-pointer text-gray-700'
+                                            >
+                                                <MdDeleteOutline size={22} />
+                                            </span>
+                                        }
                                     </div>
                                 </div>
                                 {optionErrors[index] && formSubmitted && <FormErrorMessage message="Option is required" />}
