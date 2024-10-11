@@ -3,6 +3,7 @@ import { useTheme } from 'next-themes';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { FiMonitor } from 'react-icons/fi';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi2";
+import KtIcon from '../KtIcon';
 
 const ThemeSelector = () => {
     const { theme, setTheme } = useTheme();
@@ -48,9 +49,9 @@ const ThemeSelector = () => {
                     className="text-2xl font-medium text-slate-400 hover:text-gray-600 dark:hover:text-white"
                 >
                     {/* Theme Icon based on current theme */}
-                    {theme === 'light' && <HiOutlineSun />}
-                    {theme === 'dark' && <HiOutlineMoon />}
-                    {theme === 'system' && <FiMonitor />}
+                    {theme === 'light' && <KtIcon size={25} className="text-gray-400 hover:text-gray-600" filePath="/media/icons/duotune/general/gen060.svg" />}
+                    {theme === 'dark' && <KtIcon size={25} className="text-gray-400 hover:text-white" filePath="/media/icons/duotune/general/gen061.svg" />}
+                    {theme === 'system' &&  <KtIcon size={25} className="text-gray-600 dark:text-gray-300 dark:hover:text-white" filePath="/media/icons/duotune/electronics/elc004.svg" />}
                 </button>
             </div>
 

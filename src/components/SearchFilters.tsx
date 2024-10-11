@@ -1,4 +1,5 @@
 import { Filter } from "lucide-react";
+import KtIcon from "./KtIcon";
 
 interface SearchFiltersProps {
     filterFields: React.ReactNode[];  // Array of filter fields to display
@@ -17,15 +18,16 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({ filterFields, onSearch })
                         {filterField}
                     </th>
                 ))}
-                <th className="text-left py-2 text-xs font-medium text-gray-600">
+                <th className="text-left py-2 text-xs font-medium text-gray-600 dark:text-gray-300">
                     <button
                         onClick={onSearch}
-                        className="flex items-center gap-2 bg-[#EFF6FF] rounded-md border border-blue-200  table_input_border text-blue-500 px-2 py-[6px] text-xs hover:bg-blue_hover_button transition duration-200 ease-in-out hover:text-white"
+                        className="flex items-center gap-2 bg-[#EFF6FF] dark:bg-gray-800 rounded-md border border-blue-200 dark:border-gray-700 table_input_border text-blue-500 dark:text-blue-400 px-2 py-[6px] text-xs hover:bg-blue_hover_button dark:hover:bg-blue-600 transition duration-200 ease-in-out hover:text-white dark:hover:text-gray-100 shadow-sm"
                     >
-                        <Filter size={13} />
+                        <KtIcon size={18} className="" filePath="/media/icons/duotune/general/gen031.svg" />
                         <span>Filters</span>
                     </button>
                 </th>
+
             </tr>
         </thead>
     );

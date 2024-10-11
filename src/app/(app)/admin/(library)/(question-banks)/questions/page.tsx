@@ -1,24 +1,22 @@
 'use client'
 import { useCallback, useEffect, useState } from "react";
-import { FiCopy, FiMoreVertical } from "react-icons/fi";
+import { FiMoreVertical } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import Skeleton from 'react-loading-skeleton';
-import SectionHeader from "@/components/SectionHeader";
 import SearchBar from "@/components/SearchBar";
 import StatusFilter from "@/components/StatusFilter";
 import DropdownMenu from "@/components/DropDownMenu";
 import Pagination from "@/components/Pagination";
 import TableLabelHeader from "@/components/TableLabelHeader";
 import SearchFilters from "@/components/SearchFilters";
-import { formatDate } from "@/utility/dateFormate";
 import { deleteQuestion, fetchQuestions } from "@/redux/slices/library/question-bank/questionSlice";
 import toast from "react-hot-toast";
 import QuestionTypesDropdownSelector from "@/components/QuestionTypesDropdownSelector";
 import { useRouter } from "next/navigation";
 import { BsDash } from "react-icons/bs";
-import { IoAddSharp } from "react-icons/io5";
 import { QuestionViewModal } from "@/components/QuesitonViewModal";
+import KtIcon from "@/components/KtIcon";
 
 type SearchQuery = {
     questionCode: string;
@@ -248,17 +246,31 @@ export default function Page() {
                             <span className="text-xs font-medium ">{selectedQuestions.length} selected</span>
                             <button
                                 onClick={handleDeleteSelected}
-                                className="bg-[#F8285A] hover:bg-red-600 text-white text-sm px-4 py-2"
+                                className="flex gap-1 items-center bg-[#F8285A] hover:bg-red-600 text-white text-xs px-3 py-2 rounded-md"
                             >
-                                Delete Selected
+                                <KtIcon size={20} className="" filePath="/media/icons/duotune/general/gen027.svg" />
+                                <span>Delete Selected</span>
                             </button>
                         </div>
                     )}
                     <button
-                        onClick={() => router.push(`/admin/question/new`)}
-                        className="bg-blue_button text-white flex items-center gap-1 px-3 py-2 hover:bg-blue_hover_button transition duration-200 ease-in-out"
+                    onClick={() => toast(
+                        "Not developed, Coming soon!",
+                        {
+                          duration: 6000,
+                        }
+                      )}
+                        className="bg-[#E9F3FF] dark:bg-gray-800 text-blue-500 dark:text-blue-400 font-semibold hover:text-white dark:hover:text-gray-100 flex items-center gap-1 px-3 py-2 hover:bg-blue_hover_button dark:hover:bg-blue-600 transition duration-200 ease-in-out rounded-md"
                     >
-                        <IoAddSharp size={20} />
+                        <KtIcon size={20} className="" filePath="/media/icons/duotune/arrows/arr091.svg" />
+                        <span className="text-xs">Import</span>
+                    </button>
+
+                    <button
+                        onClick={() => router.push(`/admin/question/new`)}
+                        className="bg-blue_button dark:bg-blue-600 text-white flex items-center gap-1 px-3 py-2 hover:bg-blue_hover_button transition duration-200 ease-in-out rounded-md"
+                    >
+                        <KtIcon size={20} className="text-white" filePath="/media/icons/duotune/arrows/arr075.svg" />
                         <span className='text-xs'>Add Question</span>
                     </button>
                 </div>
@@ -309,7 +321,7 @@ export default function Page() {
                                             }
                                             }
                                         >
-                                            <FiCopy className="mr-1 dark:text-text_secondary" />
+                                            <KtIcon size={16} className="mr-1 text-white dark:text-text_secondary" filePath="/media/icons/duotune/general/gen054.svg" />
                                             <span className="dark:text-text_secondary">
                                                 {item?.questionCode}
                                             </span>
