@@ -18,7 +18,6 @@ import { BsDash } from "react-icons/bs";
 import { QuestionViewModal } from "@/components/QuesitonViewModal";
 import KtIcon from "@/components/KtIcon";
 import CopyButton from "@/components/CopyButton";
-import ImportModal from "@/components/ImportModal";
 
 type SearchQuery = {
     questionCode: string;
