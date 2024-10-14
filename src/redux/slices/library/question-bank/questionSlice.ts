@@ -31,7 +31,7 @@ interface Question {
     hint?: string;
     isActive?: boolean;
     // setp 4
-    enableQuestionAttachment?: boolean
+    enableQuestionAttachment?: boolean;
     attachmentType?: string;
     comprehensionPassageId?: string;
     selectedFormat?: string;
@@ -98,6 +98,32 @@ export const createOrUpdateQuestion = createAsyncThunk<
         }
     }
 );
+
+// export const bulkUploadQuestions = createAsyncThunk<
+//     any,
+//     Question[], // Expecting an array of questions
+//     { rejectValue: { message: string } }
+// >(
+//     'question/bulkUploadQuestions',
+//     async (questions, { dispatch, rejectWithValue }) => {
+//         try {
+//             dispatch(setLoading(true));
+
+//             // Make a POST request to bulk upload questions
+//             const response = await axios.post('/api/admin/question/bulk-upload', { questions });
+
+//             if (response.data.success) {
+//                 toast.success(response.data.message || 'Questions uploaded successfully');
+//             }
+//             return response.data;
+//         } catch (error: any) {
+//             return handleError(error, rejectWithValue);
+//         } finally {
+//             dispatch(setLoading(false));
+//         }
+//     }
+// );
+
 
 // Fetch questions with pagination
 export const fetchQuestions = createAsyncThunk<
@@ -184,6 +210,19 @@ const questionSlice = createSlice({
             .addCase(deleteQuestion.rejected, (state, action) => {
                 state.error = action.error.message || "Failed to delete question"
             })
+            // .addCase(bulkUploadQuestions.pending, (state) => {
+            //     state.loading = true;
+            //     state.error = null;
+            // })
+            // .addCase(bulkUploadQuestions.fulfilled, (state, action) => {
+            //     state.loading = false;
+            //     // Optionally update the state with the newly added questions
+            //     state.questions = [...state.questions, ...action.payload.questions];
+            // })
+            // .addCase(bulkUploadQuestions.rejected, (state, action) => {
+            //     state.loading = false;
+            //     state.error = action.payload?.message || 'Failed to upload questions';
+            // });
     },
 });
 

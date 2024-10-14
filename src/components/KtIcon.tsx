@@ -21,7 +21,7 @@ const KtIcon: React.FC<KtIconProps> = ({
                 src={filePath}
                 width={size}
                 height="auto"
-                title="React"
+                title=""
             />
         </div>
     );

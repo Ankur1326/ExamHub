@@ -24,13 +24,13 @@ const QuestionTypesDropdownSelector: React.FC<QuestionTypesDropdownSelectorProps
             style={{ width: width ? `${width}px` : 'auto' }}
         >
             <option value="">All</option>
-            <option value="Multiple Choice Single Answer">Multiple Choice Single Answer</option>
-            <option value="Multiple Choice Multiple Answers">Multiple Choice Multiple Answers</option>
-            <option value="True or False">True or False</option>
-            <option value="Short Answer">Short Answer</option>
-            <option value="Match the Following">Match the Following</option>
-            <option value="Ordering/Sequence">Ordering/Sequence</option>
-            <option value="Fill in the Blanks">Fill in the Blanks</option>
+            <option value="MSA">Multiple Choice Single Answer</option>
+            <option value="MMA">Multiple Choice Multiple Answers</option>
+            <option value="TOF">True or False</option>
+            <option value="SAQ">Short Answer</option>
+            <option value="MTF">Match the Following</option>
+            <option value="ORD">Ordering/Sequence</option>
+            <option value="FIB">Fill in the Blanks</option>
         </select>
     )
 }

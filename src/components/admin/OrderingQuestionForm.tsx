@@ -94,7 +94,7 @@ const OrderingQuestionForm: React.FC<OrderingQuestionFormProps> = ({
         }
 
         const newQuestion = {
-            questionType: 'Ordering/Sequence',
+            questionType: 'MTF',
             question,
             sequences
         };

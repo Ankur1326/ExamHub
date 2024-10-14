@@ -110,7 +110,7 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
         }
 
         const newQuestion = {
-            questionType: 'Short Answer',
+            questionType: 'SAQ',
             question,
             options,
         };
@@ -147,7 +147,7 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
                         {options.map((option, index) => (
                             <div key={index} className="mb-4 last:mb-0">
                                 <div className="mb-2 text-sm font-semibold text-gray-700">
-                                    {`Option ${index + 1}`}
+                                    {`Acceptable Answer ${index + 1}`}
                                 </div>
 
                                 <div className={`rounded-md overflow-hidden border-2 ${option.isCorrect ? 'border-green-400' : 'border-green-50'}`}>
@@ -172,7 +172,7 @@ const ShortAnswerQuestionForm: React.FC<ShortAnswerQuestionFormProps> = ({
                                                 )}
                                             </div>
                                             <label className={`ml-2 text-sm text-gray-700 cursor-pointer ${option.isCorrect ? 'text-green-500' : ''}`}>
-                                                Set as correct option
+                                                Exact Answer
                                             </label>
                                         </div>
                                         {

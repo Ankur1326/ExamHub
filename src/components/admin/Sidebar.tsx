@@ -91,6 +91,13 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             onClick={() => navigateTo('/admin/question/new')}
                         />
                         <ChildNavItem
+                            title="Import Questions"
+                            icon={<Dot />}
+                            route="/admin/import-questions"
+                            isActive={isActive('/admin/import-questions')}
+                            onClick={() => navigateTo('/admin/import-questions')}
+                        />
+                        <ChildNavItem
                             title="Comprehensions"
                             icon={<Dot />}
                             route="/admin/comprehensions"
@@ -213,7 +220,6 @@ const ExpandableSection = ({
 const ChildNavItem = ({
     title,
     icon,
-    route,
     isActive,
     onClick,
 }: {

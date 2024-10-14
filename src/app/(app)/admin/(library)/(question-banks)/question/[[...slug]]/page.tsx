@@ -1,7 +1,6 @@
 'use client';
 import MultipleChoiceQuestionForm from '@/components/admin/MultipleChoiceQuestionForm';
 import StepIndicator from '@/components/StepIndicator';
-import { fetchQuestions } from '@/redux/slices/library/question-bank/questionSlice';
 import { fetchQuestionTypes } from '@/redux/slices/library/question-bank/questionTypeSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import axios from 'axios';
@@ -70,112 +69,57 @@ function CreateOrEditPage({ params }: any) {
 
     const renderQuestionForm = useCallback(() => {
         if (!selectedTab) return <div>Select a valid question type</div>;
-        if (typeof selectedTab === "string") {
-            switch (selectedTab) {
-                case 'Multiple Choice Single Answer':
-                    return (
-                        <MultipleChoiceQuestionForm
-                            currentStep={currentStep}
-                            nextStep={handleNextStep}
-                            prevStep={handlePrevStep}
-                            questionType='single'
-                            questionId={questionId}
-                        />
-                    );
-                case 'Multiple Choice Multiple Answers':
-                    return <MultipleChoiceQuestionForm
+        switch (selectedTab) {
+            case 'MSA': // 'Multiple Choice Single Answer'
+                return (
+                    <MultipleChoiceQuestionForm
                         currentStep={currentStep}
                         nextStep={handleNextStep}
                         prevStep={handlePrevStep}
-                        questionType='multiple'
+                        questionType='single'
                         questionId={questionId}
                     />
-                case 'True or False':
-                    return <TrueFalseQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'Short Answer':
-                    return <ShortAnswerQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'Match the Following':
-                    return <MatchingQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'Ordering/Sequence':
-                    return <OrderingQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'fill-in-the-blanks':
-                    return <div>Fill in the Blanks Form</div>;
-                default:
-                    return <div>Select a valid question type</div>;
-            }
-        } else if (typeof selectedTab === 'object') {
-            switch (selectedTab?.code) {
-                case 'MSA':
-                    return (
-                        <MultipleChoiceQuestionForm
-                            currentStep={currentStep}
-                            nextStep={handleNextStep}
-                            prevStep={handlePrevStep}
-                            questionType='single'
-                            questionId={questionId}
-                        />
-                    );
-                case 'MMA':
-                    return <MultipleChoiceQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionType='multiple'
-                        questionId={questionId}
-                    />
-                case 'TOF':
-                    return <TrueFalseQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'SAQ':
-                    return <ShortAnswerQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'MTF':
-                    return <MatchingQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'ORD':
-                    return <OrderingQuestionForm
-                        currentStep={currentStep}
-                        nextStep={handleNextStep}
-                        prevStep={handlePrevStep}
-                        questionId={questionId}
-                    />
-                case 'fill-in-the-blanks':
-                    return <div>Fill in the Blanks Form</div>;
-                default:
-                    return <div>Select a valid question type</div>;
-            }
+                );
+            case 'MMA': // 'Multiple Choice Multiple Answers'
+                return <MultipleChoiceQuestionForm
+                    currentStep={currentStep}
+                    nextStep={handleNextStep}
+                    prevStep={handlePrevStep}
+                    questionType='multiple'
+                    questionId={questionId}
+                />
+            case 'TOF': // 'True or False'
+                return <TrueFalseQuestionForm
+                    currentStep={currentStep}
+                    nextStep={handleNextStep}
+                    prevStep={handlePrevStep}
+                    questionId={questionId}
+                />
+            case 'SAQ': // 'Short Answer'
+                return <ShortAnswerQuestionForm
+                    currentStep={currentStep}
+                    nextStep={handleNextStep}
+                    prevStep={handlePrevStep}
+                    questionId={questionId}
+                />
+            case 'MTF': // 'Match the Following'
+                return <MatchingQuestionForm
+                    currentStep={currentStep}
+                    nextStep={handleNextStep}
+                    prevStep={handlePrevStep}
+                    questionId={questionId}
+                />
+            case 'ORD': // 'Ordering/Sequence'
+                return <OrderingQuestionForm
+                    currentStep={currentStep}
+                    nextStep={handleNextStep}
+                    prevStep={handlePrevStep}
+                    questionId={questionId}
+                />
+            case 'FIB': // 'fill-in-the-blanks'
+                return <div>Fill in the Blanks Form</div>;
+            default:
+                return <div>Select a valid question type</div>;
         }
     }, [selectedTab, currentStep, handleNextStep, handlePrevStep, questionId]);
 
@@ -205,11 +149,11 @@ function CreateOrEditPage({ params }: any) {
                             {questionTypes.map((type) => (
                                 <div
                                     key={type.code}
-                                    onClick={() => setSelectedTab(type)}
-                                    className={`w-32 h-28 p-3 flex flex-col justify-center items-center border rounded-lg cursor-pointer transition-transform duration-300 group ${selectedTab === type ? 'border-gray-600 scale-105 shadow-sm' : 'border-gray-300 bg-gray-50 dark:bg-bg_secondary dark:border-border_secondary'
+                                    onClick={() => setSelectedTab(type.code)}
+                                    className={`w-32 h-28 p-3 flex flex-col justify-center items-center border rounded-lg cursor-pointer transition-transform duration-300 group ${selectedTab === type.code ? 'border-gray-600 scale-105 shadow-sm' : 'border-gray-300 bg-gray-50 dark:bg-bg_secondary dark:border-border_secondary'
                                         }`}
                                 >
-                                    <div className={`mb-2 ${selectedTab === type ? 'text-text_red' : 'text-gray-700 group-hover:text-text_red dark:text-text_secondary'}`}>
+                                    <div className={`mb-2 ${selectedTab === type.code ? 'text-text_red' : 'text-gray-700 group-hover:text-text_red dark:text-text_secondary'}`}>
                                         {
                                             (() => {
                                                 switch (type.code) {

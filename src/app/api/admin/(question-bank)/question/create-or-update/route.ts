@@ -1,5 +1,4 @@
 import dbConnect from "@/lib/dbConnect";
-import Compreshension from "@/model/Comprehension";
 import Question, { QuestionType } from "@/model/Question";
 import Skill from "@/model/Skill";
 import Tag from "@/model/Tag";

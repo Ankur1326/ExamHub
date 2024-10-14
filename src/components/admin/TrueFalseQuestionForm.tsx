@@ -67,7 +67,7 @@ const TrueFalseQuestionForm: React.FC<TrueFalseQuestionFormProps> = ({
         }
 
         const newQuestion = {
-            questionType: 'True or False',
+            questionType: 'TOF',
             question: question,
             trueFalseAnswer,
         };

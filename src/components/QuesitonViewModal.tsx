@@ -4,6 +4,7 @@ import ModalContainer from "@/components/ModalContainer";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CopyButton from "./CopyButton";
 
 interface QuestionViewModalProps {
     onClose: () => void;
@@ -174,20 +175,6 @@ const Section: React.FC<{ property: string, value: string | number }> = ({ prope
         <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">{property}:</span>
         <span className="text-sm text-gray-800 dark:text-gray-200">{value || 'N/A'}</span>
     </div>
-);
-
-// Copy Button for copying text
-const CopyButton: React.FC<{ text: string }> = ({ text }) => (
-    <button
-        className="bg-blue-600 text-white px-2 py-1 text-xs rounded flex items-center hover:bg-blue-700"
-        onClick={() => {
-            navigator.clipboard.writeText(text);
-            toast.success("Copied!");
-        }}
-    >
-        <FiCopy className="mr-1" />
-        {text}
-    </button>
 );
 
 // Badge for question status

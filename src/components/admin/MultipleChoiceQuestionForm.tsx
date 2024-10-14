@@ -117,7 +117,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
         }
 
         const newQuestion = {
-            questionType: questionType === 'single' ? 'Multiple Choice Single Answer' : 'Multiple Choice Multiple Answers',
+            questionType: questionType === 'single' ? 'MSA' : 'MMA',
             question: question,
             options: options,
         }

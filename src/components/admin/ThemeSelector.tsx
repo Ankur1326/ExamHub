@@ -57,7 +57,7 @@ const ThemeSelector = () => {
 
             {/* Dropdown options */}
             {isOpen && ( // Show dropdown only if isOpen is true
-                <div ref={menuRef} className="absolute right-0 z-10 mt-2 w-32 rounded-md shadow-lg bg-white dark:bg-bg_secondary ring-1 ring-black ring-opacity-5">
+                <div ref={menuRef} className="absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white dark:bg-bg_secondary ring-1 ring-black ring-opacity-5" style={{zIndex: 1000}}>
                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         <button
                             className={`flex items-center px-4 py-2 text-sm w-full dark:text-text_secondary ${theme === 'light' ? 'bg-gray-100 dark:bg-bg_primary' : ''} hover:bg-gray-100 dark:hover:bg-bg_primary`}

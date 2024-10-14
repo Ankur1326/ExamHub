@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 import { BsDash } from "react-icons/bs";
 import { QuestionViewModal } from "@/components/QuesitonViewModal";
 import KtIcon from "@/components/KtIcon";
+import CopyButton from "@/components/CopyButton";
+import ImportModal from "@/components/ImportModal";
 
 type SearchQuery = {
     questionCode: string;
@@ -40,6 +42,7 @@ export default function Page() {
     const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
     const [isShowViewModal, setIsShowViewModal] = useState<boolean>(false)
     const [selectedQuestionId, setSelectedQuestionId] = useState<string>('')
+    const [selectAll, setSelectAll] = useState<boolean>(false);
 
     const [filterQuery, setFilterQuery] = useState<SearchQuery>({
         questionCode: "",
@@ -164,16 +167,30 @@ export default function Page() {
         );
     };
 
+    const handleSelectAll = () => {
+        if (selectAll) {
+            setSelectedQuestions([])
+        } else {
+            const currentQuestionIds = questions.map(q => q._id)
+            setSelectedQuestions(currentQuestionIds);
+        }
+        setSelectAll(!selectAll)
+
+    }
+
     const handleDeleteSelected = async () => {
         try {
-            await Promise.all(selectedQuestions.map(id => dispatch(deleteQuestion(id))));
-            toast.success(`${selectedQuestions.length} questions deleted`);
-            setSelectedQuestions([]);
-            const updatedQuestions = questions.filter(q => !selectedQuestions.includes(q._id));
-            setPagesCache(prevCache => ({
-                ...prevCache,
-                [currentPage]: updatedQuestions,
-            }));
+            const response = await Promise.all(selectedQuestions.map(id => dispatch(deleteQuestion(id))));
+            if (response && response.length > 0) {
+                toast.success(`${selectedQuestions.length} questions deleted`);
+                setSelectedQuestions([]);
+                setSelectAll(false)
+                const updatedQuestions = questions.filter(q => !selectedQuestions.includes(q._id));
+                setPagesCache(prevCache => ({
+                    ...prevCache,
+                    [currentPage]: updatedQuestions,
+                }));
+            }
         } catch (error) {
             toast.error("Failed to delete selected questions");
         }
@@ -253,16 +270,12 @@ export default function Page() {
                             </button>
                         </div>
                     )}
+
                     <button
-                    onClick={() => toast(
-                        "Not developed, Coming soon!",
-                        {
-                          duration: 6000,
-                        }
-                      )}
+                        onClick={() => router.push(`/admin/import-questions`)}
                         className="bg-[#E9F3FF] dark:bg-gray-800 text-blue-500 dark:text-blue-400 font-semibold hover:text-white dark:hover:text-gray-100 flex items-center gap-1 px-3 py-2 hover:bg-blue_hover_button dark:hover:bg-blue-600 transition duration-200 ease-in-out rounded-md"
                     >
-                        <KtIcon size={20} className="" filePath="/media/icons/duotune/arrows/arr091.svg" />
+                        <KtIcon size={20} className="" filePath="/media/icons/duotune/arrows/arr078.svg" />
                         <span className="text-xs">Import</span>
                     </button>
 
@@ -276,10 +289,43 @@ export default function Page() {
                 </div>
             </div>
 
-
             {/* Question Table */}
             <table className="min-w-full border dark:border-[#2d2d2d] dark:text-text_secondary dark:bg-bg_secondary ">
-                <TableLabelHeader headings={['', "Code", "Question", "Type", "Section", "Skill", "Topic", "Status", "Actions"]} />
+                <TableLabelHeader headings={
+                    [
+                        <div
+                            className={`w-5 h-5 rounded-md flex items-center justify-center cursor-pointer transition-colors duration-300 ${selectAll ? 'bg-blue-500' : 'bg-gray-200 dark:bg-gray-700'} `}
+                            onClick={handleSelectAll}
+                        >
+                            {
+                                selectAll ?
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4 text-white"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M5 13l4 4L19 7"
+                                        />
+                                    </svg>
+                                    : ""
+                            }
+                        </div>,
+                        "Code",
+                        "Question",
+                        "Type",
+                        "Section",
+                        "Skill",
+                        "Topic",
+                        "Status",
+                        "Actions"
+                    ]
+                } />
                 {/* Search Filters */}
                 <SearchFilters filterFields={filterFields} onSearch={handleSearch} />
                 <tbody>
@@ -313,19 +359,7 @@ export default function Page() {
                                     </td>
 
                                     <td className="py-3 px-3 text-sm  border-gray-100 flex items-center dark:border-border_secondary">
-                                        <button
-                                            className="bg-[#3699FF] hover:bg-[#3291F0] dark:bg-gray-700 text-white px-2 py-1 text-xs rounded flex items-center focus:outline-none"
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(item?.questionCode)
-                                                toast.success("copied!")
-                                            }
-                                            }
-                                        >
-                                            <KtIcon size={16} className="mr-1 text-white dark:text-text_secondary" filePath="/media/icons/duotune/general/gen054.svg" />
-                                            <span className="dark:text-text_secondary">
-                                                {item?.questionCode}
-                                            </span>
-                                        </button>
+                                        <CopyButton text={item?.questionCode} />
                                     </td>
                                     <td className="py-3 px-3 text-sm  border-gray-100 dark:border-border_secondary">
                                         {/* Render HTML content from the question field */}
@@ -334,7 +368,25 @@ export default function Page() {
                                         />
                                     </td>
                                     <td className="py-3 px-3 text-sm  border-gray-100 dark:border-border_secondary">
-                                        {item?.questionType}
+                                        {
+                                            item?.questionType === 'MSA'
+                                                ? "Multiple Choice Single Answer"
+                                                : item?.questionType === 'MMA'
+                                                    ? 'Multiple Choice Multiple Answers'
+                                                    : item?.questionType === 'TOF'
+                                                        ? 'True or False'
+                                                        : item?.questionType === 'SAQ'
+                                                            ? 'Short Answer'
+                                                            : item?.questionType === 'MTF'
+                                                                ? 'Match the Following'
+                                                                : item?.questionType === 'MTF'
+                                                                    ? 'Match the Following'
+                                                                    : item?.questionType === 'ORD'
+                                                                        ? 'Ordering/Sequence'
+                                                                        : item?.questionType === 'FIB'
+                                                                            ? 'Fill in the Blanks' :
+                                                                            ""
+                                        }
                                     </td>
                                     <td className="py-3 px-3 text-sm border-gray-100 dark:border-border_secondary">
                                         {item?.section ? item?.section : <BsDash />}

@@ -95,7 +95,7 @@ const MatchingQuestionForm: React.FC<MatchingQuestionFormProps> = ({
         }
 
         const newQuestion = {
-            questionType: 'Match the Following',
+            questionType: 'MTF',
             question: question,
             pairs: pairs,
         };

@@ -36,7 +36,7 @@ const Pagination: React.FC<PaginationProps> = ({
             onChange={(e) => handleItemPerPageChange(e)}
             className="text-sm px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#716ACA] dark:bg-gray-800 dark:text-white"
           >
-            {[5, 10, 15].map(size => (
+            {[5, 20, 50, 100].map(size => (
               <option key={size} value={size} className="text-sm">
                 {size}
               </option>

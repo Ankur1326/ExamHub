@@ -6,11 +6,11 @@ interface ITag extends Document {
 }
 
 enum DifficultyLevel {
-    VERY_EASY = 'Very Easy',
-    EASY = 'Easy',
-    MEDIUM = 'Medium',
-    HARD = 'Hard',
-    VERY_HARD = 'Very Hard',
+    VERY_EASY = 'VERYEASY',
+    EASY = 'EASY',
+    MEDIUM = 'MEDIUM',
+    HARD = 'HARD',
+    VERY_HARD = 'VERYHARD',
 }
 
 enum VideoType {
@@ -26,13 +26,13 @@ enum AttachmentType {
 }
 
 enum QuestionType {
-    MCQ_SINGLE = 'Multiple Choice Single Answer',
-    MCQ_MULTIPLE = 'Multiple Choice Multiple Answers',
-    TRUE_FALSE = 'True or False',
-    SHORT_ANSWER = 'Short Answer',
-    MATCH_FOLLOWING = 'Match the Following',
-    SEQUENCE = 'Ordering/Sequence',
-    FILL_BLANKS = 'Fill in the Blanks',
+    MCQ_SINGLE = 'MSA',
+    MCQ_MULTIPLE = 'MMA',
+    TRUE_FALSE = 'TOF',
+    SHORT_ANSWER = 'SAQ',
+    MATCH_FOLLOWING = 'MTF',
+    SEQUENCE = 'ORD',
+    FILL_BLANKS = 'FIB',
 }
 
 interface IQuestion extends Document {
@@ -241,33 +241,10 @@ const QuestionSchema = new Schema<IQuestion>({
 const generateRandomString = (length: number): string =>
     Array.from({ length }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]).join('');
 
-
-// Function to generate unique question code
-const getQuestionCodePrefix = (questionType: QuestionType): string => {
-    switch (questionType) {
-        case QuestionType.MCQ_SINGLE:
-            return 'MSA';
-        case QuestionType.MCQ_MULTIPLE:
-            return 'MMA';
-        case QuestionType.TRUE_FALSE:
-            return 'TOF';
-        case QuestionType.SHORT_ANSWER:
-            return 'SAQ';
-        case QuestionType.MATCH_FOLLOWING:
-            return 'MTF';
-        case QuestionType.SEQUENCE:
-            return 'ORD';
-        case QuestionType.FILL_BLANKS:
-            return 'FIB';
-        default:
-            return 'GEN';
-    }
-};
-
 // Pre-save hook to generate a question code before saving the document
 QuestionSchema.pre<IQuestion>('save', function (next) {
     if (!this.questionCode) {
-        this.questionCode = `Q_${getQuestionCodePrefix(this.questionType)}_${generateRandomString(8)}`;
+        this.questionCode = `Q_${this.questionType}_${generateRandomString(8)}`;
     }
     next();
 });
