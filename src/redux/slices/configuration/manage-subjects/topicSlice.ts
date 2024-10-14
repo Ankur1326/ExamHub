@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
+import nProgress from "nprogress";
 
 // Types for the state
 interface Topic {
@@ -48,7 +49,8 @@ const handleError = (error: any, rejectWithValue: any) => {
 export const fetchTopics = createAsyncThunk(
     'Topics/fetchTopics',
     async ({ fetchAll, isActive, name, skillName, currentPage, itemsPerPage }: { fetchAll?: boolean; isActive?: boolean | null; name?: string; skillName?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
-        
+
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/topics/get`, {
@@ -58,6 +60,7 @@ export const fetchTopics = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -67,16 +70,18 @@ export const fetchTopics = createAsyncThunk(
 export const createTopic = createAsyncThunk(
     'topics/createTopic',
     async ({ name, shortDescription, skillName, isActive }: { name: string; shortDescription: string, skillName: string, isActive: boolean }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`/api/admin/topics/create`, { name, shortDescription, skillName, isActive });
             toast.success(response.data.message || "Topics successfully created");
-            
+
             // console.log("response.data : ", response.data);
             return response.data.data;
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -85,7 +90,8 @@ export const createTopic = createAsyncThunk(
 // Edit an existing topic thunk
 export const updateTopic = createAsyncThunk(
     'Topics/editTopic',
-    async ({ _id, name, shortDescription, skillName, isActive }: { _id:string, name:string; shortDescription:string; skillName:string; isActive:boolean }, { dispatch, rejectWithValue }) => {
+    async ({ _id, name, shortDescription, skillName, isActive }: { _id: string, name: string; shortDescription: string; skillName: string; isActive: boolean }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.put(`/api/admin/topics/update`, { _id, name, shortDescription, skillName, isActive });
@@ -96,6 +102,7 @@ export const updateTopic = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -105,6 +112,7 @@ export const updateTopic = createAsyncThunk(
 export const deleteTopic = createAsyncThunk(
     'Topics/deleteTopic',
     async (_id: string, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             await axios.delete(`/api/admin/topics/delete`, { data: { _id } });
@@ -114,11 +122,11 @@ export const deleteTopic = createAsyncThunk(
             console.error(error.response?.data?.message || "Failed to delete Topics");
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
 );
-
 
 const topicSlice = createSlice({
     name: 'topics',

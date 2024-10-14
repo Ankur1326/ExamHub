@@ -3,6 +3,7 @@ import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import handleError from "../../handleError";
 import toast from "react-hot-toast";
+import nProgress from "nprogress";
 
 // Types for the state
 interface QuestionType {
@@ -31,6 +32,7 @@ const initialState: QuestionTypesState = {
 export const fetchQuestionTypes = createAsyncThunk(
     'questionTypes/fetchQuestionTypes',
     async ({ isActive }: { isActive?: boolean | null; }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true))
         try {
             const response = await axios.get('/api/admin/question-types/get', {
@@ -45,6 +47,7 @@ export const fetchQuestionTypes = createAsyncThunk(
             }
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false))
         }
     }
@@ -53,6 +56,7 @@ export const fetchQuestionTypes = createAsyncThunk(
 export const addAllQuestionTypes = createAsyncThunk<QuestionType[], void, { rejectValue: string }>(
     'questionTypes/addAllQuestionType',
     async (_, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true))
         try {
             const response = await axios.post('/api/admin/question-types/add-all');
@@ -62,6 +66,7 @@ export const addAllQuestionTypes = createAsyncThunk<QuestionType[], void, { reje
             console.error("error : ", error);
             return rejectWithValue(error.message);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false))
         }
     }
@@ -71,6 +76,7 @@ export const addAllQuestionTypes = createAsyncThunk<QuestionType[], void, { reje
 export const updateQuestionType = createAsyncThunk<QuestionType, QuestionType, { rejectValue: string }>(
     'questionTypes/editQuestionType',
     async (data, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true))
         try {
             const response = await axios.put(`/api/admin/question-types/update`, data);
@@ -87,6 +93,7 @@ export const updateQuestionType = createAsyncThunk<QuestionType, QuestionType, {
             console.error(error);
             return rejectWithValue(error.message);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false))
         }
     }
@@ -96,6 +103,7 @@ export const updateQuestionType = createAsyncThunk<QuestionType, QuestionType, {
 export const toggleQuestionTypeStatus = createAsyncThunk<QuestionType, { _id: string }, { rejectValue: string }>(
     'questionTypes/toggleQuestionTypeStatus',
     async ({ _id }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true))
         try {
             const response = await axios.post(`/api/admin/question-types/toggle-status`, { _id });
@@ -105,6 +113,7 @@ export const toggleQuestionTypeStatus = createAsyncThunk<QuestionType, { _id: st
             console.error(error);
             return rejectWithValue(error.message);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false))
         }
     }

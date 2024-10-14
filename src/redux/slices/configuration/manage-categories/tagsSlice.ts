@@ -3,6 +3,7 @@ import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
 import handleError from "../../handleError";
+import nProgress from "nprogress";
 
 // Types for the state
 interface Tag {
@@ -36,6 +37,7 @@ const initialState: TagsState = {
 export const fetchTags = createAsyncThunk(
     'Tags/fetchTags',
     async ({ fetchAll, isActive, name, currentPage, itemsPerPage }: { fetchAll?: boolean; isActive?: boolean | null; name?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/tages/get`, {
@@ -45,6 +47,7 @@ export const fetchTags = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue)
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -54,6 +57,7 @@ export const fetchTags = createAsyncThunk(
 export const createTag = createAsyncThunk<Tag, { name: string, isActive: boolean }, { rejectValue: string }>(
     'Tags/createTag',
     async ({ name, isActive }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`/api/admin/tages/create`, { name, isActive });
@@ -65,6 +69,7 @@ export const createTag = createAsyncThunk<Tag, { name: string, isActive: boolean
             console.error(error);
             return handleError(error, rejectWithValue)
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -74,6 +79,7 @@ export const createTag = createAsyncThunk<Tag, { name: string, isActive: boolean
 export const toggleTagStatus = createAsyncThunk<Tag, { id: string }, { rejectValue: string }>(
     'Tags/toggleQuestionTagStatus',
     async ({ id }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`/api/admin/configuration/manage-categoriesAndTages/tages/toggle-status`, { id });
@@ -81,6 +87,7 @@ export const toggleTagStatus = createAsyncThunk<Tag, { id: string }, { rejectVal
         } catch (error: any) {
             return handleError(error, rejectWithValue)
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -90,6 +97,7 @@ export const toggleTagStatus = createAsyncThunk<Tag, { id: string }, { rejectVal
 export const updateTag = createAsyncThunk(
     'Tags/editTag',
     async (tag: Tag, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.put(`/api/admin/tages/update`, tag);
@@ -99,6 +107,7 @@ export const updateTag = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue)
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -108,6 +117,7 @@ export const updateTag = createAsyncThunk(
 export const deleteTag = createAsyncThunk(
     'Tags/deleteTag',
     async (_id: string, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             await axios.delete(`/api/admin/tages/delete`, { data: { _id } });
@@ -117,6 +127,7 @@ export const deleteTag = createAsyncThunk(
             console.error(error.response?.data?.message || "Failed to delete tag");
             return rejectWithValue(error.response?.data?.message || 'Failed to delete tag');
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }

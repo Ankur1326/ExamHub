@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
+import nProgress from "nprogress";
 
 // Types for the state
 interface Skill {
@@ -50,6 +51,7 @@ export const fetchSkills = createAsyncThunk(
     async ({ fetchAll, isActive, name, sectionName, currentPage, itemsPerPage }: { fetchAll?: boolean, isActive?: boolean | null; name?: string; sectionName?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
         // console.log(name, sectionName);
 
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/skills/get`, {
@@ -59,6 +61,7 @@ export const fetchSkills = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -68,6 +71,7 @@ export const fetchSkills = createAsyncThunk(
 export const createSkill = createAsyncThunk(
     'skills/createSkill',
     async ({ name, shortDescription, sectionName, isActive }: { name: string; shortDescription: string, sectionName: string, isActive: boolean }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`/api/admin/skills/create`, { name, shortDescription, sectionName, isActive });
@@ -78,6 +82,7 @@ export const createSkill = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -87,6 +92,7 @@ export const createSkill = createAsyncThunk(
 export const updateSkill = createAsyncThunk(
     'Skills/editSkill',
     async ({ _id, name, shortDescription, sectionName, isActive }: { _id: string, name: string; shortDescription: string; sectionName: string; isActive: boolean }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.put(`/api/admin/skills/update`, { _id, name, shortDescription, sectionName, isActive });
@@ -97,6 +103,7 @@ export const updateSkill = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -106,6 +113,7 @@ export const updateSkill = createAsyncThunk(
 export const deleteSkill = createAsyncThunk(
     'Skills/deleteSkill',
     async (_id: string, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             await axios.delete(`/api/admin/skills/delete`, { data: { _id } });
@@ -115,6 +123,7 @@ export const deleteSkill = createAsyncThunk(
             console.error(error.response?.data?.message || "Failed to delete skill");
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }

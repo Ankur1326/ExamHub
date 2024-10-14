@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import handleError from "../../handleError";
 import { setLoading } from "../../loadingSlice";
+import nProgress from "nprogress";
 
 // Structure of a Question
 interface Question {
@@ -77,6 +78,7 @@ export const createOrUpdateQuestion = createAsyncThunk<
     'question/createOrUpdateQuestion',
     async ({ step, data, questionId }, { dispatch, rejectWithValue }) => {
         try {
+            nProgress.start();
             dispatch(setLoading(true))
             const response = await axios.post('/api/admin/question/create-or-update', {
                 step,
@@ -94,6 +96,7 @@ export const createOrUpdateQuestion = createAsyncThunk<
         } catch (error: any) {
             handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false))
         }
     }
@@ -134,6 +137,7 @@ export const fetchQuestions = createAsyncThunk<
     'question/fetchQuestions',
     async ({ questionCode, question, questionType, section, skill, topic, isActive, currentPage = 1, itemsPerPage = 10 }, { dispatch, rejectWithValue }) => {
         try {
+            nProgress.start();
             dispatch(setLoading(true))
             const response = await axios.get('/api/admin/question/get', {
                 params: { questionCode, question, questionType, section, skill, topic, isActive, currentPage, itemsPerPage },
@@ -142,6 +146,7 @@ export const fetchQuestions = createAsyncThunk<
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false))
         }
     }
@@ -150,6 +155,7 @@ export const fetchQuestions = createAsyncThunk<
 export const deleteQuestion = createAsyncThunk(
     'question/deleteQuestion',
     async (_id: string, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true))
         try {
             await axios.delete(`/api/admin/question/delete`, { data: { _id } });
@@ -158,6 +164,7 @@ export const deleteQuestion = createAsyncThunk(
             console.error(error.response?.data?.message || "Failed to delete question");
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }

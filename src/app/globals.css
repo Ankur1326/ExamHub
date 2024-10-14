@@ -38,14 +38,13 @@ body {
   }
 } */
 
-
 /* Custom Scrollbar */
 .scrollbar-custom::-webkit-scrollbar {
   width: 8px;
 }
 
 .scrollbar-custom::-webkit-scrollbar-track {
-  background: #0D0E12; /* Background of the scrollbar track */
+  background: #0d0e12; /* Background of the scrollbar track */
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb {
@@ -77,4 +76,33 @@ body {
 
 .tab-content {
   margin-top: 0px;
+}
+
+#nprogress .bar {
+  background: red; /* DodgerBlue */
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px red, 0 0 5px red;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: red;
+  border-left-color: red;
+}
+
+/* Dark mode NProgress customization */
+@media (prefers-color-scheme: dark) {
+  #nprogress .bar {
+    background: #ff5517; /* OrangeRed in dark mode */
+  }
+
+  #nprogress .peg {
+    box-shadow: 0 0 10px #ff5517, 0 0 5px #ff5517;
+  }
+
+  #nprogress .spinner-icon {
+    border-top-color: #ff5517;
+    border-left-color: #ff5517;
+  }
 }

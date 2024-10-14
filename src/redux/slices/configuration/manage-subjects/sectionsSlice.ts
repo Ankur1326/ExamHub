@@ -3,6 +3,7 @@ import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
 import handleError from "../../handleError";
+import nProgress from "nprogress";
 
 // Types for the state
 interface Section {
@@ -35,6 +36,7 @@ const initialState: SectionsState = {
 export const fetchSections = createAsyncThunk(
     'questionSections/fetchSections',
     async ({ fetchAll, isActive, name, currentPage, itemsPerPage }: { fetchAll?: boolean | null, isActive?: boolean | null; name?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/sections/get`, {
@@ -44,6 +46,7 @@ export const fetchSections = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -53,6 +56,7 @@ export const fetchSections = createAsyncThunk(
 export const createSection = createAsyncThunk(
     'questionSections/createSection',
     async ({ name, shortDescription, isActive }: { name: string; shortDescription: string, isActive: boolean }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`/api/admin/sections/create`, { name, shortDescription, isActive });
@@ -62,6 +66,7 @@ export const createSection = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -72,6 +77,7 @@ export const createSection = createAsyncThunk(
 export const updateSection = createAsyncThunk(
     'questionSections/editSection',
     async (section: Section, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.put(`/api/admin/sections/update`, section);
@@ -81,6 +87,7 @@ export const updateSection = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -90,6 +97,7 @@ export const updateSection = createAsyncThunk(
 export const deleteSection = createAsyncThunk(
     'questionSections/deleteSection',
     async (_id: string, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             await axios.delete(`/api/admin/sections/delete`, { data: { _id } });
@@ -99,6 +107,7 @@ export const deleteSection = createAsyncThunk(
             console.error(error.response?.data?.message || "Failed to delete section");
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }

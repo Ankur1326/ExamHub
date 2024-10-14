@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { setLoading } from "./loadingSlice";
+import nProgress from "nprogress";
 
 // Types for the state
 interface UserProfile {
@@ -31,6 +32,7 @@ export const fetchUserProfile = createAsyncThunk<UserProfile, { username: string
     'user/fetchUserProfile',
     async ({ username, email }, { rejectWithValue }) => {
         try {
+            nProgress.start();
             const response = await fetch(`/api/profile/get?username=${username}&email=${email}`);
             if (!response.ok) {
                 return rejectWithValue(await response.json());
@@ -40,6 +42,8 @@ export const fetchUserProfile = createAsyncThunk<UserProfile, { username: string
         } catch (error: any) {
             console.error(error);
             return rejectWithValue({ message: 'Failed to fetch user profile', error: error?.message });
+        } finally {
+            nProgress.done();
         }
     }
 );
@@ -48,6 +52,7 @@ export const fetchUserProfile = createAsyncThunk<UserProfile, { username: string
 export const uploadProfilePicture = createAsyncThunk<string, File, { rejectValue: string }>(
     'profile/uploadProfilePicture',
     async (file, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         const formData = new FormData();
         formData.append('file', file);
@@ -70,6 +75,7 @@ export const uploadProfilePicture = createAsyncThunk<string, File, { rejectValue
             console.log("Error while uploading profile image : ", error);
             return rejectWithValue(error.message);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -79,6 +85,7 @@ export const uploadProfilePicture = createAsyncThunk<string, File, { rejectValue
 export const updateUserProfile = createAsyncThunk<UserProfile, { formData: any; userId: string }, { rejectValue: string }>(
     'user/updateUserProfile',
     async ({ formData, userId }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true))
         try {
             const response = await fetch(`/api/profile/update`, {
@@ -103,6 +110,7 @@ export const updateUserProfile = createAsyncThunk<UserProfile, { formData: any; 
             toast.error("Failed to update profile");
             return rejectWithValue(error.message);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false))
         }
     }

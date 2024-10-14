@@ -3,6 +3,7 @@ import axios from "axios";
 import { setLoading } from "../../loadingSlice";
 import toast from "react-hot-toast";
 import handleError from "../../handleError";
+import nProgress from "nprogress";
 
 interface Comprehension {
     _id: string;
@@ -35,6 +36,7 @@ const initialState: ComprehensionsState = {
 export const fetchComprehensions = createAsyncThunk(
     'Comprehension/fetchComprehensions',
     async ({ fetchAll, isActive, title, currentPage, itemsPerPage }: { fetchAll?: boolean | null, isActive?: boolean | null; title?: string; currentPage?: number; itemsPerPage?: number }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.get(`/api/admin/comprehensions/get`, {
@@ -44,6 +46,7 @@ export const fetchComprehensions = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -53,6 +56,7 @@ export const fetchComprehensions = createAsyncThunk(
 export const createComprehension = createAsyncThunk(
     'comprehension/createComprehension',
     async ({ title, body, isActive }: { title: string; body: string, isActive: boolean }, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.post(`/api/admin/comprehensions/create`, { title, body, isActive });
@@ -62,6 +66,7 @@ export const createComprehension = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -71,6 +76,7 @@ export const createComprehension = createAsyncThunk(
 export const updateComprehension = createAsyncThunk(
     'comprehension/editComprehension',
     async (comprehension: Comprehension, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             const response = await axios.put(`/api/admin/comprehension/update`, comprehension);
@@ -80,6 +86,7 @@ export const updateComprehension = createAsyncThunk(
         } catch (error: any) {
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
@@ -89,6 +96,7 @@ export const updateComprehension = createAsyncThunk(
 export const deleteComprehension = createAsyncThunk(
     'comprehension/deleteComprehension',
     async (_id: string, { dispatch, rejectWithValue }) => {
+        nProgress.start();
         dispatch(setLoading(true));
         try {
             await axios.delete(`/api/admin/comprehensions/delete`, { data: { _id } });
@@ -98,6 +106,7 @@ export const deleteComprehension = createAsyncThunk(
             console.error(error.response?.data?.message || "Failed to delete comprehension");
             return handleError(error, rejectWithValue);
         } finally {
+            nProgress.done();
             dispatch(setLoading(false));
         }
     }
