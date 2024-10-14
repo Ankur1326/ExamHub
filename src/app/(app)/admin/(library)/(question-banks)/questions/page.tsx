@@ -294,6 +294,7 @@ export default function Page() {
                 <TableLabelHeader headings={
                     [
                         <div
+                            key="selectAll"
                             className={`w-5 h-5 rounded-md flex items-center justify-center cursor-pointer transition-colors duration-300 ${selectAll ? 'bg-blue-500' : 'bg-gray-200 dark:bg-gray-700'} `}
                             onClick={handleSelectAll}
                         >

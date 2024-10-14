@@ -402,7 +402,7 @@ const ImportQuestions = () => {
                                         {
                                             [0, 1, 2, 3, 4].map((index) => {
                                                 return (
-                                                    <td className="py-3 px-3 border-r text-sm border-gray-100 dark:border-border_secondary">
+                                                    <td key={index} className="py-3 px-3 border-r text-sm border-gray-100 dark:border-border_secondary">
                                                         {
                                                             question.options ?
                                                                 <div className="flex gap-1">
