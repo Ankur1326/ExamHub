@@ -10,7 +10,7 @@ interface Question {
     _id?: string;
     questionType?: string;
     question?: string;
-    options?: {text:string, isCorrect: boolean}[];
+    options?: { text: string, isCorrect: boolean }[];
     pairs?: {
         left: string;
         right: string;
@@ -128,6 +128,37 @@ export const createOrUpdateQuestion = createAsyncThunk<
 // );
 
 
+// bulk update questions thunk
+export const bulkUpdateQuestions = createAsyncThunk<
+    any,
+    any,
+    { rejectValue: { message: string } }
+>(
+    "question/bulkUpdateQuestions",
+    async ({ selectedQuestions, updatedData }, { dispatch, rejectWithValue }) => {
+        try {
+            nProgress.start();
+            dispatch(setLoading(true));
+
+            // Make a POST request to bulk update questions
+            const response = await axios.post("/api/admin/question/bulk-update", { selectedQuestions, updatedData });
+
+            if (response.data.success) {
+                toast.success(response.data.message || "Questions updated successfully");
+            }
+            console.log("response.data ", response.data);
+
+            return response.data;
+        } catch (error: any) {
+            return handleError(error, rejectWithValue);
+        } finally {
+            nProgress.done();
+            dispatch(setLoading(false));
+        }
+    }
+);
+
+
 // Fetch questions with pagination
 export const fetchQuestions = createAsyncThunk<
     { questions: Question[], totalPages: number, totalQuestions: number, currentPage: number },
@@ -230,6 +261,29 @@ const questionSlice = createSlice({
             //     state.loading = false;
             //     state.error = action.payload?.message || 'Failed to upload questions';
             // });
+            .addCase(bulkUpdateQuestions.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(bulkUpdateQuestions.fulfilled, (state, action) => {
+                state.loading = false;
+                // Optionally update the state with the updated questions
+                const updatedQuestions = action.payload.questions;
+
+                // Update state with the updated questions
+                updatedQuestions.forEach((updatedQuestion: Question) => {
+                    const index = state.questions.findIndex(q => q._id === updatedQuestion._id);
+                    if (index !== -1) {
+                        state.questions[index] = updatedQuestion; // Replace the old question with the updated one
+                    }
+                });
+
+                toast.success("Bulk update successful");
+            })
+            .addCase(bulkUpdateQuestions.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload?.message || 'Failed to update questions';
+            })
     },
 });
 

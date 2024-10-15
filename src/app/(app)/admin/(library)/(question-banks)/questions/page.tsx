@@ -10,7 +10,7 @@ import DropdownMenu from "@/components/DropDownMenu";
 import Pagination from "@/components/Pagination";
 import TableLabelHeader from "@/components/TableLabelHeader";
 import SearchFilters from "@/components/SearchFilters";
-import { deleteQuestion, fetchQuestions } from "@/redux/slices/library/question-bank/questionSlice";
+import { bulkUpdateQuestions, deleteQuestion, fetchQuestions } from "@/redux/slices/library/question-bank/questionSlice";
 import toast from "react-hot-toast";
 import QuestionTypesDropdownSelector from "@/components/QuestionTypesDropdownSelector";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import { BsDash } from "react-icons/bs";
 import { QuestionViewModal } from "@/components/QuesitonViewModal";
 import KtIcon from "@/components/KtIcon";
 import CopyButton from "@/components/CopyButton";
+import BulkEditQuestions from "@/components/BulkEditQuestions";
 
 type SearchQuery = {
     questionCode: string;
@@ -35,13 +36,14 @@ export default function Page() {
     const { totalPages = 1, totalQuestions } = useSelector((state: RootState) => state.question);
     const [loadingPage, setLoadingPage] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [itemsPerPage, setItemsPerPage] = useState(20)
     const [pagesCache, setPagesCache] = useState<Record<number, any[]>>({}); // Cache to store page data
     const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
     const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
     const [isShowViewModal, setIsShowViewModal] = useState<boolean>(false)
     const [selectedQuestionId, setSelectedQuestionId] = useState<string>('')
     const [selectAll, setSelectAll] = useState<boolean>(false);
+    const [isBulkEditModalOpen, setIsBulkEditModalOpen] = useState(false);
 
     const [filterQuery, setFilterQuery] = useState<SearchQuery>({
         questionCode: "",
@@ -63,7 +65,7 @@ export default function Page() {
         isActive: null,
     });
 
-    const questions = pagesCache[currentPage] || []; // Get sections for the current page from cache
+    const questions = pagesCache[currentPage] || []; // Get items for the current page from cache
 
     useEffect(() => {
         const fetchData = async () => {
@@ -195,6 +197,18 @@ export default function Page() {
         }
     };
 
+    const handleBulkEdit = () => {
+        if (selectedQuestions.length > 0) {
+            setIsBulkEditModalOpen(true); // Open bulk edit modal
+        } else {
+            toast.error("Please select questions to edit");
+        }
+    };
+
+    const handleCloseMoBulkEditModal = () => {
+        setIsBulkEditModalOpen(false)
+    }
+
     const filterFields = [
         <span key=""></span>,
         <SearchBar
@@ -268,6 +282,16 @@ export default function Page() {
                                 <span>Delete Selected</span>
                             </button>
                         </div>
+                    )}
+
+                    {selectedQuestions.length > 0 && (
+                        <button
+                            onClick={handleBulkEdit}
+                            className="bg-[#E9F3FF] dark:bg-gray-800 text-blue-500 dark:text-blue-400 font-semibold hover:text-white dark:hover:text-gray-100 flex items-center gap-2 px-3 py-2 hover:bg-blue_hover_button dark:hover:bg-blue-600 transition duration-200 ease-in-out rounded-md"
+                        >
+                            <KtIcon size={18} className="" filePath="/media/icons/duotune/general/gen055.svg" />
+                            <span className="text-xs">Edit</span>
+                        </button>
                     )}
 
                     <button
@@ -441,6 +465,9 @@ export default function Page() {
                     )}
                 </tbody>
             </table>
+
+            {/* EditOrCreateNewModalWrapper({ onClose, onSave, title, isVisible, children, size = 'small' } */}
+            <BulkEditQuestions isVisible={isBulkEditModalOpen} onClose={handleCloseMoBulkEditModal} selectedQuestions={selectedQuestions} setSelectedQuestions={setSelectedQuestions} />
 
             <Pagination
                 currentPage={currentPage}

@@ -127,7 +127,7 @@ const MultiTagSearchDropdown = ({
                         setInitialClick(true)
                     }}
                     placeholder={placeholder}
-                    className="border p-2 rounded-md w-full dark:border-border_secondary dark:hover:border-hover_border"
+                    className="border p-2 rounded-md w-full bg-gray-50 hover:border-gray-300 dark:border-border_secondary dark:hover:border-hover_border"
                 />
                 {isLoading && (
                     <span className="absolute right-2">

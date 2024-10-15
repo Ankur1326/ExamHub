@@ -98,7 +98,7 @@ const SearchDropdown = ({
                         setShowDropdown(true);
                     }}
                     placeholder={placeholder}
-                    className="border p-2 rounded-md w-full dark:border-border_secondary dark:hover:border-hover_border"
+                    className="border p-2 rounded-md hover:border-gray-300 bg-gray-50 w-full dark:border-border_secondary dark:hover:border-hover_border"
                 />
                 {
                     isLoading &&

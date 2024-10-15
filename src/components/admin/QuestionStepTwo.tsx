@@ -29,8 +29,6 @@ function QuestionStepTwo({ questionId, nextStep, prevStep }: QuestionStepTwoProp
     const [defaultTimeToSolve, setDefaultTimeToSolve] = useState<number>(0);
     const [isActive, setIsActive] = useState<boolean>(false);
 
-    console.log("In step 2 : ", questionId);
-
     useEffect(() => {
         if (questionId) {
             const fetchQuestionDetails = async () => {
