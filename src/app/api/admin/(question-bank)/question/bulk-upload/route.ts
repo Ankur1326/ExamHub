@@ -6,17 +6,17 @@ export async function POST(request: Request) {
     await dbConnect();
 
     try {
-            const { questions } = await request.json();
+        const { questions } = await request.json();
 
-            if (!questions || !Array.isArray(questions)) {
-                return Response.json(
-                    {
-                        success: false,
-                        message: "Invalid data format. Expected an array of questions."
-                    },
-                    { status: 400 }
-                );
-            }
+        if (!questions || !Array.isArray(questions)) {
+            return Response.json(
+                {
+                    success: false,
+                    message: "Invalid data format. Expected an array of questions."
+                },
+                { status: 400 }
+            );
+        }
         // console.log("questions : ", questions);
 
         const bulkOps = questions.map(async (questionData) => {
@@ -41,65 +41,75 @@ export async function POST(request: Request) {
                 throw new Error("Question and question type are required");
             }
 
-        // Check if the question type is valid
-        if (!['MSA', 'MMA', 'TOF', 'SAQ', 'MTF', 'ORD', 'FIB'].includes(questionType)) {
-            // throw new Error(`${questionType} question type is not valid`);
-            return {
-                status: "rejected",
-                reason: `${questionType} question type is not valid`,
-                questionData,
-            };
-        }
+            const existedQuestion = await Question.findOne({ question })
 
-        // Check if the question type is valid
-        if (!['VERYEASY', 'EASY', 'MEDIUM', 'HARD', 'VERYHARD'].includes(difficultyLevel)) {
-            // throw new Error(`${difficultyLevel} difficulty level is not valid`);
-            return {
-                status: "rejected",
-                reason: `${difficultyLevel} difficulty level is not valid`,
-                questionData,
-            };
-        }
+            if (existedQuestion) {
+                return {
+                    status: "rejected",
+                    reason: `This question is already exist`,
+                    questionData
+                }
+            }
 
-        // Prepare question data
-        const newQuestion = new Question({
-            questionType,
-            question,
-            options,
-            pairs,
-            sequences,
-            trueFalseAnswer,
-            difficultyLevel,
-            defaultMarks,
-            defaultTimeToSolve,
-            solution,
-            hint,
-        });
+            // Check if the question type is valid
+            if (!['MSA', 'MMA', 'TOF', 'SAQ', 'MTF', 'ORD', 'FIB'].includes(questionType)) {
+                // throw new Error(`${questionType} question type is not valid`);
+                return {
+                    status: "rejected",
+                    reason: `${questionType} question type is not valid`,
+                    questionData,
+                };
+            }
 
-        if (!newQuestion) {
-            return Response.json(
-                {
-                    success: false,
-                    message: "Question is not created"
-                },
-                { status: 400 }
-            )
+            // Check if the question type is valid
+            if (!['VERYEASY', 'EASY', 'MEDIUM', 'HARD', 'VERYHARD'].includes(difficultyLevel)) {
+                // throw new Error(`${difficultyLevel} difficulty level is not valid`);
+                return {
+                    status: "rejected",
+                    reason: `${difficultyLevel} difficulty level is not valid`,
+                    questionData,
+                };
+            }
 
-        }
+            // Prepare question data
+            const newQuestion = new Question({
+                questionType,
+                question,
+                options,
+                pairs,
+                sequences,
+                trueFalseAnswer,
+                difficultyLevel,
+                defaultMarks,
+                defaultTimeToSolve,
+                solution,
+                hint,
+            });
 
-        // console.log("newQuestion : ", newQuestion);
+            if (!newQuestion) {
+                return Response.json(
+                    {
+                        success: false,
+                        message: "Question is not created"
+                    },
+                    { status: 400 }
+                )
 
-        try {
-            const savedQuestion = await newQuestion.save(); // Save each question
-            return { status: "fulfilled", value: savedQuestion };
-        } catch (error: any) {
-            // return { status: "rejected", reason: error.message };
-            return {
-                status: "rejected",
-                reason: error.message,
-                questionData,
-            };
-        }
+            }
+
+            // console.log("newQuestion : ", newQuestion);
+
+            try {
+                const savedQuestion = await newQuestion.save(); // Save each question
+                return { status: "fulfilled", value: savedQuestion };
+            } catch (error: any) {
+                // return { status: "rejected", reason: error.message };
+                return {
+                    status: "rejected",
+                    reason: error.message,
+                    questionData,
+                };
+            }
         });
 
         // Wait for all bulk operations to complete

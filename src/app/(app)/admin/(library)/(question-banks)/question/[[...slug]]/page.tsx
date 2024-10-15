@@ -119,7 +119,7 @@ function CreateOrEditPage({ params }: any) {
             case 'FIB': // 'fill-in-the-blanks'
                 return <div>Fill in the Blanks Form</div>;
             default:
-                return <div>Select a valid question type</div>;
+                return <div className='text-base font-semibold text-red-600 '>Select a valid question type</div>;
         }
     }, [selectedTab, currentStep, handleNextStep, handlePrevStep, questionId]);
 

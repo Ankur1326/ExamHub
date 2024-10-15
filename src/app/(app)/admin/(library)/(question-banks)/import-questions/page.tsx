@@ -241,7 +241,7 @@ const ImportQuestions = () => {
         }
         try {
             const response = await axios.post("/api/admin/question/bulk-upload", { questions }, config);
-            console.log("response : ", response);
+            // console.log("response : ", response);
 
             if (response.data.success) {
                 const successfulQuestions = response.data.questions.filter((q: any) => q.status === 'fulfilled');
@@ -386,10 +386,10 @@ const ImportQuestions = () => {
             </div>
 
             {/* Preview Questions Button */}
-            {questions.length > 0 && (
+            {questions?.length > 0 && (
                 showPreview && (
                     <div className="mt-4 bg-white shadow-sm p-4 rounded-md dark:bg-bg_primary">
-                        <h3 className="font-semibold text-lg mb-2 dark:text-text_secondary">Parsed Questions</h3>
+                        <h3 className="font-semibold text-lg mb-2 dark:text-text_secondary">Parsed Questions : {questions?.length}</h3>
                         <table className="w-full border dark:border-[#2d2d2d] dark:text-text_secondary dark:bg-bg_secondary rounded-lg text-sm">
                             <TableLabelHeader headings={["Question Type", "Question", "Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Correct Answer", "Default Marks", "Default Time To Solve", "Difficulty",]} />
                             <tbody>
@@ -398,13 +398,13 @@ const ImportQuestions = () => {
                                         <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">
                                             <CopyButton text={question?.questionType || ""} />
                                         </td>
-                                        <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">{question.question}</td>
+                                        <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">{question?.question}</td>
                                         {
                                             [0, 1, 2, 3, 4].map((index) => {
                                                 return (
                                                     <td key={index} className="py-3 px-3 border-r text-sm border-gray-100 dark:border-border_secondary">
                                                         {
-                                                            question.options ?
+                                                            question?.options ?
                                                                 <div className="flex gap-1">
                                                                     <span>{question?.options[index]?.text}</span>
                                                                     <span className="">{
@@ -432,9 +432,9 @@ const ImportQuestions = () => {
                                             })
                                         }
                                         <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">{question?.correctAnswer ? question?.correctAnswer : question?.trueFalseAnswer?.toString()}</td>
-                                        <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">{question.defaultMarks}</td>
-                                        <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">{question.defaultTimeToSolve}</td>
-                                        <td className="py-3 px-3 text-sm border-gray-100 dark:border-border_secondary">{question.difficultyLevel}</td>
+                                        <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">{question?.defaultMarks}</td>
+                                        <td className="py-3 px-3 text-sm border-r border-gray-100 dark:border-border_secondary">{question?.defaultTimeToSolve}</td>
+                                        <td className="py-3 px-3 text-sm border-gray-100 dark:border-border_secondary">{question?.difficultyLevel}</td>
                                     </tr>
                                 ))}
                             </tbody>
