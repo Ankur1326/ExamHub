@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AiOutlineUser, AiOutlineSetting, AiOutlineHome, AiOutlineDashboard, AiOutlineTags } from 'react-icons/ai';
 import { FaAngleDown, FaQuestionCircle } from 'react-icons/fa';
+import KtIcon from '../KtIcon';
 
 interface SidebarProps {
     isSidebarOpen: boolean;
@@ -17,7 +18,8 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
         dashboard: false,
         questionBanks: false,
         manageCategories: false,
-        manageSubjects: false
+        manageSubjects: false,
+        userManagement: false
     });
 
     useEffect(() => {
@@ -46,7 +48,7 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                     {/* Dashboard Section */}
                     <ExpandableSection
                         title="Dashboard"
-                        icon={<AiOutlineDashboard className="text-lg" />}
+                        icon={<KtIcon size={18} className="" filePath="/media/icons/duotune/general/gen025.svg" />}
                         isActive={isActive('/admin/dashboard')}
                         isExpanded={expandedSections.dashboard}
                         onClick={() => toggleSection('dashboard')}
@@ -158,6 +160,22 @@ export default function Sidebar({ isSidebarOpen }: SidebarProps) {
                             route="/admin/topics"
                             isActive={isActive('/admin/topics')}
                             onClick={() => navigateTo('/admin/topics')}
+                        />
+                    </ExpandableSection>
+
+                    <ExpandableSection
+                        title="User Managemet"
+                        icon={<KtIcon size={18} className="" filePath="/media/icons/duotune/communication/com014.svg" />}
+                        isActive={isActive('/admin/user-management')}
+                        isExpanded={expandedSections.userManagement}
+                        onClick={() => toggleSection('userManagement')}
+                    >
+                        <ChildNavItem
+                            title="Users"
+                            icon={<Dot />}
+                            route="/admin/users"
+                            isActive={isActive('/admin/users')}
+                            onClick={() => navigateTo('/admin/users')}
                         />
                     </ExpandableSection>
                 </nav>

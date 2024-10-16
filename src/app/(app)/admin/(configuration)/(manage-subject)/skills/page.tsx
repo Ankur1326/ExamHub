@@ -31,7 +31,7 @@ export default function Page() {
     const [selectedSkill, setSelectedSkill] = useState<any | null>(null);
     const [loadingPage, setLoadingPage] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(5)
+    const [itemsPerPage, setItemsPerPage] = useState(20)
     const [pagesCache, setPagesCache] = useState<Record<number, any[]>>({}); // Cache to store page data
     const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
 

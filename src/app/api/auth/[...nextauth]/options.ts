@@ -34,6 +34,10 @@ export const authOptions: NextAuthOptions = {
                         throw new Error('Please verified your account first before login')
                     }
 
+                    if (!user.isApproved) {
+                        throw new Error("You can't logged-in without the approval of admin")
+                    }
+
                     const isPasswordCorrect = await user.comparePassword(credentials.password.trim());
 
                     if (isPasswordCorrect) {
@@ -61,6 +65,10 @@ export const authOptions: NextAuthOptions = {
                     }
                     if (!user.isVerified) {
                         throw new Error('Please verify your account first before login');
+                    }
+
+                    if (!user.isApproved) {
+                        throw new Error("You can't logged-in without the approval of admin")
                     }
 
                     return {

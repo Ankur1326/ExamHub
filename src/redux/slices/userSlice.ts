@@ -116,7 +116,6 @@ export const updateUserProfile = createAsyncThunk<UserProfile, { formData: any; 
     }
 );
 
-
 // Profile slice
 const profileSlice = createSlice({
     name: 'user',

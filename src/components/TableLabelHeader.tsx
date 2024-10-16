@@ -9,7 +9,7 @@ interface TableHeaderProps {
           {headings.map((heading:string, index:number) => (
             <th
               key={index}
-              className="py-3 px-4 text-left text-sm font-semibold text-gray-400 border-r border-gray-100 dark:border-border_secondary"
+              className="py-3 px-4 text-left text-sm font-semibold text-[#99A1B7] border-r border-gray-100 dark:border-border_secondary"
             >
               {heading}
             </th>

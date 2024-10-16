@@ -159,7 +159,7 @@ const MultipleChoiceQuestionForm: React.FC<MultipleChoiceQuestionFormProps> = ({
 
                                 <div className={`rounded-md overflow-hidden border-2 ${option.isCorrect ? 'border-green-400' : 'border-green-50'}`}>
                                     <CustomCKEditor
-                                        key={`editor-${index}-${option.text}`}
+                                        key={`editor-${index}`}
                                         content={option.text}
                                         setContent={(value) => handleOptionChange(index, value)}
                                     />

@@ -8,8 +8,8 @@ import { fetchTopics } from '@/redux/slices/configuration/manage-subjects/topicS
 import { fetchTags } from '@/redux/slices/configuration/manage-categories/tagsSlice';
 import FormInput from '../FormInput';
 import { createOrUpdateQuestion } from '@/redux/slices/library/question-bank/questionSlice';
-import DifficultyLevel from '../DifficultyLevel';
 import axios from 'axios';
+import Select from '../DropDownSelector';
 
 interface QuestionStepTwoProps {
     questionId: string | null;
@@ -29,6 +29,8 @@ function QuestionStepTwo({ questionId, nextStep, prevStep }: QuestionStepTwoProp
     const [defaultTimeToSolve, setDefaultTimeToSolve] = useState<number>(0);
     const [isActive, setIsActive] = useState<boolean>(false);
 
+    console.log("difficultyLevel : ", difficultyLevel);
+    
     useEffect(() => {
         if (questionId) {
             const fetchQuestionDetails = async () => {
@@ -127,8 +129,14 @@ function QuestionStepTwo({ questionId, nextStep, prevStep }: QuestionStepTwoProp
                     required={false}
                     selectedTags={tagNames}
                 />
-
-                <DifficultyLevel difficulty={difficultyLevel} setDifficulty={setDifficultyLevel} required={true} />
+                
+                <Select
+                    label="Difficulty Level"
+                    value={difficultyLevel}
+                    options={['Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard']}
+                    setValue={setDifficultyLevel}
+                    required
+                />
                 {/* Time Period */}
                 <div className="mt-4">
                     <FormInput

@@ -129,7 +129,6 @@ export const deleteSkill = createAsyncThunk(
     }
 );
 
-
 const skillsSlice = createSlice({
     name: 'skills',
     initialState,
