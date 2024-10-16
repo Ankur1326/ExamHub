@@ -5,21 +5,18 @@ import DropdownMenu from '@/components/DropDownMenu'
 import Select from '@/components/DropDownSelector'
 import { EditOrCreateNewModalWrapper } from '@/components/EditOrCreateNewModalWrapper'
 import Pagination from '@/components/Pagination'
-import SectionHeader from '@/components/SectionHeader'
 import TableLabelHeader from '@/components/TableLabelHeader'
 import { fetchUsers, updateUser } from '@/redux/slices/configuration/user-managements/userManagementSlice'
 import { AppDispatch, RootState } from '@/redux/store'
 import { formatDate } from '@/utility/dateFormate'
-import axios from 'axios'
 import { UserRound } from 'lucide-react'
 import Image from 'next/image'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FiMoreVertical } from 'react-icons/fi'
 import Skeleton from 'react-loading-skeleton'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
-function page() {
+function Page() {
     const dispatch = useDispatch<AppDispatch>();
     const { totalPages, totalUsers, status, error } = useSelector((state: RootState) => state.users);
     const [loadingPage, setLoadingPage] = useState<boolean>(false)
@@ -282,4 +279,4 @@ function page() {
     )
 }
 
-export default page
+export default Page
